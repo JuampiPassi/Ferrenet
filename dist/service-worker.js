@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/ferrenet/precache-manifest.e83a77be917c6f14d6cf6f574a37dcf4.js"
+  "precache-manifest.8215736d1b5be84afb29bbafc4909e83.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "ferrenet"});
