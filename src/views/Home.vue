@@ -1,38 +1,64 @@
 <template>
-   <v-container>
-      <StreamBarcodeReader @decode="(a, b, c) => onDecode(a, b, c)" @loaded="() =>onLoaded()"></StreamBarcodeReader>
-      Input Value: {{ text || "Nothing" }}
-    </v-container>
+     <v-container class="mt-5">
+        <v-btn
+            block
+            color="#ef6b01"
+            elevation="2"
+            x-large
+            dark
+            @click="clicStock"
+        >Stock</v-btn>
+        <v-btn
+            block
+            color="#ef6b01"
+            elevation="2"
+            x-large
+            class="mt-5"
+            dark
+        >Pedido</v-btn>
+        <v-btn
+            block
+            color="#ef6b01"
+            elevation="2"
+            x-large
+            class="mt-5"
+            dark
+        >Despacho</v-btn>
+        <v-btn
+            block
+            color="#ef6b01"
+            elevation="2"
+            x-large
+            class="mt-5"
+            dark
+        >Ingreso</v-btn>
+        <v-btn
+            block
+            color="#ef6b01"
+            elevation="2"
+            x-large
+            class="mt-5"
+            dark
+        >Ventas</v-btn>
+      </v-container>
 </template>
 
 <script>
-
-import { StreamBarcodeReader } from "vue-barcode-reader";
 export default {
-  name: 'Home',
-  components: {
-    StreamBarcodeReader,
-  },
-  data(){
+    name:'Home',
+    data(){
         return{
-          text: "",
-          id: null, 
+
         }
     },
-    methods: {
-       onDecode(a, b, c) {
-      console.log(a, b, c);
-      this.text = a;
-      if (this.id) clearTimeout(this.id);
-      this.id = setTimeout(() => {
-        if (this.text === a) {
-          this.text = "";
+    methods:{
+        clicStock(){
+             this.$router.push({name: 'Stock'});
         }
-      }, 5000);
-    },
-    onLoaded() {
-      console.log("load");
-    },
     }
 }
 </script>
+
+<style>
+
+</style>

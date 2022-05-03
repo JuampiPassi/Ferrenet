@@ -1,7 +1,6 @@
 <template>
     <div>
         <v-navigation-drawer
-         
             v-model="drawer"
             :clipped="$vuetify.breakpoint.lgAndUp"
             fixed
@@ -10,14 +9,20 @@
 
         <template v-slot:prepend>
             <v-list-item class="px-1">
-
-               <v-img 
-               src="../assets/logo.jpg"
-               max-height="80px"
-               max-width="240px"
-               contain
-               ></v-img>
- 
+                <v-list-item-avatar size="50">
+                    <v-img 
+                    src="../assets/avatar.png"
+                    max-height="80px"
+                    max-width="240px"
+                    contain
+                    ></v-img>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                    <v-list-item-title>{{usuario}}</v-list-item-title>
+                    <v-list-item-subtitle link @click="cerrarSesion">
+                        <a style="font-size: 15px;">Salir</a>
+                    </v-list-item-subtitle>
+                </v-list-item-content>
             </v-list-item>
         </template>
 
@@ -33,6 +38,16 @@
 
                 <v-list-item-content>
                 <v-list-item-title style="color: #424242">Home</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item link @click="IrStock">
+                <v-list-item-action>
+                <v-icon color="#ef6b01" >mdi-archive-outline</v-icon>
+                </v-list-item-action>
+
+                <v-list-item-content>
+                <v-list-item-title style="color: #424242">Stock</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
 
@@ -68,6 +83,7 @@ export default {
     data(){
         return{
             drawer: null,
+            usuario: '',
         }
     },
     methods: {
@@ -75,6 +91,17 @@ export default {
             if (this.$route.path !== '/') 
             this.$router.push({name: 'Home'});
         },
+        IrStock(){
+            if (this.$route.path !== 'Stock') 
+            this.$router.push({name: 'Stock'});
+        },
+        cerrarSesion(){
+            sessionStorage.clear();
+            window.location.reload();
+        }
+    },
+    mounted(){
+        this.usuario = sessionStorage.getItem("usuario");
     }
 
 }
