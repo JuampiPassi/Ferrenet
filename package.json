@@ -4,20 +4,31 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "start": "node server/bin/www",
+    "debug:all": "npm-run-all --parallel serve debug:server"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@mdi/font": "^6.6.96",
+    "body-parser": "^1.20.0",
+    "cookie-parser": "^1.4.6",
     "core-js": "^3.6.5",
+    "cross-env": "^7.0.3",
+    "express": "^4.18.1",
+    "express-http-proxy": "^1.6.3",
     "material-design-icons-iconfont": "^6.7.0",
+    "morgan": "^1.10.0",
+    "node-firebird": "^1.0.0",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.11",
     "vue-barcode-reader": "^1.0.2",
     "vue-router": "^3.2.0",
     "vuetify": "^2.6.0",
-    "vuex": "^3.4.0"
+    "vuex": "^3.4.0",
+    "winston": "^3.7.2",
+    "winston-daily-rotate-file": "^4.6.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.8",

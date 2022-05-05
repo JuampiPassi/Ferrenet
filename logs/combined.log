@@ -1,0 +1,9 @@
+{"level":"debug","message":"Configurando CORS"}
+{"level":"debug","message":"Configurando endpoints"}
+{"level":"error","message":"Error al iniciar el servidor Cannot find module 'jsonwebtoken'\nRequire stack:\n- C:\\Users\\JuanPablo\\Desktop\\ferrenet\\server\\repositories\\articulos.js\n- C:\\Users\\JuanPablo\\Desktop\\ferrenet\\server\\controllers\\articulos.js\n- C:\\Users\\JuanPablo\\Desktop\\ferrenet\\server\\routers\\articulos.js\n- C:\\Users\\JuanPablo\\Desktop\\ferrenet\\server\\routers\\index.js\n- C:\\Users\\JuanPablo\\Desktop\\ferrenet\\server\\app.js\n- C:\\Users\\JuanPablo\\Desktop\\ferrenet\\server\\bin\\www"}
+{"level":"debug","message":"Configurando CORS"}
+{"level":"debug","message":"Configurando endpoints"}
+{"level":"error","message":"Error al iniciar el servidor ArticulosController is not defined"}
+{"level":"debug","message":"Configurando CORS"}
+{"level":"debug","message":"Configurando endpoints"}
+{"level":"info","message":"Iniciando servidor en el puerto 3000"}
