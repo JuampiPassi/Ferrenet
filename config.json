@@ -7,5 +7,12 @@
         "database":"/var/lib/firebird/2.5/data/DBSIFTEMP.FDB",
         "user":"SYSDBA",
         "password":"masterkey"
+    },
+    "mysql":{
+        "host":"10.19.0.251",
+        "port":"3306",
+        "database":"bdp",
+        "user":"root",
+        "password":"select562"
     }
 }

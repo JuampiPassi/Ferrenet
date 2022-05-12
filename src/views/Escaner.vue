@@ -30,7 +30,7 @@
 
 import { StreamBarcodeReader } from "vue-barcode-reader";
 export default {
-  name: 'Home2',
+  name: 'Escaner',
   components: {
     StreamBarcodeReader,
   },

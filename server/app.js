@@ -7,6 +7,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var config = require('./config/config.json');
 var app = express();
+port = 3000;
 
 logger.debug('Configurando CORS');
 // CORS
@@ -28,10 +29,14 @@ app.use(cookieParser());
 logger.debug('Configurando endpoints');
 require('./routers')(app);
 
-if (process.env.NODE_ENV == "development") {
-  app.use('/', proxy(`localhost:${parseInt(config.PORT)+1}`));
-} else {
-  app.use('/', express.static(path.join(__dirname, '../dist')));
+app.get('/', (req, res) => {
+	res.send('Hello desde app');
+});
+
+if(process.env.NODE_ENV == "development"){
+	app.use('/', proxy(`localhost:${parseInt(config.PORT)+1}`));
+}else{
+	app.use('/', express.static(path.join(__dirname, '../dist')));
 }
 
 app.use(function(req, res, next) {
@@ -62,5 +67,7 @@ app.use(function(err, req, res, _next) {
 	});
 	res.render('error');
 });
+
+
 
 module.exports = app;

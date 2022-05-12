@@ -27,8 +27,8 @@
                                 :loading='loading'
                                 prepend-icon="person"
                                 v-model="usuario"
-                                label="Usuario"
-                                type="text"
+                                label="Contraseña"
+                                type="password"
                                 outlined
                                 color="#ef6b01"
                                 @keyup.enter="login"
@@ -53,6 +53,8 @@
 </template>
 
 <script>
+import ApiServer from './../api';
+const crypto = require('crypto');
 export default {
     name:'Login',
     data(){
@@ -66,13 +68,37 @@ export default {
         }
     },
     methods:{
-        login(){
+        async login(){
             if(this.usuario!=''){
-                sessionStorage.setItem('logged', true);
-                sessionStorage.setItem('usuario', this.usuario);
-                this.$router.push({ name: 'Home'});
-                window.location.reload();
+                this.loading=true;
+                let pass = (crypto.createHash('md5').update(this.usuario).digest("hex")).toUpperCase();
+                try {
+                    let resp = await ApiServer.verifUser(pass);
+                    if(resp!=''){
+                        this.loading=false;
+                        console.log(resp[0])
+                        sessionStorage.setItem('logged', true);
+                        sessionStorage.setItem('usuario', resp[0].USUARIO);
+                        this.$router.push({ name: 'Home'});
+                        window.location.reload();
+                    }else{
+                        this.loading=false;
+                        this.mensaje='Contraseña Incorrecta'
+                        this.tipo='error'
+                        this.alert=true
+                        setTimeout(()=>{
+                            this.alert=false
+                        },5000)
+                    }
+                } catch (error) {
+                    this.loading=false;
+                    this.mensaje='Se ha producido un error'
+                    this.tipo='error'
+                    this.alert=true
+                    console.log(error)
+                }
             }else{
+                this.loading=false;
                 this.mensaje='Ingrese Usuario'
                 this.tipo='warning'
                 this.alert=true
@@ -80,7 +106,21 @@ export default {
                     this.alert=false
                 },5000)
             }
+        },
+        async inicio(){
+            try {
+                let resp = await ApiServer.getUsuarios();
+                console.log(resp)
+            } catch (error) {
+                this.mensaje='Se ha producido un error al conectar'
+                this.tipo='error'
+                this.alert=true
+                console.log(error)
+            }
         }
+    },
+    async mounted(){
+        //await this.inicio();
     }
 
 }

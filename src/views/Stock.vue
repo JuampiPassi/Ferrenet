@@ -6,6 +6,7 @@
             elevation="2"
             x-large
             dark
+            @click="clicPoliticas"
         >Politica</v-btn>
         <v-btn
             block
@@ -21,7 +22,18 @@
 
 <script>
 export default {
-    name:'Stock'
+    name:'Stock',
+    data(){
+        return{
+
+        }
+    },
+    methods:{
+        clicPoliticas(){
+             this.$router.push({name: 'Politicas'});
+        },
+    },
+
 }
 </script>
 

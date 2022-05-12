@@ -3,16 +3,30 @@ const firebird = require('node-firebird');
 const logger = require('../logger');
 const dbError = require('./db-error');
 
-const getArticulo = async (query) => {
+const getUsuarios = async () => {
 
     try {
-
-       console.log('GetArticulo')
-
+        let consulta = 'select * from USUARIOS';
+        console.log(consulta)
+        return await funcionesexportadas.consultaFirebird(consulta);
       
-
     } catch (error) {
-        logger.error('Error en el metodo getArticulo');
+        logger.error('Error en el metodo getUsuarios');
+        logger.error(error);
+        return error;
+    }
+}
+
+const getVerifPass = async (pass) =>{
+    try {
+        if(pass){
+            let consulta = `select USUARIO from USUARIOS where USUARIOS.PASS='${pass}'`;
+            let resp = await funcionesexportadas.consultaFirebird(consulta);
+
+            return resp;
+        }
+    } catch (error) {
+        logger.error('Error en el metodo getVerifPass');
         logger.error(error);
         return error;
     }
@@ -50,7 +64,8 @@ const consultaFirebird = (consulta, info) => {
 }
 
 const funcionesexportadas = {
-    getArticulo,
+    getUsuarios,
+    getVerifPass,
     consultaFirebird,
 }
 

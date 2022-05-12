@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Stock from '../views/Stock.vue'
+import Politicas from '../views/Politicas.vue'
+import Escaner from '../views/Escaner.vue'
 
 Vue.use(VueRouter)
 
@@ -31,6 +33,22 @@ const routes = [
     path: '/Stock',
     name: 'Stock',
     component: Stock,
+    meta: {
+      guest: true
+    }
+  },
+  {
+    path: '/Politicas',
+    name: 'Politicas',
+    component: Politicas,
+    meta: {
+      guest: true
+    }
+  },
+  {
+    path: '/Escaner',
+    name: 'Escaner',
+    component: Escaner,
     meta: {
       guest: true
     }
