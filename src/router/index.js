@@ -4,7 +4,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Stock from '../views/Stock.vue'
 import Politicas from '../views/Politicas.vue'
-import Escaner from '../views/Escaner.vue'
+import PoliticaArticulo from '../views/PoliticaArticulo.vue'
 
 Vue.use(VueRouter)
 
@@ -46,10 +46,11 @@ const routes = [
     }
   },
   {
-    path: '/Escaner',
-    name: 'Escaner',
-    component: Escaner,
-    meta: {
+    path: '/PoliticaArticulo',
+    name: 'PoliticaArticulo',
+    component : PoliticaArticulo,
+    props: true,
+    meta:{
       guest: true
     }
   },

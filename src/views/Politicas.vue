@@ -36,7 +36,7 @@ export default {
     },
     methods:{
         verArticulos(politica){
-            this.$router.push({name: 'Articulos',params:{id:politica}}); 
+            this.$router.push({name: 'PoliticaArticulo', params:{ id: politica}}); 
         }
     },
      async mounted(){

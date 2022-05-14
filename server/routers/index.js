@@ -9,8 +9,8 @@ module.exports = (app) => {
     require('./politicas') (router);
     app.use('/api/politicas', router);
     
-   /* require('./articulos') (router);
-    app.use('/api/articulos', router);*/
+    require('./articulos') (router);
+    app.use('/api/articulos', router);
 
 
 }

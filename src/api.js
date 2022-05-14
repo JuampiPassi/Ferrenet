@@ -11,6 +11,9 @@ export default{
     async verArticulos(id){
         return (await axios.get(`./api/politicas/articulos/${id}`)).data;
     },
+    async buscarArticulo(cod){
+        return (await axios.get(`./api/articulos/${cod}`)).data;
+    },
     async verPoliticas(){
         return (await axios.get(`./api/politicas/`)).data;
     },
