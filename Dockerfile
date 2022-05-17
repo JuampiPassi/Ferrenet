@@ -1,6 +1,6 @@
 FROM node:10.22.0-alpine
 
-WORKDIR /opt/bbjet-versionado
+WORKDIR /opt/ferrenet
 # API
 ADD dist/server/. ./server
 # ADD dist/.env_default ./.env_default

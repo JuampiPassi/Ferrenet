@@ -67,7 +67,7 @@ gulp.task("package",
   gulp.series(
     "build",
     () => {
-      let project = process.env.CI_PROJECT_NAME || "bbjet-versionado";
+      let project = process.env.CI_PROJECT_NAME || "ferrenet";
       let version;
       if (/^v((([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)$/.test(process.env.CI_BUILD_REF_NAME))
         version = process.env.CI_BUILD_REF_NAME.slice(1);
