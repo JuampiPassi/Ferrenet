@@ -1,0 +1,19 @@
+stages:
+  - build
+  - deploy
+build app:
+  stage: build
+  script:
+    - npm i && npm run build:all
+    - CI_BUILD_REF_NAME=${CI_BUILD_REF_NAME#"v"}
+    - docker login https://docker.bbjetcloud.com -u gitlab -p Select562
+    - docker build -t ${CI_PROJECT_NAME}:${CI_BUILD_REF_NAME} .
+    - docker tag ${CI_PROJECT_NAME}:${CI_BUILD_REF_NAME} docker.bbjetcloud.com/bbjet/${CI_PROJECT_NAME}:${CI_BUILD_REF_NAME}
+    - docker push docker.bbjetcloud.com/bbjet/${CI_PROJECT_NAME}:${CI_BUILD_REF_NAME}
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - ./$CI_PROJECT_NAME-*.zip
+  only:
+    - master
+    - tags
