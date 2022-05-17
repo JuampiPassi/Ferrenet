@@ -1,6 +1,5 @@
 <template>
     <v-container>
-        {{notieneimagen}}
         <v-card
             :loading="loading"
             class="mx-auto my-12"
@@ -13,14 +12,15 @@
                     indeterminate
                 ></v-progress-linear>
             </template>
-
-            <template v-if="notieneimagen">
+            <Imagen v-if="!this.loading" :cod="this.cod"/>
+           <!-- <template v-if="notieneimagen">
                 <v-img :src="imgnotfound"> </v-img>
             </template>
             <template v-else>
-                <!-- <img :src="img">-->
-                <v-img contain :src="imagen"></v-img>
-            </template>
+              
+                <v-img contain :src="imagen">
+                </v-img>
+            </template>-->
 
             <v-card-title>{{descripcion}}</v-card-title>
             <v-divider class="mx-4"></v-divider>
@@ -32,18 +32,21 @@
 
 <script>
 import ApiServer from '../api';
+import Imagen from '../components/Imagen.vue'
 export default {
     name: 'Articulo',
+    components:{ Imagen },
     props:{cod: {type: String}},
     data(){
         return{
-            imgnotfound:require('@/../image-not-found.png'),
-            imagen: require('@/../imgarticulo.png'),
+           // imgnotfound:require('@/../image-not-found.png'),
+            //imagen: require('@/../imgarticulo.png'),
             descripcion: '',
             ean: '',
             loading:false,
-            notieneimagen:false,
-            articulo:''
+            notieneimagen:true,
+            articulo:'',
+            
         
             
         }
@@ -62,10 +65,10 @@ export default {
             if(this.articulo[0].hasOwnProperty('IMAGEN')){
 
                 this.notieneimagen=true;
-            }
+            }else this.notieneimagen=false
             this.descripcion=resp[0].DESCRIPCION
             this.ean=resp[0].EAN
-
+            
             
         } catch (error) {
             this.loading=false;

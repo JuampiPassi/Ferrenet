@@ -29,9 +29,6 @@ app.use(cookieParser());
 logger.debug('Configurando endpoints');
 require('./routers')(app);
 
-app.get('/', (req, res) => {
-	res.send('Hello desde app');
-});
 
 if(process.env.NODE_ENV == "development"){
 	app.use('/', proxy(`localhost:${parseInt(config.PORT)+1}`));

@@ -8,13 +8,37 @@ const  request  = require('request');
 const getArticulo = async (cod) => {
     try {
     
-        let consulta = `select DESCRIPCION, IMAGEN, EAN from ARTICULOS where ARTICULOS.COD_ART='${cod}'`;
+        let consulta = `select A.DESCRIPCION, A.EAN, A.MOD, A.MED, A.CANT_EMPAQ, S.EXISTENCIA, S.FECHA_CTRL from ARTICULOS A, STOCK S where A.COD_ART='${cod}' AND S.ART_ID=A.ART_ID`;
+        let resp = await funcionesexportadas.consultaFirebird(consulta);
+        return resp;
+    } catch (error) {
+        logger.error('Error en el metodo getArticulo');
+        logger.error(error);
+        return error;
+    }
+}
+
+const getImagen = async (cod) => {
+    try {
+        let consulta = `SELECT IMAGEN, iif(IMAGEN is NULL, 1, 0) as ISNULL FROM ARTICULOS WHERE COD_ART='${cod}'`;
         let resp = await funcionesexportadas.consultaFirebirdImagen(consulta);
         return resp;
     } catch (error) {
         logger.error('Error en el metodo getArticulo');
         logger.error(error);
         return error;
+    }
+}
+
+const getArtEan = async (ean) => {
+    try {
+        let consulta = `SELECT DESCRIPCION from ARTICULOS WHERE ARTICULOS.EAN='${ean}'`;
+        let resp = await funcionesexportadas.consultaFirebird(consulta);
+        return resp;
+    } catch (error) {
+        logger.error('Error en el metodo getArticulo');
+        logger.error(error);
+        return error; 
     }
 }
 
@@ -79,6 +103,7 @@ const consultaFirebirdImagen = (consulta, info) => {
                                    });
                                })
                            }else{
+                               //console.log('no tiene imagen')
                            /*fs.rename('imgarticulo.png','img.png', function(err){
                                     if(err) console.log(err);
                                 });*/
@@ -101,6 +126,8 @@ const consultaFirebirdImagen = (consulta, info) => {
 
 const funcionesexportadas = {
     getArticulo,
+    getImagen,
+    getArtEan,
     consultaFirebird,
     consultaFirebirdImagen
 }

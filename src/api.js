@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+
 export default{
     
     async getUsuarios(){
@@ -13,6 +14,12 @@ export default{
     },
     async buscarArticulo(cod){
         return (await axios.get(`./api/articulos/${cod}`)).data;
+    },
+    async buscarImagen(cod){
+        return(await axios.get(`./api/articulos/imagen/${cod}`)).data;
+    },
+    async buscarArticuloporEan(ean){
+        return (await axios.get(`./api/articulos/ean/${ean}`)).data;
     },
     async verPoliticas(){
         return (await axios.get(`./api/politicas/`)).data;

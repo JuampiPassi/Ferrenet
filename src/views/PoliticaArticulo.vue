@@ -9,7 +9,10 @@
             </v-card-text>
             <v-card-actions>
                 <v-btn outlined text color="#ef6b01" @click="siguiente()">
-                    Siguiente
+                    Aceptar
+                </v-btn>
+                <v-btn outlined text color="secondary" @click="pasar()">
+                    Pasar
                 </v-btn>
             </v-card-actions>
         </v-card>
@@ -17,6 +20,43 @@
         <v-alert class="mt-10"  :type="tipo"  v-model="alert" dense transition="scale-transition">
             {{mensaje}}
         </v-alert>
+        <v-dialog  v-model="dialogMotivos" persistent :overlay="false" max-width="500px" scrollable
+            transition="dialog-bottom-transition"
+        >
+            <v-card>
+                <v-toolbar color="#ef6b01">
+                    <v-card-title primary-title>
+                        Causas
+                    </v-card-title>
+                </v-toolbar>
+                
+                <v-list>
+                    <v-list-item-group v-model="motivoselected" active-class="orange--text">
+                        <template v-for="(item, index) in motivos" >
+                            <v-list-item :key="item.id" :value="item.id">
+                                <template v-slot:default="{active}">
+                                    <v-list-item-content>
+                                        <v-list-item-title v-text="item.motivo">
+
+                                        </v-list-item-title>
+                                    </v-list-item-content>
+                                    <v-list-item-action>
+                                        <v-icon v-if="active">mdi-check</v-icon>
+                                    </v-list-item-action>
+                                </template>
+                            </v-list-item>
+                            <v-divider :key="index+'a'"></v-divider>
+                        </template>
+                    </v-list-item-group>
+                </v-list>
+
+
+                <v-card-actions>
+                    <v-btn text @click="aceptarMotivo">Aceptar</v-btn>
+                    <v-btn text @click="dialogMotivos=false">Cancelar</v-btn>
+                </v-card-actions>
+            </v-card>   
+        </v-dialog>
     </v-container>
 </template>
 
@@ -34,7 +74,15 @@ export default {
             mensaje:'No se encontraron articulos',
             alert:false,
             codigo: '',
-            componentKey: 0
+            componentKey: 0,
+            dialogMotivos: false,
+            motivos:[
+                {id:1,motivo: "Motivo 1"},
+                {id:2,motivo: "Motivo 2"},
+                {id:3,motivo: "Motivo 3"},
+                {id:4,motivo: "Motivo 4"},
+                ],
+            motivoselected: ''
         }
     },
     methods:{
@@ -44,6 +92,12 @@ export default {
                 this.articulos.shift();
                 this.componentKey +=1;
             }
+        },
+        pasar(){
+            this.dialogMotivos=true;
+        },
+        aceptarMotivo(){
+            console.log(this.motivoselected)
         }
     },
     async mounted(){
@@ -61,7 +115,6 @@ export default {
     },
     watch:{
         articulos(){
-            console.log(this.articulos.length)
             if(this.articulos.length==0){
                 this.alert=true
             }
