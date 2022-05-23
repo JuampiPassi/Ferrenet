@@ -51,6 +51,16 @@
                 </v-list-item-content>
             </v-list-item>
 
+            <v-list-item link @click="IrQr">
+                <v-list-item-action>
+                <v-icon color="#ef6b01" >mdi-qrcode</v-icon>
+                </v-list-item-action>
+
+                <v-list-item-content>
+                <v-list-item-title style="color: #424242">QR</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+
             </template>
         </v-list>
 
@@ -94,6 +104,10 @@ export default {
         IrStock(){
             if (this.$route.path !== 'Stock') 
             this.$router.push({name: 'Stock'});
+        },
+        IrQr(){
+          if (this.$route.path !== 'Qr') 
+            this.$router.push({name: 'Qr'});  
         },
         cerrarSesion(){
             sessionStorage.clear();
