@@ -15,8 +15,6 @@ const buscarImagen = async (req, res) => {
     res.status(200);
     res.writeHead(200, {'Content-Type': 'image/jpg'})
     res.end(await repositories.getImagen(cod))
-   //var data = await repositories.getImagen(cod)
-   //res.send({data})
 }
 
 

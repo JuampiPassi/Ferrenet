@@ -10,7 +10,7 @@ const axios = require('axios')
 const getArticulo = async (cod) => {
     try {
     
-        let consulta = `select A.DESCRIPCION, A.EAN, A.MOD, A.MED, A.CANT_EMPAQ, S.EXISTENCIA, S.FECHA_CTRL from ARTICULOS A, STOCK S where A.COD_ART='${cod}' AND S.ART_ID=A.ART_ID`;
+        let consulta = `select A.DESCRIPCION, A.EAN, A.MOD, A.MED, A.CANT_EMPAQ, S.EXISTENCIA, S.FECHA_CTRL from ARTICULOS A, STOCK S where A.COD_ART='${cod}' AND S.ART_ID=A.ART_ID AND A.EMP_ID=1 AND S.DEP_ID=1`;
         let resp = await funcionesexportadas.consultaFirebird(consulta);
         return resp;
     } catch (error) {
@@ -22,7 +22,7 @@ const getArticulo = async (cod) => {
 
 const getImagen = async (cod) => {
     try {
-        let consulta = `SELECT IMAGEN, iif(IMAGEN is NULL, 1, 0) as ISNULL FROM ARTICULOS WHERE COD_ART='${cod}'`;
+        let consulta = `SELECT IMAGEN, iif(IMAGEN is NULL, 1, 0) as ISNULL FROM ARTICULOS WHERE COD_ART='${cod} AND EMP_ID=1'`;
         let resp = await funcionesexportadas.consultaFirebirdImagen(consulta);
         return resp;
     } catch (error) {
@@ -34,7 +34,7 @@ const getImagen = async (cod) => {
 
 const getArtEan = async (ean) => {
     try {
-        let consulta = `SELECT DESCRIPCION from ARTICULOS WHERE ARTICULOS.EAN='${ean}'`;
+        let consulta = `SELECT DESCRIPCION from ARTICULOS WHERE ARTICULOS.EAN='${ean} AND EMP_ID=1'`;
         let resp = await funcionesexportadas.consultaFirebird(consulta);
         return resp;
     } catch (error) {

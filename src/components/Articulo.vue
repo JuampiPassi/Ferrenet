@@ -27,7 +27,7 @@
                 <v-divider class="mx-4 mt-3 mb-3"></v-divider>
                 <h2 class="titulo text-center"><b>EAN: </b>{{ean}}</h2>
                 <v-divider class="mx-4 mt-3 mb-3"></v-divider>
-                <h2 class="titulo text-center"><b>Stock: </b>{{ean}}</h2>
+                <h2 class="titulo text-center"><b>Stock: </b>{{stock}}</h2>
             </v-card-text>
             
 
