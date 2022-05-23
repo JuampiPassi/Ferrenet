@@ -4,6 +4,8 @@ const logger = require('../logger');
 const dbError = require('./db-error');
 const fs = require('fs');
 const  request  = require('request');
+const axios = require('axios')
+
 
 const getArticulo = async (cod) => {
     try {
@@ -24,7 +26,7 @@ const getImagen = async (cod) => {
         let resp = await funcionesexportadas.consultaFirebirdImagen(consulta);
         return resp;
     } catch (error) {
-        logger.error('Error en el metodo getArticulo');
+        logger.error('Error en el metodo getImagen');
         logger.error(error);
         return error;
     }
@@ -36,7 +38,7 @@ const getArtEan = async (ean) => {
         let resp = await funcionesexportadas.consultaFirebird(consulta);
         return resp;
     } catch (error) {
-        logger.error('Error en el metodo getArticulo');
+        logger.error('Error en el metodo getArtEan');
         logger.error(error);
         return error; 
     }
@@ -74,43 +76,45 @@ const consultaFirebird = (consulta, info) => {
 }
 
 const consultaFirebirdImagen = (consulta, info) => {
-
     let resultado = new Promise((resolve, reject) => {
-
         firebird.attach(config.firebird, function(err, db) {
             if (err){
                 reject(err);
             }else{
-
                 db.query(consulta, info, function(err, resp) {
                         if(err){
                             reject(err)
                         }else{
-                           if(resp[0].IMAGEN!=null){
-                               resp[0].IMAGEN(function(err, name,e){
-                                   if(err)
-                                        throw err;
-                                   var buffers=[];
-                                   e.on('data',function(chunk){
-                                       buffers.push(chunk);
+                            if(resp.length>0){
+
+                                if(resp[0].IMAGEN!=null){
+                                    resp[0].IMAGEN(function(err, name,e){
+                                        if(err)
+                                            throw err;
+                                        var buffers=[];
+                                        e.on('data',function(chunk){
+                                            buffers.push(chunk);
+                                        });
+                                        e.once('end',function(){
+                                            var buffer = Buffer.concat(buffers);
+                                            resolve(buffer); 
+                                        });
+                                    })
+                                    db.detach(); /*CIERRA LA CONEXION */
+                                }else{
+                                    let url = 'https://www.ibmhs.com/ss-content/not-found.jpg';
+                                    request({ url, encoding: null }, (err, resp, buffer) => {
+                                        resolve(buffer)
                                    });
-                                   e.once('end',function(){
-                                       var buffer = Buffer.concat(buffers);
-                                       fs.writeFile('imgarticulo.png',buffer, err =>{
-                                           if (err) throw err;
-                                       });
-                                       
-                                   });
-                               })
-                           }else{
-                               //console.log('no tiene imagen')
-                           /*fs.rename('imgarticulo.png','img.png', function(err){
-                                    if(err) console.log(err);
-                                });*/
-                            
-                           } 
-                            db.detach(); /*CIERRA LA CONEXION */
-                            resolve(resp);
+                                   db.detach(); /*CIERRA LA CONEXION */
+                                }
+                            }else{
+                                let url = 'https://www.ibmhs.com/ss-content/not-found.jpg';
+                                request({ url, encoding: null }, (err, resp, buffer) => {
+                                    resolve(buffer)
+                                });
+                                db.detach(); /*CIERRA LA CONEXION */
+                            }
                         }
                     }
                 );

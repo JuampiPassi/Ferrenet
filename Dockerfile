@@ -1,6 +1,6 @@
 FROM node:10.22.0-alpine
 
-WORKDIR /opt/ferrenet
+WORKDIR /opt/ferrenetapp
 # API
 ADD dist/server/. ./server
 # ADD dist/.env_default ./.env_default
@@ -11,7 +11,9 @@ ADD dist/index.html ./dist/index.html
 ADD dist/favicon.ico ./dist/favicon.ico
 ADD dist/css/. ./dist/css
 ADD dist/fonts/. ./dist/fonts
-ADD dist/js/. ./dist/js
+ADD dist/js/. ./dist/js/
+ADD dist/img/. ./dist/img/
+ADD dist/manifest.json ./dist/manifest.json
 
 ADD entrypoint.sh ./entrypoint.sh
 
