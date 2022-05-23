@@ -12,19 +12,24 @@
                     indeterminate
                 ></v-progress-linear>
             </template>
-            <Imagen v-if="!this.loading" :cod="this.cod"/>
-           <!-- <template v-if="notieneimagen">
-                <v-img :src="imgnotfound"> </v-img>
-            </template>
-            <template v-else>
-              
-                <v-img contain :src="imagen">
-                </v-img>
-            </template>-->
+            <Imagen :cod="this.cod"/>
 
-            <v-card-title>{{descripcion}}</v-card-title>
+            
+
+            <v-card-title class="titulo text-center">{{descripcion}}</v-card-title>
             <v-divider class="mx-4"></v-divider>
-            <v-card-title>Código: {{ean}}</v-card-title>
+            <v-card-text>
+                <h2 class="titulo text-center"><b>Mod: </b>{{mod}}</h2>
+                <v-divider class="mx-4 mt-3 mb-3"></v-divider>
+                <h2 class="titulo text-center"><b>Med: </b>{{medidas}}</h2>
+                <v-divider class="mx-4 mt-3 mb-3"></v-divider>
+                <h2 class="titulo text-center"><b>Empaque: </b>{{empaque}}</h2>
+                <v-divider class="mx-4 mt-3 mb-3"></v-divider>
+                <h2 class="titulo text-center"><b>EAN: </b>{{ean}}</h2>
+                <v-divider class="mx-4 mt-3 mb-3"></v-divider>
+                <h2 class="titulo text-center"><b>Stock: </b>{{ean}}</h2>
+            </v-card-text>
+            
 
         </v-card>
     </v-container>
@@ -39,16 +44,15 @@ export default {
     props:{cod: {type: String}},
     data(){
         return{
-           // imgnotfound:require('@/../image-not-found.png'),
-            //imagen: require('@/../imgarticulo.png'),
             descripcion: '',
             ean: '',
             loading:false,
-            notieneimagen:true,
             articulo:'',
-            
-        
-            
+            medidas:'',
+            empaque: '',
+            mod:'',
+            stock: ''
+              
         }
     },
     methods:{
@@ -60,14 +64,19 @@ export default {
         try {
             let resp = await ApiServer.buscarArticulo(this.cod)
             this.loading=false;
-            this.articulo=resp;
-            console.log(this.articulo[0])
-            if(this.articulo[0].hasOwnProperty('IMAGEN')){
+            if(resp.length>0){
 
-                this.notieneimagen=true;
-            }else this.notieneimagen=false
-            this.descripcion=resp[0].DESCRIPCION
-            this.ean=resp[0].EAN
+                this.articulo=resp;
+                console.log(this.articulo[0])
+                this.descripcion=resp[0].DESCRIPCION
+                this.ean=resp[0].EAN
+                this.medidas=resp[0].MED
+                this.empaque=resp[0].CANT_EMPAQ
+                this.mod=resp[0].MOD
+                this.stock=resp[0].EXISTENCIA
+            }else{
+                this.descripcion="Articulo no encontrado"
+            }
             
             
         } catch (error) {
@@ -77,13 +86,6 @@ export default {
         
     },
     computed:{
-        /*img(){
-        try {
-                return require('@/../imgarticulo.png')
-            } catch (error) {
-                return require('@/../image-not-found.png')
-            }
-        }*/
     },
     watch:{
     }
@@ -92,5 +94,8 @@ export default {
 </script>
 
 <style>
+.titulo{
+    word-break: normal;
+}
 
 </style>
