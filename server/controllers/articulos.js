@@ -12,7 +12,11 @@ const buscarArticuloporEan = async (req, res) => {
 }
 const buscarImagen = async (req, res) => {
     let cod = req.params.cod;
-    res.status(200).send(await repositories.getImagen(cod));
+    res.status(200);
+    res.writeHead(200, {'Content-Type': 'image/jpg'})
+    res.end(await repositories.getImagen(cod))
+   //var data = await repositories.getImagen(cod)
+   //res.send({data})
 }
 
 
