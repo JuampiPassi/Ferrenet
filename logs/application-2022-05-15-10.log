@@ -1,0 +1,2 @@
+{"level":"error","message":"Error en el metodo getVerifPass"}
+{"address":"10.19.0.242","code":"ETIMEDOUT","errno":-4039,"level":"error","port":3050,"syscall":"connect"}

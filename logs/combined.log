@@ -707,3 +707,9 @@
 {"level":"debug","message":"Configurando CORS"}
 {"level":"debug","message":"Configurando endpoints"}
 {"level":"info","message":"Iniciando servidor en el puerto 3000"}
+{"level":"debug","message":"Configurando CORS"}
+{"level":"debug","message":"Configurando endpoints"}
+{"level":"info","message":"Iniciando servidor en el puerto 3000"}
+{"level":"debug","message":"Configurando CORS"}
+{"level":"debug","message":"Configurando endpoints"}
+{"level":"info","message":"Iniciando servidor en el puerto 3000"}
