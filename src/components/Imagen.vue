@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-img contain :src="`http://localhost:3000/api/articulos/imagen/${this.cod}`" />
+        <v-img contain :src="`http://localhost:8080/api/articulos/imagen/${this.cod}`" />
         
         
     </v-container>
