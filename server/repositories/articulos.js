@@ -22,7 +22,7 @@ const getArticulo = async (cod) => {
 
 const getImagen = async (cod) => {
     try {
-        let consulta = `SELECT IMAGEN, iif(IMAGEN is NULL, 1, 0) as ISNULL FROM ARTICULOS WHERE COD_ART='${cod} AND EMP_ID=1'`;
+        let consulta = `SELECT IMAGEN, iif(IMAGEN is NULL, 1, 0) as ISNULL FROM ARTICULOS WHERE COD_ART='${cod}'`;
         let resp = await funcionesexportadas.consultaFirebirdImagen(consulta);
         return resp;
     } catch (error) {
