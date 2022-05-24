@@ -5,7 +5,7 @@ module.exports = function (router) {
 
 	
 	router.get('/articulos/:id', (req,res) =>{
-		let consulta = 'SELECT COD_ART from STOCK_POLITICA WHERE POLITICA=?';
+		let consulta = 'SELECT COD_ART from STOCK_POLITICA WHERE POLITICA=? ORDER BY ORDEN';
 		conexion.query(consulta,[req.params.id],(error,results)=>{
 			if(error){
 				throw(error)

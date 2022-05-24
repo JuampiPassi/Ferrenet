@@ -10,7 +10,7 @@ const axios = require('axios')
 const getArticulo = async (cod) => {
     try {
     
-        let consulta = `select A.DESCRIPCION, A.EAN, A.MOD, A.MED, A.CANT_EMPAQ, S.EXISTENCIA, S.FECHA_CTRL from ARTICULOS A, STOCK S where A.COD_ART='${cod}' AND S.ART_ID=A.ART_ID AND A.EMP_ID=1 AND S.DEP_ID=1`;
+        let consulta = `select A.DESCRIPCION, A.EAN, A.MOD, A.MED, A.CANT_EMPAQ, S.EXISTENCIA, S.ORD_REC_STR, cast(S.FECHA_CTRL as char(25)) as FECHA_CTRL from ARTICULOS A LEFT OUTER JOIN STOCK S ON S.ART_ID=A.ART_ID where A.COD_ART='${cod}' AND A.EMP_ID=1 AND S.DEP_ID=1`;
         let resp = await funcionesexportadas.consultaFirebird(consulta);
         return resp;
     } catch (error) {
