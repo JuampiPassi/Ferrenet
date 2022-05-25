@@ -34,7 +34,7 @@ const getImagen = async (cod) => {
 
 const getArtEan = async (ean) => {
     try {
-        let consulta = `SELECT DESCRIPCION from ARTICULOS WHERE ARTICULOS.EAN='${ean} AND EMP_ID=1'`;
+        let consulta = `SELECT COD_ART from ARTICULOS WHERE ARTICULOS.EAN='${ean}' AND EMP_ID=1`;
         let resp = await funcionesexportadas.consultaFirebird(consulta);
         return resp;
     } catch (error) {
