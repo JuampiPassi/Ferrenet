@@ -26,11 +26,8 @@
         >
             <v-card>
                 <v-toolbar color="#ef6b01">
-                    <v-card-title primary-title>
-                        Causas
-                    </v-card-title>
+                    <v-card-title>Causa</v-card-title>
                 </v-toolbar>
-                
                 <v-list>
                     <v-list-item-group v-model="motivoselected" active-class="orange--text">
                         <template v-for="(item, index) in motivos" >
@@ -53,7 +50,7 @@
 
 
                 <v-card-actions>
-                    <v-btn text @click="aceptarMotivo" >Aceptar</v-btn>
+                    <v-btn text @click="aceptarMotivo" color="orange" :disabled="disabledAceptarMotivo">Aceptar</v-btn>
                     <v-btn text @click="dialogMotivos=false">Cancelar</v-btn>
                 </v-card-actions>
             </v-card>   
@@ -93,6 +90,7 @@ export default {
                 this.codigo = this.articulos[0].COD_ART
                 this.articulos.shift();
                 this.componentKey +=1;
+                this.bloqueado=true
             }
         },
         pasar(){
@@ -113,6 +111,15 @@ export default {
             console.log('articulos: ',resp)
         } catch (error) {
             console.log(error)
+        }
+    },
+    computed: {
+        disabledAceptarMotivo(){
+            if(this.motivoselected=='' || this.motivoselected==undefined) {
+                return true
+            }else{
+                return false
+            }
         }
     },
     watch:{

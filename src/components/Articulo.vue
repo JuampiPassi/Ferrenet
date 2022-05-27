@@ -60,8 +60,27 @@
         <v-alert class="mt-10"  :type="tipo"  v-model="alert" dense transition="scale-transition">
             {{mensaje}}
         </v-alert>
-        <StreamBarcodeReader v-if="this.verbarcode" @decode="code=> onDecodeBarCode(code)"></StreamBarcodeReader>
-        <QrcodeStream v-if="this.verqr" @decode="onDecodeQr"></QrcodeStream>
+        <v-dialog v-model="verbarcode" scrollable transition="dialog-transition">
+            <StreamBarcodeReader v-if="this.verbarcode" @decode="code=> onDecodeBarCode(code)"></StreamBarcodeReader>
+        </v-dialog>
+        <v-dialog v-model="verqr" scrollable transition="dialog-transition">
+            <QrcodeStream v-if="this.verqr" @decode="onDecodeQr" @init="onInit" :torch="torchActive" :key="_uid" :track="paintOutline" :camera="camera">
+                <v-btn icon color="orange" @click="cambiarCamara()">
+                    <v-icon dark>
+                    mdi-camera-flip
+                    </v-icon>
+                </v-btn>
+                <v-btn icon color="orange" @click="torchActive = !torchActive" :disabled="torchNotSupported">
+                    <v-icon dark>
+                    {{flashIcon}}
+                    </v-icon>
+                </v-btn>
+                
+            </QrcodeStream>
+            <v-alert class="mt-10"  type="error"  v-model="alertCamara" dense transition="scale-transition">
+                {{mensajeCamara}}
+            </v-alert>
+        </v-dialog>
     </v-container>
 </template>
 
@@ -95,6 +114,11 @@ export default {
             tipo:'error',
             verif:false,
             nuevaCant:'',
+            camera: 'rear',
+            torchActive: false,
+            torchNotSupported: false,
+            alertCamara:false,
+            mensajeCamara:''
 
               
         }
@@ -113,8 +137,20 @@ export default {
             }else this.verqr=true
         },
         onDecodeBarCode(code){
-            console.log(code)
             this.verbarcode=false
+             if(this.ean==code){
+                this.alert=true
+                this.tipo='success'
+                this.mensaje="Verificación Correcta"
+                this.verif=true
+                this.$emit('validado',true)
+                this.escaner=false
+            }else{
+                this.alert=true
+                this.tipo='error'
+                this.mensaje="Verificación Incorrecta"
+            }
+            
         },onDecodeQr(decodedString){
             this.verqr=false;
             if(this.ean==decodedString){
@@ -123,12 +159,63 @@ export default {
                 this.mensaje="Verificación Correcta"
                 this.verif=true
                 this.$emit('validado',true)
+                this.escaner=false
             }else{
                 this.alert=true
                 this.tipo='error'
                 this.mensaje="Verificación Incorrecta"
             }
-        }
+        },
+        cambiarCamara(){
+            this.alert=false
+            switch (this.camera) {
+                case 'front':
+                this.camera = 'rear'
+                break
+                case 'rear':
+                this.camera = 'front'
+                break
+            }
+        },
+        async onInit (promise) {
+            try {
+                const { capabilities } = await promise
+                this.torchNotSupported = !capabilities.torch
+            } catch (error) {
+                const triedFrontCamera = this.camera === 'front'
+                const triedRearCamera = this.camera === 'rear'
+
+                const cameraMissingError = error.name === 'OverconstrainedError'
+
+                if (triedRearCamera && cameraMissingError) {
+                this.alertCamara=true;
+                this.mensajeCamara="No se ha encontrado cámara trasera"
+                }
+
+                if (triedFrontCamera && cameraMissingError) {
+                this.alertCamara=true;
+                this.mensajeCamara="No se ha encontrado cámara frontal"
+                }
+
+                console.error(error)
+            }
+        },
+        paintOutline (detectedCodes, ctx) {
+            for (const detectedCode of detectedCodes) {
+                const [ firstPoint, ...otherPoints ] = detectedCode.cornerPoints
+
+                ctx.strokeStyle = "red";
+
+                ctx.beginPath();
+                ctx.moveTo(firstPoint.x, firstPoint.y);
+                for (const { x, y } of otherPoints) {
+                ctx.lineTo(x, y);
+                }
+                ctx.lineTo(firstPoint.x, firstPoint.y);
+                ctx.closePath();
+                ctx.stroke();
+            }
+    },
         
     },
     async mounted(){
@@ -167,6 +254,12 @@ export default {
         
     },
     computed:{
+        flashIcon() {
+            if (this.torchActive)
+                return 'mdi-flashlight-off'
+            else
+                return 'mdi-flashlight'
+        }
     },
     watch:{
     }
