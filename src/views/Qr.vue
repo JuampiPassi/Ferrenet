@@ -21,9 +21,20 @@
          </v-col>
        </v-row>
        <template v-if="this.cod_art!=''">
-          <Articulo :cod="this.cod_art" :key="componentKey"></Articulo>
+          <Articulo :cod="this.cod_art" :key="componentKey" :escaner='false'></Articulo>
         </template>
-        <QrcodeStream v-if="this.camara" @decode="onDecode"></QrcodeStream>
+        <QrcodeStream v-if="this.camara" @decode="onDecode" :camera="camera" @init="onInit" :torch="torchActive" :key="_uid" :track="paintOutline" >
+          <v-btn icon color="orange" @click="cambiarCamara()">
+            <v-icon dark>
+              mdi-camera-flip
+            </v-icon>
+          </v-btn>
+        <v-btn icon color="orange" @click="torchActive = !torchActive" :disabled="torchNotSupported">
+            <v-icon dark>
+              {{flashIcon}}
+            </v-icon>
+          </v-btn>
+        </QrcodeStream>
         <v-alert class="mt-10"  :type="tipo"  v-model="alert" dense transition="scale-transition">
             {{mensaje}}
         </v-alert>
@@ -45,7 +56,11 @@ export default {
             alert:false,
             mensaje:'',
             cod_art:'',
-            componentKey:0
+            componentKey:0,
+            camera: 'rear',
+            torchActive: false,
+            torchNotSupported: false
+  
         }
     },
     methods:{
@@ -71,8 +86,68 @@ export default {
             this.tipo='error'
             this.alert=true
           }
-        }
+        },
+        cambiarCamara(){
+          this.alert=false
+          switch (this.camera) {
+            case 'front':
+              this.camera = 'rear'
+              break
+            case 'rear':
+              this.camera = 'front'
+              break
+          }
+        },
+        async onInit (promise) {
+          try {
+            const { capabilities } = await promise
+            this.torchNotSupported = !capabilities.torch
+          } catch (error) {
+            const triedFrontCamera = this.camera === 'front'
+            const triedRearCamera = this.camera === 'rear'
+
+            const cameraMissingError = error.name === 'OverconstrainedError'
+
+            if (triedRearCamera && cameraMissingError) {
+              this.alert=true;
+              this.tipo='error';
+              this.mensaje="No se ha encontrado cámara trasera"
+            }
+
+            if (triedFrontCamera && cameraMissingError) {
+              this.alert=true;
+              this.tipo='error';
+              this.mensaje="No se ha encontrado cámara frontal"
+            }
+
+            console.error(error)
+          }
+        },
+         paintOutline (detectedCodes, ctx) {
+          for (const detectedCode of detectedCodes) {
+            const [ firstPoint, ...otherPoints ] = detectedCode.cornerPoints
+
+            ctx.strokeStyle = "red";
+
+            ctx.beginPath();
+            ctx.moveTo(firstPoint.x, firstPoint.y);
+            for (const { x, y } of otherPoints) {
+              ctx.lineTo(x, y);
+            }
+            ctx.lineTo(firstPoint.x, firstPoint.y);
+            ctx.closePath();
+            ctx.stroke();
+          }
+    },
+  },
+  computed: {
+    flashIcon() {
+      if (this.torchActive)
+        return 'mdi-flashlight-off'
+      else
+        return 'mdi-flashlight'
     }
+  },
 }
 </script>
 

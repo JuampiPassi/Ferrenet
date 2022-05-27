@@ -2,13 +2,14 @@
     <v-container>
         <v-card elevation="0" v-if="this.articulos.length>0">
             <v-card-title>{{id}}</v-card-title>
+            <v-card-subtitle>Articulos Restantes: {{this.articulos.length}}</v-card-subtitle>
             <v-card-text>
                 <template v-if="this.articulos.length>0">
-                    <Articulo :cod="this.codigo" :key="componentKey"></Articulo>
+                    <Articulo :cod="this.codigo" :key="componentKey" @validado="bloqueado=false"></Articulo>
                 </template>
             </v-card-text>
             <v-card-actions>
-                <v-btn outlined text color="#ef6b01" @click="siguiente()">
+                <v-btn outlined text color="#ef6b01" @click="siguiente()" :disabled="bloqueado">
                     Aceptar
                 </v-btn>
                 <v-btn outlined text color="secondary" @click="pasar()">
@@ -52,7 +53,7 @@
 
 
                 <v-card-actions>
-                    <v-btn text @click="aceptarMotivo">Aceptar</v-btn>
+                    <v-btn text @click="aceptarMotivo" >Aceptar</v-btn>
                     <v-btn text @click="dialogMotivos=false">Cancelar</v-btn>
                 </v-card-actions>
             </v-card>   
@@ -82,7 +83,8 @@ export default {
                 {id:3,motivo: "Motivo 3"},
                 {id:4,motivo: "Motivo 4"},
                 ],
-            motivoselected: ''
+            motivoselected: '',
+            bloqueado:true,
         }
     },
     methods:{
