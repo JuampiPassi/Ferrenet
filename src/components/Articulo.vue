@@ -64,7 +64,7 @@
             <StreamBarcodeReader v-if="this.verbarcode" @decode="code=> onDecodeBarCode(code)"></StreamBarcodeReader>
         </v-dialog>
         <v-dialog v-model="verqr" scrollable transition="dialog-transition">
-            <QrcodeStream v-if="this.verqr" @decode="onDecodeQr" @init="onInit" :torch="torchActive" :key="_uid" :track="paintOutline" :camera="camera">
+            <QrcodeStream v-if="this.verqr" @decode="onDecodeQr" @init="onInit" :torch="torchActive" :key="_uid" :track="paintOutline">
                 <v-btn icon color="orange" @click="cambiarCamara()">
                     <v-icon dark>
                     mdi-camera-flip
@@ -77,9 +77,9 @@
                 </v-btn>
                 
             </QrcodeStream>
-            <v-alert class="mt-10"  type="error"  v-model="alertCamara" dense transition="scale-transition">
+            <!--<v-alert class="mt-10"  type="error"  v-model="alertCamara" dense transition="scale-transition">
                 {{mensajeCamara}}
-            </v-alert>
+            </v-alert>-->
         </v-dialog>
     </v-container>
 </template>

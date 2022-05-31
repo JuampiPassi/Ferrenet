@@ -24,4 +24,7 @@ export default{
     async verPoliticas(){
         return (await axios.get(`./api/politicas/`)).data;
     },
+    async eliminarArticulo(cod){
+        return (await axios.get(`./api/politicas/eliminararticulo/${cod}`)).data;
+    },
 }

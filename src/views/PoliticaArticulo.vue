@@ -85,10 +85,16 @@ export default {
         }
     },
     methods:{
-        siguiente(){
+       async siguiente(){
             if(this.articulos.length>0){
-                this.codigo = this.articulos[0].COD_ART
+                try {
+                   let result = await ApiServer.eliminarArticulo(this.codigo)
+                   console.log(result) 
+                } catch (error) {
+                    console.log(error)
+                }
                 this.articulos.shift();
+                this.codigo = this.articulos[0].COD_ART
                 this.componentKey +=1;
                 this.bloqueado=true
             }
