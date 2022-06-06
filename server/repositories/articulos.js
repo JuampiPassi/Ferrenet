@@ -102,14 +102,14 @@ const consultaFirebirdImagen = (consulta, info) => {
                                     })
                                     db.detach(); /*CIERRA LA CONEXION */
                                 }else{
-                                    let url = 'https://www.ibmhs.com/ss-content/not-found.jpg';
+                                    let url = 'https://e-cycles.com.py/assets/meemba/images/default_product_image.png';
                                     request({ url, encoding: null }, (err, resp, buffer) => {
                                         resolve(buffer)
                                    });
                                    db.detach(); /*CIERRA LA CONEXION */
                                 }
                             }else{
-                                let url = 'https://www.ibmhs.com/ss-content/not-found.jpg';
+                                let url = 'https://e-cycles.com.py/assets/meemba/images/default_product_image.png';
                                 request({ url, encoding: null }, (err, resp, buffer) => {
                                     resolve(buffer)
                                 });

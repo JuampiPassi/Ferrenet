@@ -24,6 +24,12 @@ export default{
     async verPoliticas(){
         return (await axios.get(`./api/politicas/`)).data;
     },
+    async verMotivos(){
+        return (await axios.get(`./api/politicas/motivos`)).data;
+    },
+    async artnoajustado(info){
+        return (await axios.post(`./api/politicas/noescaneado`,info)).data; 
+    },
     async eliminarArticulo(cod){
         return (await axios.get(`./api/politicas/eliminararticulo/${cod}`)).data;
     },

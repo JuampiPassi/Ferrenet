@@ -1,6 +1,9 @@
 <template>
     <v-container>
-        <v-img contain :src="`http://10.19.0.180:8080/api/articulos/imagen/${this.cod}`" />
+        <v-img contain :src="`http://localhost:8080/api/articulos/imagen/${this.cod}`" 
+        max-width="160"
+        max-height="160"
+        />
         
         
     </v-container>
