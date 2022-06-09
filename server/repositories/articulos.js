@@ -2,7 +2,6 @@ const config = require('../config/config.json');
 const firebird = require('node-firebird');
 const logger = require('../logger');
 const dbError = require('./db-error');
-const fs = require('fs');
 const  request  = require('request');
 const axios = require('axios')
 
@@ -10,7 +9,7 @@ const axios = require('axios')
 const getArticulo = async (cod) => {
     try {
     
-        let consulta = `select A.DESCRIPCION, A.EAN, A.MOD, A.MED, A.CANT_EMPAQ, S.EXISTENCIA, S.ORD_REC_STR, cast(S.FECHA_CTRL as char(25)) as FECHA_CTRL from ARTICULOS A LEFT OUTER JOIN STOCK S ON S.ART_ID=A.ART_ID where A.COD_ART='${cod}' AND A.EMP_ID=1 AND S.DEP_ID=1`;
+        let consulta = `select A.ART_ID, A.DESCRIPCION, A.EAN, A.MOD, A.MED, A.CANT_EMPAQ, A.ESCALA_ID, S.EXISTENCIA, S.ORD_REC_STR,S.STK_ID, cast(S.FECHA_CTRL as char(25)) as FECHA_CTRL from ARTICULOS A LEFT OUTER JOIN STOCK S ON S.ART_ID=A.ART_ID where A.COD_ART='${cod}' AND A.EMP_ID=1 AND S.DEP_ID=1`;
         let resp = await funcionesexportadas.consultaFirebird(consulta);
         return resp;
     } catch (error) {
@@ -41,6 +40,43 @@ const getArtEan = async (ean) => {
         logger.error('Error en el metodo getArtEan');
         logger.error(error);
         return error; 
+    }
+}
+
+const putArticulo = async (art_id) =>{
+    try {
+        let consulta = `UPDATE ARTICULOS SET EXIST_NEG='N' WHERE ART_ID=${art_id}`;
+        let resp = await funcionesexportadas.consultaFirebird(consulta);
+        return resp;
+    } catch (error) {
+        logger.error('Error en el metodo putArticulo');
+        logger.error(error);
+        return error; 
+    }
+}
+
+const putStock = async (id,dep_id) => {
+    try {
+        let consulta = `UPDATE STOCK SET FECHA_CTRL=(SELECT CAST ('Now' as date) from rdb$database) WHERE ART_ID=${id} AND DEP_ID=${dep_id}`;
+        let resp = await funcionesexportadas.consultaFirebird(consulta);
+        return resp;
+    } catch (error) {
+        logger.error('Error en el metodo putStock');
+        logger.error(error);
+        return error; 
+    }
+}
+
+const postAjustar = async (data) =>{
+    let consulta = `Insert into stockmov (STK_TIPOMOV_ID, CPR_ID, DEP_ID, ART_ID, FEC_INGRESO, ESCALA_ID, EXISTENCIA, CMETIDO, ARECIBIR, CPRDET_ID, STK_ID, CPRDET_CPRDET_ID)
+    VALUES('3',(SELECT CPR_ID from cprdet WHERE COD_ART='AJUSTE' AND MOD='01.02.2022' and DEP_DESTINO_ID=${data.dep_id}),${data.dep_id},'${data.art_id}',(select cast('Now' as date) from rdb$database),${data.escala_id},${data.ajuste},'0','0','1',${data.stock_id},'1')`;
+    try {
+        let resp = await funcionesexportadas.consultaFirebird(consulta);
+        return resp;
+    } catch (error) {
+        logger.error('Error en el metodo postAjustar');
+        logger.error(error);
+        return error;
     }
 }
 
@@ -132,6 +168,9 @@ const funcionesexportadas = {
     getArticulo,
     getImagen,
     getArtEan,
+    putArticulo,
+    putStock,
+    postAjustar,
     consultaFirebird,
     consultaFirebirdImagen
 }

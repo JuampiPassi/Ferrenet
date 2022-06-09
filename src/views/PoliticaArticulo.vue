@@ -5,12 +5,10 @@
            <!-- <v-card-subtitle>Articulos Restantes: {{this.articulos.length}}</v-card-subtitle>-->
             <v-card-text>
                 <template v-if="this.articulos.length>0">
-                    <Articulo2 :cod="this.codigo" :key="componentKey" @validado="bloqueado=false"></Articulo2>
+                    <Articulo2 :cod="this.codigo" :key="componentKey" @validado="bloqueado=false" @info="pasarInfo($event)" @ajuste="agregarAjuste($event)"></Articulo2>
                 </template>
             </v-card-text>
-            <v-alert class=""  :type="tipoMsjeAjuste"  v-model="alertAjuste" dense dismissible transition="scale-transition">
-                    {{mensajeAjuste}}
-                </v-alert>
+            
             <v-card-actions>
                 <v-btn outlined text color="#ef6b01" @click="siguiente()" :disabled="bloqueado">
                     Aceptar
@@ -23,6 +21,9 @@
 
         <v-alert class="mt-10"  :type="tipo"  v-model="alert" dense transition="scale-transition">
             {{mensaje}}
+        </v-alert>
+        <v-alert class=""  :type="tipoMsjeAjuste"  v-model="alertAjuste" dense dismissible transition="scale-transition">
+            {{mensajeAjuste}}
         </v-alert>
         <v-dialog  v-model="dialogMotivos" persistent :overlay="false" max-width="500px" scrollable
             transition="dialog-bottom-transition"
@@ -56,23 +57,36 @@
                 </v-card-actions>
             </v-card>   
         </v-dialog>
+        <v-overlay :value="cargando">
+            <v-progress-circular
+                indeterminate
+                size="70"
+                width="7"
+            ></v-progress-circular>
+        </v-overlay>
     </v-container>
 </template>
 
 <script>
 import ApiServer from './../api';
 import Articulo2 from '../components/Articulo2.vue'
+import moment from 'moment';
 export default {
     name:'PoliticaArticulo',
     components:{Articulo2},
     data(){
         return{
             id: this.$route.params.id,
+            artid:'',
+            escalaid:'',
+            stkid:'',
             articulos:[],
             tipo:'error',
             mensaje:'No se encontraron articulos',
             alert:false,
             codigo: '',
+            dep_id:'',
+            ajuste:'',
             componentKey: 0,
             dialogMotivos: false,
             motivos:[],
@@ -80,15 +94,44 @@ export default {
             bloqueado:true,
             mensajeAjuste:'Artículo ajustado con exito',
             alertAjuste:false,
-            tipoMsjeAjuste:'success'
+            tipoMsjeAjuste:'success',
+            cargando:false
         }
     },
     methods:{
        async siguiente(){
             if(this.articulos.length>0){
+                let infoeliminar={
+                cod_art:this.articulos[0].COD_ART,
+                dep_id:this.articulos[0].DEPOSITO
+                }
+                let infoaclaje={
+                    cod_art:this.articulos[0].COD_ART,
+                    dep_id:this.articulos[0].DEPOSITO,
+                    art_id:this.artid,
+                    ajuste:this.ajuste
+                }
+                let fecha = moment().format('DD-MM-YYYY')
+                fecha = fecha.replace('-','.')
+                fecha = fecha.replace('-','.')
+                let infoajuste={
+                    art_id:this.artid,
+                    dep_id:this.articulos[0].DEPOSITO,
+                    ajuste:this.ajuste,
+                    fec_actual:fecha,
+                    escala_id:this.escalaid,
+                    stock_id:this.stkid
+                }
                 try {
-                   let result = await ApiServer.eliminarArticulo(this.codigo)
-                   console.log(result) 
+                    this.cargando=true
+                    let respajuste = await ApiServer.ajustarArticulo(infoajuste)
+                    let resultaclaje = await ApiServer.aclajeajustes(infoaclaje)
+                    let resulteliminar = await ApiServer.eliminarArticulo(infoeliminar)
+                    let resultstock = await ApiServer.editarStock({art_id:this.artid, dep_id:this.articulos[0].DEPOSITO}) 
+                    let resultarticulo = await ApiServer.editarArticulo(this.artid)
+                    console.log(resulteliminar)
+                    this.mensajeAjuste='Artículo ajustado con exito',
+                    this.tipoMsjeAjuste='success',
                     this.alertAjuste=true
                     setTimeout(()=>{
                         this.alertAjuste=false
@@ -97,6 +140,7 @@ export default {
                     this.codigo = this.articulos[0].COD_ART
                     this.componentKey +=1;
                     this.bloqueado=true
+                    this.cargando=false
                 } catch (error) {
                     console.log(error)
                     this.mensajeAjuste="Error al ajustar artículo"
@@ -105,6 +149,7 @@ export default {
                     setTimeout(()=>{
                         this.alertAjuste=false
                     },5000)
+                    this.cargando=false
                 }
             }
         },
@@ -114,20 +159,47 @@ export default {
         async aceptarMotivo(){
             this.dialogMotivos=false
             let info={
-                art_id:1,
+                art_id:this.artid,
                 cod_art:this.articulos[0].COD_ART,
-                usuario:'prueba',
+                usuario:sessionStorage.getItem("usuario"),
                 motivo_id:this.motivoselected
             }
+            let infoeliminar={
+                cod_art:this.articulos[0].COD_ART,
+                dep_id:this.articulos[0].DEP_ID
+            }
             try {
+                this.cargando=true
                 let resp = await ApiServer.artnoajustado(info)
-                console.log(resp)
+                let result = await ApiServer.eliminarArticulo(infoeliminar)
+                this.articulos.shift();
+                this.codigo = this.articulos[0].COD_ART
+                this.componentKey +=1;
+                this.bloqueado=true
+                console.log(resp,result)
+                this.cargando=false
             } catch (error) {
                 console.log(error)
+                this.mensajeAjuste="Se produjo un error"
+                this.tipoMsjeAjuste="error"
+                this.alertAjuste=true
+                setTimeout(()=>{
+                    this.alertAjuste=false
+                },5000)
+                this.cargando=false
             }
+        },
+        pasarInfo(info){
+            this.artid=info.art_id;
+            this.stkid=info.stk_id;
+            this.escalaid=info.escala_id;
+        },
+        agregarAjuste(cant){
+            this.ajuste=cant
         }
     },
     async mounted(){
+        
         try {
             let resp = await ApiServer.verArticulos(this.id);
             this.motivos = await ApiServer.verMotivos();

@@ -30,7 +30,7 @@
                 <h2 class="titulo2 text-center"><b>Stock: </b>{{stock}}</h2>
                 <v-divider class="mx-4 mt-3 mb-3"></v-divider>
                 <template v-if="this.verif==false">
-                    <h2 class="titulo2 text-center"><b>Cantidad: </b>{{cantidad}}</h2>
+                    <h2 class="titulo2 text-center"><b>Hola: </b>{{cantidad}}</h2>
                 </template>
                 <template v-else>
                     <v-row>
@@ -38,8 +38,9 @@
                              <h2 class="titulo2 text-center"><b>Cantidad: </b></h2>
                         </v-col>
                         <v-col cols="6" class="columnas">
-                            <v-text-field dense v-model="nuevaCant" color="#ef6b01" class="text-field"></v-text-field>
+                            <v-text-field dense v-model="this.cantidad" color="#ef6b01" class="text-field"></v-text-field>
                         </v-col>
+                    
                     </v-row>
                 </template>
                 <v-divider class="mx-4 mt-3 mb-3"></v-divider>
@@ -262,6 +263,16 @@ export default {
         }
     },
     watch:{
+        nuevaCant(){
+            if(this.empaque!=0){
+                let ajuste=(this.nuevaCant*this.empaque)-this.stock;
+                this.$emit('ajuste',ajuste)
+            }else{
+                let ajuste=this.nuevaCant-this.stock;
+                this.$emit('ajuste',ajuste)
+            }
+            console.log(this.nuevaCant)
+        }
     }
 
 }

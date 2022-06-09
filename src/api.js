@@ -30,7 +30,19 @@ export default{
     async artnoajustado(info){
         return (await axios.post(`./api/politicas/noescaneado`,info)).data; 
     },
-    async eliminarArticulo(cod){
-        return (await axios.get(`./api/politicas/eliminararticulo/${cod}`)).data;
+    async eliminarArticulo(info){
+        return (await axios.delete(`./api/politicas/eliminararticulo`,{data: info})).data;
     },
+    async aclajeajustes(info){
+        return (await axios.post(`./api/politicas/ajuste`,info)).data;
+    },
+    async ajustarArticulo(info){
+        return (await axios.post(`./api/articulos/ajustarstock`,info)).data;
+    },
+    async editarStock(info){
+        return (await axios.put(`./api/articulos/editarstock`, info)).data
+    },
+    async editarArticulo(art_id){
+        return (await axios.put(`./api/articulos/editararticulo/${art_id}`)).data
+    }
 }

@@ -17,10 +17,29 @@ const buscarImagen = async (req, res) => {
     res.end(await repositories.getImagen(cod))
 }
 
+const editarArticulo = async (req,res)=>{
+    let art_id = req.params.art_id;
+    res.status(200).send(await repositories.putArticulo(art_id));
+}
+
+const editarStock = async (req,res)=>{
+    let id = req.body.art_id;
+    let dep_id = req.body.dep_id;
+    res.status(200).send(await repositories.putStock(id,dep_id));
+}
+
+const ajustarStock = async (req,res)=>{
+    console.log(req.body)
+    res.status(200).send(await repositories.postAjustar(req.body));
+}
+
 
 module.exports = {
     buscarArticulo,
     buscarImagen,
+    editarStock,
+    ajustarStock,
     buscarArticuloporEan,
+    editarArticulo
 
 }

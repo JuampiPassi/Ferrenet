@@ -1,50 +1,70 @@
 <template>
     <v-container>
-        <!-- *{padding=0%}-->
-        <p class="font-weight-black" style="color:black">
-            {{datos}}-{{posicion}}
-        </p>
-        <Imagen :cod="this.cod" style="inline-size: fit-content;"/>
-        <v-divider class="orange mb-5" dark></v-divider>
-        <v-row>
-            <v-col>
-                <p class="font-weight-black float-right mb-0" style="font-size:20px">{{ean}}</p>
-                <p v-if="this.veriffail" class="float-right mb-0" style="font-size:20px;color:red">{{codeerror}}</p>
-            </v-col>
-            <v-col>
-                <v-icon v-if="this.verifok" class="float-right" style="margin-right: 15px" color="green">mdi-check-circle</v-icon> 
-                <v-icon v-if="this.veriffail" class="float-right" style="margin-right: 15px" color="red">mdi-close-circle</v-icon>   
-            </v-col>
-        </v-row>
-        <v-divider class="orange mt-5 mb-5" dark></v-divider>
-        <div class="text-center">
-            <v-btn style="margin-right:50px;" large outlined color="orange" @click="activarBarcode()"><v-icon color="orange" style="font-size:28px">mdi-barcode-scan</v-icon></v-btn>
-            <v-btn  large @click="activarQr()" outlined color="orange"><v-icon style="font-size:25px">mdi-qrcode-scan</v-icon></v-btn>
-        </div>
-        <div class="mt-5">
-            <v-simple-table dense>
-                <tbody>
-                    <tr>
-                        <td>Cantidad</td>
-                        <td>
-                            <input type="number" :value="this.cantidad" :readonly="!verifok"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Stock</td>
-                        <td>{{stock}}</td>
-                    </tr>
-                    <tr>
-                        <td>Empaque</td>
-                        <td>{{empaque}}</td>
-                    </tr>
-                    <tr v-if="this.fecha_ctrl">
-                        <td>Fecha ctrl</td>
-                        <td>{{fecha_ctrl}}</td>
-                    </tr>
-                </tbody>
-            </v-simple-table>
-        </div>
+        <template v-if="!loading">
+            <!-- *{padding=0%}-->
+            <p class="font-weight-black" style="color:black">
+                {{datos}}-{{posicion}}
+            </p>
+            <Imagen :cod="this.cod" style="inline-size: fit-content;"/>
+            <v-divider class="orange mb-5" dark></v-divider>
+            <v-row>
+                <v-col>
+                    <p class="font-weight-black float-right mb-0" style="font-size:20px">{{ean}}</p>
+                    <p v-if="this.veriffail" class="float-right mb-0" style="font-size:20px;color:red">{{codeerror}}</p>
+                </v-col>
+                <v-col>
+                    <v-icon v-if="this.verifok" class="float-right" style="margin-right: 15px" color="green">mdi-check-circle</v-icon> 
+                    <v-icon v-if="this.veriffail" class="float-right" style="margin-right: 15px" color="red">mdi-close-circle</v-icon>   
+                </v-col>
+            </v-row>
+            <v-divider class="orange mt-5 mb-5" dark></v-divider>
+            <div class="text-center">
+                <v-btn style="margin-right:50px;" large outlined color="orange" @click="activarBarcode()"><v-icon color="orange" style="font-size:28px">mdi-barcode-scan</v-icon></v-btn>
+                <v-btn  large @click="activarQr()" outlined color="orange"><v-icon style="font-size:25px">mdi-qrcode-scan</v-icon></v-btn>
+            </div>
+            <div class="mt-5">
+                <v-simple-table dense>
+                    <tbody>
+                        <tr>
+                            <td>Cantidad</td>
+                            <td>
+                                <input type="number" v-model="cantidad" :readonly="!verifok"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Stock</td>
+                            <td>{{stock}}</td>
+                        </tr>
+                        <tr>
+                            <td>Empaque</td>
+                            <td>{{empaque}}</td>
+                        </tr>
+                        <tr v-if="this.fecha_ctrl">
+                            <td>Fecha ctrl</td>
+                            <td>{{fecha_ctrl}}</td>
+                        </tr>
+                    </tbody>
+                </v-simple-table>
+            </div>
+        </template>
+        <template v-else>
+            <v-row  class="fill-height" align-content="center" justify="center">
+                <v-col
+                class="text-subtitle-1 text-center"
+                cols="12"
+                >
+                Cargando Artículo
+                </v-col>
+                <v-col cols="6">
+                <v-progress-linear
+                    color="deep-orange accent-4"
+                    indeterminate
+                    rounded
+                    height="6"
+                ></v-progress-linear>
+                </v-col>
+            </v-row>
+        </template>
             
         <v-alert class="mt-10"  :type="tipo"  v-model="alert" dense transition="scale-transition">
             {{mensaje}}
@@ -99,7 +119,6 @@ export default {
             tipo:'error',
             verifok:false,
             veriffail:false,
-            nuevaCant:'',
             camera: 'rear',
             torchActive: false,
             torchNotSupported: false,
@@ -140,7 +159,6 @@ export default {
             if(this.ean==decodedString){
                 this.verifok=true
                 this.$emit('validado',true)
-                this.escaner=false
             }else{
               this.veriffail=true  
               this.codeerror=decodedString
@@ -203,7 +221,7 @@ export default {
         this.loading=true;
         try {
             let resp = await ApiServer.buscarArticulo(this.cod)
-            this.loading=false;
+            
             if(resp.length>0){
 
                 this.articulo=resp;
@@ -216,12 +234,13 @@ export default {
                 this.stock=resp[0].EXISTENCIA
                 this.fecha_ctrl=resp[0].FECHA_CTRL
                 this.posicion=resp[0].ORD_REC_STR
+                let info={art_id:this.articulo[0].ART_ID,stk_id:this.articulo[0].STK_ID, escala_id:this.articulo[0].ESCALA_ID}
+                this.$emit('info',info)
                 if(this.empaque==0){
                     this.cantidad=this.stock
                 }else{
                     this.cantidad=this.stock/this.empaque
                 }
-                this.nuevaCant=this.cantidad
                 this.datos=this.cod+'-'+this.descripcion;
                 if(this.medidas.length>0){
                     this.datos=this.datos+'-'+this.medidas;
@@ -229,8 +248,10 @@ export default {
                 if(this.mod.length>0){
                     this.datos=this.datos+'-'+this.mod;
                 }
+                this.loading=false;
             }else{
                 this.descripcion="Articulo no encontrado"
+                this.loading=false;
             }
             
             
@@ -249,6 +270,21 @@ export default {
         }
     },
     watch:{
+        cantidad(){
+            if(this.cantidad!=''){
+                if(this.empaque!=0){
+                    let ajuste=(this.cantidad*this.empaque)-this.stock;
+                    this.$emit('ajuste',ajuste)
+                }else{
+                    let ajuste=this.cantidad-this.stock;
+                    this.$emit('ajuste',ajuste)
+                }
+            }else{
+                let ajuste = 0-this.stock;
+                this.$emit('ajuste',ajuste)
+            }
+            
+        }
     }
 
 }
