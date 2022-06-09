@@ -129,7 +129,7 @@ export default {
                     let resulteliminar = await ApiServer.eliminarArticulo(infoeliminar)
                     let resultstock = await ApiServer.editarStock({art_id:this.artid, dep_id:this.articulos[0].DEPOSITO}) 
                     let resultarticulo = await ApiServer.editarArticulo(this.artid)
-                    console.log(resulteliminar)
+                    console.log(respajuste,resultaclaje,resulteliminar,resultstock,resultarticulo)
                     this.mensajeAjuste='Artículo ajustado con exito',
                     this.tipoMsjeAjuste='success',
                     this.alertAjuste=true
@@ -166,7 +166,7 @@ export default {
             }
             let infoeliminar={
                 cod_art:this.articulos[0].COD_ART,
-                dep_id:this.articulos[0].DEP_ID
+                dep_id:this.articulos[0].DEPOSITO
             }
             try {
                 this.cargando=true
