@@ -1,9 +1,8 @@
 version: "1"
 services:
   ferrenet:
-    build:
-      context: ./
-    env_file:
-      - ./variables.env
+    container_name: ferrenetapp
+    restart: always
+    image: juampipassi/ferrenetapp:1.0.1
     ports:
       - "8080:3000"
