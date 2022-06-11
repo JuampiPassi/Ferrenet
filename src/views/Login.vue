@@ -79,6 +79,7 @@ export default {
                         console.log(resp[0])
                         sessionStorage.setItem('logged', true);
                         sessionStorage.setItem('usuario', resp[0].USUARIO);
+                        sessionStorage.setItem('escaner', "QR");
                         this.$router.push({ name: 'Home'});
                         window.location.reload();
                     }else{
