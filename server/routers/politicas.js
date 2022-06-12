@@ -73,6 +73,18 @@ module.exports = function (router) {
 				res.status(200).send(results);
 			}
 		})
+	});
+	router.post('/obsinteligente',(req,res)=>{
+		let user = req.body.usuario
+		let texto = req.body.texto
+		let consulta = `INSERT INTO OBSERVADOR_INTELIGENTE (NOM,description) VALUES ('${user}','${texto}')`;
+		conexion.query(consulta,(error, results)=>{
+			if(error){
+				throw(error)
+			}else{
+				res.status(200).send(results);
+			}
+		})
 	})
 
 }
