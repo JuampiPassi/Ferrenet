@@ -53,7 +53,7 @@
                         <tr>
                             <td>Cantidad</td>
                             <td>
-                                <input type="number" v-model="cantidad" :readonly="!verifok"/>
+                                <input type="number" v-model="nuevacant" :placeholder="cantidad" :readonly="!verifok"/>
                             </td>
                         </tr>
                         <tr>
@@ -150,7 +150,8 @@ export default {
             alertCamara:false,
             mensajeCamara:'',
             codeerror:'',
-            tipoescaner:''
+            tipoescaner:'',
+            nuevacant:''
 
               
         }
@@ -243,7 +244,6 @@ export default {
             }
         },
         cambiartipoescaner(){
-            console.log('entra')
             if(this.tipoescaner=='QR'){
                 sessionStorage.setItem('escaner', "BARRA");
                 this.tipoescaner='BARRA'
@@ -256,16 +256,14 @@ export default {
             this.$emit('pasar')
         },
         aceptar(){
-            if(this.cantidad!=''){
-                if(this.empaque!=0){
-                    let ajuste=(this.cantidad*this.empaque)-this.stock;
-                    this.$emit('aceptar',ajuste)
-                }else{
-                    let ajuste=this.cantidad-this.stock;
-                    this.$emit('aceptar',ajuste)
-                }
+            if(this.nuevacant=='')
+                this.nuevacant=this.cantidad
+          
+            if(this.empaque!=0){
+                let ajuste=(this.nuevacant*this.empaque)-this.stock;
+                this.$emit('aceptar',ajuste)
             }else{
-                let ajuste = 0-this.stock;
+                let ajuste=this.nuevacant-this.stock;
                 this.$emit('aceptar',ajuste)
             }  
         }

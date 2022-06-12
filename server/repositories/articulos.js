@@ -69,7 +69,7 @@ const putStock = async (id,dep_id) => {
 
 const postAjustar = async (data) =>{
     let consulta = `Insert into stockmov (STK_TIPOMOV_ID, CPR_ID, DEP_ID, ART_ID, FEC_INGRESO, ESCALA_ID, EXISTENCIA, CMETIDO, ARECIBIR, CPRDET_ID, STK_ID, CPRDET_CPRDET_ID)
-    VALUES('3',(SELECT CPR_ID from cprdet WHERE COD_ART='AJUSTE' AND MOD='01.02.2022' and DEP_DESTINO_ID=${data.dep_id}),${data.dep_id},'${data.art_id}',(select cast('Now' as date) from rdb$database),${data.escala_id},${data.ajuste},'0','0','1',${data.stock_id},'1')`;
+    VALUES('3',(SELECT CPR_ID from cprdet WHERE COD_ART='AJUSTE' AND MOD='01.02.2022' and DEP_DESTINO_ID=${data.dep_id}),${data.dep_id},'${data.art_id}',(select cast('Now' as timestamp) from rdb$database),${data.escala_id},${data.ajuste},'0','0','1',${data.stock_id},'1')`;
     try {
         let resp = await funcionesexportadas.consultaFirebird(consulta);
         return resp;
