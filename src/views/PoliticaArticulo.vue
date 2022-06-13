@@ -5,7 +5,7 @@
            <!-- <v-card-subtitle>Articulos Restantes: {{this.articulos.length}}</v-card-subtitle>-->
             <v-card-text>
                 <template v-if="this.articulos.length>0">
-                    <Articulo2 :cod="this.codigo" :key="componentKey" @siguiente="siguiente($event)" @pasar="pasar()" @info="pasarInfo($event)"></Articulo2>
+                    <Articulo2 :cod="this.codigo" :key="componentKey" @aceptar="siguiente($event)" @pasar="pasar()" @info="pasarInfo($event)"></Articulo2>
                 </template>
             </v-card-text>
         </v-card>

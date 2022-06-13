@@ -1,5 +1,4 @@
-
-const   getPaljetTransac = require("./firebird")
+const {getPaljetTransac} = require("./firebird")
 
 const getConsultaPaljet = async (consulta, params) => {
     let tr

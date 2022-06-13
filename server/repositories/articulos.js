@@ -48,7 +48,8 @@ const getArtEan = async (ean) => {
 const putArticulo = async (art_id) =>{
     try {
         let consulta = `UPDATE ARTICULOS SET EXIST_NEG='N' WHERE ART_ID=${art_id}`;
-        let resp = await funcionesexportadas.consultaFirebird(consulta);
+        //let resp = await funcionesexportadas.consultaFirebird(consulta);
+        let resp = await firebirdMetodos.getConsultaPaljet(consulta);
         return resp;
     } catch (error) {
         logger.error('Error en el metodo putArticulo');
@@ -60,7 +61,8 @@ const putArticulo = async (art_id) =>{
 const putStock = async (id,dep_id) => {
     try {
         let consulta = `UPDATE STOCK SET FECHA_CTRL=(SELECT CAST ('Now' as date) from rdb$database) WHERE ART_ID=${id} AND DEP_ID=${dep_id}`;
-        let resp = await funcionesexportadas.consultaFirebird(consulta);
+        //let resp = await funcionesexportadas.consultaFirebird(consulta);
+        let resp = await firebirdMetodos.getConsultaPaljet(consulta);
         return resp;
     } catch (error) {
         logger.error('Error en el metodo putStock');
@@ -73,7 +75,8 @@ const postAjustar = async (data) =>{
     let consulta = `Insert into stockmov (STK_TIPOMOV_ID, CPR_ID, DEP_ID, ART_ID, FEC_INGRESO, ESCALA_ID, EXISTENCIA, CMETIDO, ARECIBIR, CPRDET_ID, STK_ID, CPRDET_CPRDET_ID)
     VALUES('3',(SELECT CPR_ID from cprdet WHERE COD_ART='AJUSTE' AND MOD='01.02.2022' and DEP_DESTINO_ID=${data.dep_id}),${data.dep_id},'${data.art_id}',(select cast('Now' as timestamp) from rdb$database),${data.escala_id},${data.ajuste},'0','0','1',${data.stock_id},'1')`;
     try {
-        let resp = await funcionesexportadas.consultaFirebird(consulta);
+        //let resp = await funcionesexportadas.consultaFirebird(consulta);
+        let resp = await firebirdMetodos.getConsultaPaljet(consulta);
         return resp;
     } catch (error) {
         logger.error('Error en el metodo postAjustar');
@@ -81,6 +84,8 @@ const postAjustar = async (data) =>{
         return error;
     }
 }
+
+
 
 
 

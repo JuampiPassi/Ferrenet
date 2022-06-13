@@ -1,5 +1,5 @@
 var Firebird = require('node-firebird');
-const config = require('./config.json');
+const config = require('../config/config.json');
 
 let paljetPool = Firebird.pool(10, { host: config.firebird.host, database: config.firebird.database, user: config.firebird.user, password: config.firebird.password, port: config.firebird.port || 3050 });
 
