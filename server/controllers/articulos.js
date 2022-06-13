@@ -29,8 +29,11 @@ const editarStock = async (req,res)=>{
 }
 
 const ajustarStock = async (req,res)=>{
-    console.log(req.body)
     res.status(200).send(await repositories.postAjustar(req.body));
+}
+
+const getCprid = async (req,res)=>{
+    res.status(200).send(await repositories.getCprid(req.query));
 }
 
 
@@ -40,6 +43,7 @@ module.exports = {
     editarStock,
     ajustarStock,
     buscarArticuloporEan,
+    getCprid,
     editarArticulo
 
 }

@@ -47,5 +47,8 @@ export default{
     },
     async editarArticulo(art_id){
         return (await axios.put(`./api/articulos/editararticulo/${art_id}`)).data
+    },
+    async getCprid(fec_actual, dep_id){
+        return (await axios.get(`./api/articulos/cprdet/id?fec_actual=${fec_actual}&dep_id=${dep_id}`)).data
     }
 }

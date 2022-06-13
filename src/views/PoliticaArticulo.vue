@@ -85,7 +85,8 @@ export default {
             mensajeAjuste:'Artículo ajustado con exito',
             alertAjuste:false,
             tipoMsjeAjuste:'success',
-            cargando:false
+            cargando:false,
+            cargandoCprId:false
         }
     },
     methods:{
@@ -108,38 +109,42 @@ export default {
                 art_id:this.artid,
                 dep_id:this.articulos[0].DEPOSITO,
                 ajuste:this.ajuste,
-                fec_actual:fecha,
                 escala_id:this.escalaid,
-                stock_id:this.stkid
+                stock_id:this.stkid,
+                cpr_id:sessionStorage.getItem("CprId")
             }
-            try {
-                this.cargando=true
-                let respajuste = await ApiServer.ajustarArticulo(infoajuste)
-                let resultaclaje = await ApiServer.aclajeajustes(infoaclaje)
-                let resulteliminar = await ApiServer.eliminarArticulo(infoeliminar)
-                let resultstock = await ApiServer.editarStock({art_id:this.artid, dep_id:this.articulos[0].DEPOSITO}) 
-                let resultarticulo = await ApiServer.editarArticulo(this.artid)
-                console.log(respajuste,resultaclaje,resulteliminar,resultstock,resultarticulo)
-                this.mensajeAjuste='Artículo ajustado con exito',
-                this.tipoMsjeAjuste='success',
-                this.alertAjuste=true
-                setTimeout(()=>{
-                    this.alertAjuste=false
-                },3000)
-                this.articulos.shift();
-                this.codigo = this.articulos[0].COD_ART
-                this.componentKey +=1;
-                this.bloqueado=true
-                this.cargando=false
-            } catch (error) {
-                console.log(error)
-                this.mensajeAjuste="Error al ajustar artículo"
-                this.tipoMsjeAjuste="error"
-                this.alertAjuste=true
-                setTimeout(()=>{
-                    this.alertAjuste=false
-                },5000)
-                this.cargando=false
+            if(!this.cargandoCprId){
+                try {
+                    this.cargando=true
+                    let respajuste = await ApiServer.ajustarArticulo(infoajuste)
+                    let resultaclaje = await ApiServer.aclajeajustes(infoaclaje)
+                    let resulteliminar = await ApiServer.eliminarArticulo(infoeliminar)
+                    let resultstock = await ApiServer.editarStock({art_id:this.artid, dep_id:this.articulos[0].DEPOSITO}) 
+                    let resultarticulo = await ApiServer.editarArticulo(this.artid)
+                    console.log(respajuste,resultaclaje,resulteliminar,resultstock,resultarticulo)
+                    this.mensajeAjuste='Artículo ajustado con exito',
+                    this.tipoMsjeAjuste='success',
+                    this.alertAjuste=true
+                    setTimeout(()=>{
+                        this.alertAjuste=false
+                    },3000)
+                    this.articulos.shift();
+                    this.codigo = this.articulos[0].COD_ART
+                    this.componentKey +=1;
+                    this.bloqueado=true
+                    this.cargando=false
+                } catch (error) {
+                    console.log(error)
+                    this.mensajeAjuste="Error al ajustar artículo"
+                    this.tipoMsjeAjuste="error"
+                    this.alertAjuste=true
+                    setTimeout(()=>{
+                        this.alertAjuste=false
+                    },5000)
+                    this.cargando=false
+                }
+            }else{
+                console.log("Cargando cpr id..")
             }
             
         },
@@ -198,6 +203,21 @@ export default {
                 this.alert=true;
             }
             console.log('articulos: ',resp)
+            //Me fijo el dep_id y la fecha guardadas en el session storage
+            let fechaCprid = sessionStorage.getItem("fechaCprid")
+            let fecha = moment().format('DD-MM-YYYY')
+            fecha = fecha.replace('-','.')
+            fecha = fecha.replace('-','.')
+            if(fechaCprid == undefined||fechaCprid == ''||fechaCprid !=fecha){
+                sessionStorage.setItem("fechaCprid",fecha)
+                let resp = await ApiServer.getCprid(fecha,this.articulos[0].DEPOSITO)
+                sessionStorage.setItem("CprId",resp[0].CPR_ID)
+                console.log("Cpr id cargado correctamente")
+            }else if(sessionStorage.getItem("CprId")==undefined||sessionStorage.getItem("CprId")==''){
+               let resp = await ApiServer.getCprid(fecha,this.articulos[0].DEPOSITO)
+                sessionStorage.setItem("CprId",resp[0].CPR_ID)
+                console.log("Cpr id cargado correctamente")
+            }
         } catch (error) {
             console.log(error)
         }

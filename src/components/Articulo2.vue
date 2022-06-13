@@ -5,7 +5,7 @@
             <p class="font-weight-black" style="color:black">
                 {{datos}}-{{posicion}}
             </p>
-            <Imagen :cod="this.cod" style="inline-size: fit-content;"/>
+            <Imagen v-if="!loading" :cod="this.cod" style="inline-size: fit-content;"/>
             <v-divider class="orange mb-5" dark></v-divider>
             <v-row>
                 <v-col>

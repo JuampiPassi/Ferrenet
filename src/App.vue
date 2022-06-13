@@ -31,9 +31,7 @@ export default {
     }
   },
    computed: {
-
     check: function(){
-
       if (
         sessionStorage.getItem('logged') == 'false' ||
         sessionStorage.getItem('logged') == false ||
@@ -46,11 +44,9 @@ export default {
       }else{
         return true;
       }
-
-
     }
-
   },
+  
 };
 </script>
 <style>
