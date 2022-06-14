@@ -1,8 +1,6 @@
 <template>
     <v-container>
         <v-card elevation="0" v-if="this.articulos.length>0">
-           <!-- <v-card-title>{{id}}</v-card-title>-->
-           <!-- <v-card-subtitle>Articulos Restantes: {{this.articulos.length}}</v-card-subtitle>-->
             <v-card-text>
                 <template v-if="this.articulos.length>0">
                     <Articulo2 :cod="this.codigo" :key="componentKey" @aceptar="siguiente($event)" @pasar="pasar()" @info="pasarInfo($event)"></Articulo2>
@@ -10,11 +8,15 @@
             </v-card-text>
         </v-card>
 
-        <v-alert class="mt-10"  :type="tipo"  v-model="alert" dense transition="scale-transition">
+        <v-alert class="mt-10"  elevation="24" dismissible :type="tipo"  v-model="alert" dense transition="scale-transition">
             {{mensaje}}
         </v-alert>
         <v-alert class=""  :type="tipoMsjeAjuste"  v-model="alertAjuste" dense dismissible transition="scale-transition">
             {{mensajeAjuste}}
+        </v-alert>
+        <v-alert class="mt-10" outlined elevation="24" type="info" color="orange"  v-model="alertCargando" dense transition="scale-transition">
+            Cargando datos..
+            <v-progress-circular class="mr-5" size="25" style="float: right;" indeterminate color="orange"></v-progress-circular>
         </v-alert>
         <v-dialog  v-model="dialogMotivos" persistent :overlay="false" max-width="500px" scrollable
             transition="dialog-bottom-transition"
@@ -85,6 +87,7 @@ export default {
             mensajeAjuste:'Artículo ajustado con exito',
             alertAjuste:false,
             tipoMsjeAjuste:'success',
+            alertCargando:true,
             cargando:false,
             cargandoCprId:false
         }
@@ -210,15 +213,22 @@ export default {
             fecha = fecha.replace('-','.')
             if(fechaCprid == undefined||fechaCprid == ''||fechaCprid !=fecha){
                 sessionStorage.setItem("fechaCprid",fecha)
+                this.alertCargando=true
                 let resp = await ApiServer.getCprid(fecha,this.articulos[0].DEPOSITO)
+                this.alertCargando=false
                 sessionStorage.setItem("CprId",resp[0].CPR_ID)
                 console.log("Cpr id cargado correctamente")
             }else if(sessionStorage.getItem("CprId")==undefined||sessionStorage.getItem("CprId")==''){
-               let resp = await ApiServer.getCprid(fecha,this.articulos[0].DEPOSITO)
+                this.alertCargando=true
+                let resp = await ApiServer.getCprid(fecha,this.articulos[0].DEPOSITO)
+                this.alertCargando=false
                 sessionStorage.setItem("CprId",resp[0].CPR_ID)
                 console.log("Cpr id cargado correctamente")
             }
         } catch (error) {
+             this.alert=true
+             this.mensaje="Se produjo un error"
+             this.tipo="error"
             console.log(error)
         }
     },
