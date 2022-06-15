@@ -115,7 +115,8 @@ export default {
                 cod_art:this.articulos[0].COD_ART,
                 dep_id:this.articulos[0].DEPOSITO,
                 art_id:this.artid,
-                ajuste:this.ajuste
+                ajuste:this.ajuste,
+                usuario:sessionStorage.getItem("usuario"),
             }
             let fecha = moment().format('DD-MM-YYYY')
             fecha = fecha.replace('-','.')

@@ -65,7 +65,8 @@ module.exports = function (router) {
 		let art_id=req.body.art_id
 		let dep_id=req.body.dep_id
 		let ajuste=req.body.ajuste
-		let consulta = `INSERT INTO STOCK_ACLAJE_AJUSTES (COD_ART, FECHA, ART_ID, DEP_ID, AJUSTE) VALUES ('${cod_art}',(SELECT NOW()),${art_id},${dep_id},${ajuste})`;
+		let user=req.body.usuario
+		let consulta = `INSERT INTO STOCK_ACLAJE_AJUSTES (COD_ART, FECHA, ART_ID, DEP_ID, AJUSTE, USUARIO) VALUES ('${cod_art}',(SELECT NOW()),${art_id},${dep_id},${ajuste},'${user}')`;
 		conexion.query(consulta,(error, results)=>{
 			if(error){
 				throw(error)
