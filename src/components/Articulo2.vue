@@ -6,16 +6,16 @@
                 {{datos}}
             </p>
             <Imagen v-if="!loading" :cod="this.cod" style="inline-size: fit-content;"/>
-            <v-divider class="orange mb-5" dark></v-divider>
-            <v-row>
-                <v-col>
-                    <p class="font-weight-black float-right mb-0" style="font-size:20px">{{posicion}}</p>
+            <v-divider class="orange" dark></v-divider>
+            <v-row class="mt-3">
+                <v-col cols="12" class="text-center">
+                    <p class="font-weight-black ml-3" style="font-size:20px">{{posicion}}</p>
                 </v-col>
             </v-row>
             <v-divider class="orange mb-5" dark></v-divider>
             <v-row>
                 <v-col>
-                    <p class="font-weight-black float-right mb-0" style="font-size:20px">{{ean}}</p>
+                    <p class="font-weight-black ml-3 mb-0" style="font-size:16px">{{ean}}</p>
                     <p v-if="this.veriffail" class="float-right mb-0" style="font-size:20px;color:red">{{codeerror}}</p>
                 </v-col>
                 <v-col>
@@ -26,40 +26,17 @@
             <v-divider class="orange mt-5 mb-5" dark></v-divider>
             <div class="text-center">
                 <v-btn outlined small color="orange" @click="pasar()">Pasar</v-btn>
-                 <v-menu bottom offset-y max-width="63">
-                    <template v-slot:activator="{ on, attrs  }">
-                        <div class="split-btn">
-                        <v-btn v-if="tipoescaner=='BARRA'" @click="activarBarcode()" icon color="orange" class="main-btn"><v-icon style="font-size:28px">mdi-barcode-scan</v-icon></v-btn>
-                        <v-btn v-if="tipoescaner=='QR'" @click="activarQr()"  icon color="orange"  class="main-btn"><v-icon style="font-size:25px">mdi-qrcode-scan</v-icon></v-btn>
-                        <v-btn  v-on="on" v-bind="attrs" icon rounded color="orange" dark class="actions-btn"><v-icon left>mdi-menu-down</v-icon></v-btn>
-                        </div>
-                    </template>
-
-                    <v-list>
-                        <v-list-item-group >
-                            <v-list-item v-if="tipoescaner=='BARRA'">
-                                <v-list-item-icon @click="cambiartipoescaner()">
-                                    <v-icon class="ml-5">mdi-qrcode-scan</v-icon>
-                                </v-list-item-icon>
-                            </v-list-item>
-                            <v-list-item  v-if="tipoescaner=='QR'">
-                                <v-list-item-icon @click="cambiartipoescaner()">
-                                    <v-icon class="ml-5">mdi-barcode-scan</v-icon>
-                                </v-list-item-icon>
-                            
-                            </v-list-item>
-                        </v-list-item-group>
-                    </v-list>
-                </v-menu>
-                <v-btn outlined small color="orange" :disabled="!verifok" @click="aceptar()">Aceptar</v-btn>
+                <v-btn outlined small color="orange" class="ml-3" :disabled="!verifok" @click="aceptar()">Aceptar</v-btn>
+                <v-btn  @click="activarBarcode()" icon color="orange" class="ml-3"><v-icon style="font-size:28px">mdi-barcode-scan</v-icon></v-btn>
+                <v-btn  @click="activarQr()"  icon color="orange" class="ml-3"><v-icon style="font-size:25px">mdi-qrcode-scan</v-icon></v-btn>
             </div>
             <div class="mt-5">
                 <v-simple-table dense>
                     <tbody>
                         <tr>
-                            <td>Cantidad</td>
+                            <td><p class="mb-0" style="font-size:17px; font-weight: bold;">Cantidad</p></td>
                             <td>
-                                <input type="number" v-model="nuevacant" :placeholder="cantidad" :readonly="!verifok"/>
+                                <input style="font-size:16px; font-weight: bold;" type="number" v-model="nuevacant" :placeholder="cantidad" :readonly="!verifok"/>
                             </td>
                         </tr>
                         <tr>
@@ -156,7 +133,6 @@ export default {
             alertCamara:false,
             mensajeCamara:'',
             codeerror:'',
-            tipoescaner:'',
             nuevacant:''
 
               
@@ -247,15 +223,6 @@ export default {
                 ctx.lineTo(firstPoint.x, firstPoint.y);
                 ctx.closePath();
                 ctx.stroke();
-            }
-        },
-        cambiartipoescaner(){
-            if(this.tipoescaner=='QR'){
-                sessionStorage.setItem('escaner', "BARRA");
-                this.tipoescaner='BARRA'
-            }else{
-                sessionStorage.setItem('escaner', "QR");
-                this.tipoescaner='QR'
             }
         },
         pasar(){
@@ -352,22 +319,6 @@ export default {
 .text-field{
     height:34px;
 }
-.main-btn{
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    padding-right: 2px !important;
-    width: auto;
-  }
-  .actions-btn{
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    padding: 0 !important;
-    min-width: 35px !important;
-    margin-left: -3.5px;
-  }
-  .split-btn{
-    display: inline-block;
-    margin-left: 20px;
-  }
+
 
 </style>
