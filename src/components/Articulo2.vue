@@ -7,18 +7,18 @@
             </p>
             <Imagen v-if="!loading" :cod="this.cod" style="inline-size: fit-content;"/>
             <v-divider class="orange" dark></v-divider>
-            <v-row class="mt-3">
-                <v-col cols="12" class="text-center">
+            <v-row class="mt-2">
+                <v-col cols="11" class="text-center">
                     <p class="font-weight-black ml-3" style="font-size:20px">{{posicion}}</p>
                 </v-col>
             </v-row>
             <v-divider class="orange mb-5" dark></v-divider>
             <v-row>
-                <v-col>
+                <v-col cols="11">
                     <p class="font-weight-black ml-3 mb-0" style="font-size:16px">{{ean}}</p>
                     <p v-if="this.veriffail" class="float-right mb-0" style="font-size:20px;color:red">{{codeerror}}</p>
                 </v-col>
-                <v-col>
+                <v-col cols="1">
                     <v-icon v-if="this.verifok" class="float-right" style="margin-right: 15px" color="green">mdi-check-circle</v-icon> 
                     <v-icon v-if="this.veriffail" class="float-right" style="margin-right: 15px" color="red">mdi-close-circle</v-icon>   
                 </v-col>
@@ -34,9 +34,9 @@
                 <v-simple-table dense>
                     <tbody>
                         <tr>
-                            <td><p class="mb-0" style="font-size:17px; font-weight: bold;">Cantidad</p></td>
+                            <td><p class="mb-0" style="font-size:20px; font-weight: bold;">Cantidad</p></td>
                             <td>
-                                <input style="font-size:16px; font-weight: bold;" type="number" v-model="nuevacant" :placeholder="cantidad" :readonly="!verifok"/>
+                                <input style="font-size:20px; font-weight: bold;" type="number" v-model="nuevacant" :placeholder="cantidad" :readonly="!verifok"/>
                             </td>
                         </tr>
                         <tr>
