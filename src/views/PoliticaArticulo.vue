@@ -204,6 +204,7 @@ export default {
                 this.mensajeAjuste="Se produjo un error"
                 this.tipoMsjeAjuste="error"
                 this.alertAjuste=true
+                this.finalizada=false
                 setTimeout(()=>{
                     this.alertAjuste=false
                 },5000)
@@ -250,6 +251,7 @@ export default {
              this.alert=true
              this.mensaje="Se produjo un error"
              this.tipo="error"
+             this.finalizada=false
             console.log(error)
         }
     },

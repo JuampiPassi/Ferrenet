@@ -3,9 +3,15 @@
         <template v-if="!loading">
             <!-- *{padding=0%}-->
             <p class="font-weight-black" style="color:black">
-                {{datos}}-{{posicion}}
+                {{datos}}
             </p>
             <Imagen v-if="!loading" :cod="this.cod" style="inline-size: fit-content;"/>
+            <v-divider class="orange mb-5" dark></v-divider>
+            <v-row>
+                <v-col>
+                    <p class="font-weight-black float-right mb-0" style="font-size:20px">{{posicion}}</p>
+                </v-col>
+            </v-row>
             <v-divider class="orange mb-5" dark></v-divider>
             <v-row>
                 <v-col>
