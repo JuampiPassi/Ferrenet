@@ -50,6 +50,17 @@
                 </v-card-actions>
             </v-card>   
         </v-dialog>
+
+        <v-card class="mt-5" v-if="this.finalizada"> 
+                <v-card-title style="color:green">Política finalizada <v-icon class="ml-3" color="green">mdi-check</v-icon></v-card-title>
+                <v-card-text>
+                    Politica <b>{{id}}</b> finalizada
+                </v-card-text>
+                <v-card-actions>
+                    <v-btn text outlined color="orange" @click="volver()">Volver</v-btn>
+                </v-card-actions>
+            </v-card>
+
         <v-overlay :value="cargando">
             <v-progress-circular
                 indeterminate
@@ -87,9 +98,10 @@ export default {
             mensajeAjuste:'Artículo ajustado con exito',
             alertAjuste:false,
             tipoMsjeAjuste:'success',
-            alertCargando:true,
+            alertCargando:false,
             cargando:false,
-            cargandoCprId:false
+            cargandoCprId:false,
+            finalizada:false
         }
     },
     methods:{
@@ -124,6 +136,7 @@ export default {
                     let resulteliminar = await ApiServer.eliminarArticulo(infoeliminar)
                     let resultstock = await ApiServer.editarStock({art_id:this.artid, dep_id:this.articulos[0].DEPOSITO}) 
                     let resultarticulo = await ApiServer.editarArticulo(this.artid)
+                    this.cargando=false
                     console.log(respajuste,resultaclaje,resulteliminar,resultstock,resultarticulo)
                     this.mensajeAjuste='Artículo ajustado con exito',
                     this.tipoMsjeAjuste='success',
@@ -132,10 +145,13 @@ export default {
                         this.alertAjuste=false
                     },3000)
                     this.articulos.shift();
-                    this.codigo = this.articulos[0].COD_ART
-                    this.componentKey +=1;
-                    this.bloqueado=true
-                    this.cargando=false
+                    if(this.articulos.length>0){
+                        this.codigo = this.articulos[0].COD_ART
+                        this.componentKey +=1;
+                        this.bloqueado=true
+                    }else{
+                        this.finalizada=true
+                    }
                 } catch (error) {
                     console.log(error)
                     this.mensajeAjuste="Error al ajustar artículo"
@@ -172,12 +188,16 @@ export default {
                 this.cargando=true
                 let resp = await ApiServer.artnoajustado(info)
                 let result = await ApiServer.eliminarArticulo(infoeliminar)
-                this.articulos.shift();
-                this.codigo = this.articulos[0].COD_ART
-                this.componentKey +=1;
-                this.bloqueado=true
-                console.log(resp,result)
                 this.cargando=false
+                this.articulos.shift();
+                console.log(resp,result)
+                if(this.articulos.length>0){
+                    this.codigo = this.articulos[0].COD_ART
+                    this.componentKey +=1;
+                    this.bloqueado=true
+                }else{
+                    this.finalizada=true
+                }
             } catch (error) {
                 console.log(error)
                 this.mensajeAjuste="Se produjo un error"
@@ -193,6 +213,9 @@ export default {
             this.artid=info.art_id;
             this.stkid=info.stk_id;
             this.escalaid=info.escala_id;
+        },
+        volver(){
+            this.$router.push({name: 'Politicas'});
         }
     },
     async mounted(){
@@ -202,9 +225,6 @@ export default {
             this.motivos = await ApiServer.verMotivos();
             this.articulos = resp;
             this.codigo = this.articulos[0].COD_ART;
-            if(this.articulos.length==0){
-                this.alert=true;
-            }
             console.log('articulos: ',resp)
             //Me fijo el dep_id y la fecha guardadas en el session storage
             let fechaCprid = sessionStorage.getItem("fechaCprid")
@@ -244,7 +264,7 @@ export default {
     watch:{
         articulos(){
             if(this.articulos.length==0){
-                this.alert=true
+                this.finalizada=true
             }
         }
     }
