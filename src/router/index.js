@@ -6,6 +6,7 @@ import Stock from '../views/Stock.vue'
 import Politicas from '../views/Politicas.vue'
 import Escaner from '../views/Escaner.vue'
 import PoliticaArticulo from '../views/PoliticaArticulo.vue'
+import Ubicacion from '../views/Ubicacion.vue'
 import Qr from '../views/Qr.vue'
 
 Vue.use(VueRouter)
@@ -67,6 +68,14 @@ const routes = [
     path: '/Qr',
     name: 'Qr',
     component : Qr,
+    meta:{
+      guest: true
+    }
+  },
+  {
+    path: '/Ubicacion',
+    name: 'Ubicacion',
+    component : Ubicacion,
     meta:{
       guest: true
     }

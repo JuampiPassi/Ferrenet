@@ -3,7 +3,7 @@
         <v-card elevation="0" v-if="this.articulos.length>0">
             <v-card-text>
                 <template v-if="this.articulos.length>0">
-                    <Articulo2 :cod="this.codigo" :key="componentKey" @aceptar="siguiente($event)" @pasar="pasar()" @info="pasarInfo($event)"></Articulo2>
+                    <Articulo :cod="this.codigo" :key="componentKey" @aceptar="siguiente($event)" @pasar="pasar()" @info="pasarInfo($event)"></Articulo>
                 </template>
             </v-card-text>
         </v-card>
@@ -52,14 +52,14 @@
         </v-dialog>
 
         <v-card class="mt-5" v-if="this.finalizada"> 
-                <v-card-title style="color:green">Política finalizada <v-icon class="ml-3" color="green">mdi-check</v-icon></v-card-title>
-                <v-card-text>
-                    Politica <b>{{id}}</b> finalizada
-                </v-card-text>
-                <v-card-actions>
-                    <v-btn text outlined color="orange" @click="volver()">Volver</v-btn>
-                </v-card-actions>
-            </v-card>
+            <v-card-title style="color:green">Política finalizada <v-icon class="ml-3" color="green">mdi-check</v-icon></v-card-title>
+            <v-card-text>
+                Politica <b>{{id}}</b> finalizada
+            </v-card-text>
+            <v-card-actions>
+                <v-btn text outlined color="orange" @click="volver()">Volver</v-btn>
+            </v-card-actions>
+        </v-card>
 
         <v-overlay :value="cargando">
             <v-progress-circular
@@ -73,11 +73,11 @@
 
 <script>
 import ApiServer from './../api';
-import Articulo2 from '../components/Articulo2.vue'
+import Articulo from '../components/Articulo.vue'
 import moment from 'moment';
 export default {
     name:'PoliticaArticulo',
-    components:{Articulo2},
+    components:{Articulo},
     data(){
         return{
             id: this.$route.params.id,

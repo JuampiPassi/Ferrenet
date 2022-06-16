@@ -7,7 +7,7 @@
             x-large
             dark
             @click="clicPoliticas"
-        >Politica</v-btn>
+        >Política</v-btn>
         <v-btn
             block
             color="#ef6b01"
@@ -16,6 +16,15 @@
             class="mt-5"
             dark
         >Ajuste</v-btn>
+        <v-btn
+            block
+            color="#ef6b01"
+            elevation="2"
+            x-large
+            class="mt-5"
+            dark
+            @click="clicUbicacion"
+        >Ubicación</v-btn>
        
       </v-container>
 </template>
@@ -32,6 +41,10 @@ export default {
         clicPoliticas(){
              this.$router.push({name: 'Politicas'});
         },
+        clicUbicacion(){
+            this.$router.push({name: 'Ubicacion'});   
+        }
+
     },
 
 }
