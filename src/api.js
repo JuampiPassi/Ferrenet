@@ -50,5 +50,8 @@ export default{
     },
     async getCprid(fec_actual, dep_id){
         return (await axios.get(`./api/articulos/cprdet/id?fec_actual=${fec_actual}&dep_id=${dep_id}`)).data
+    },
+    async putUbicacion(info){
+        return (await axios.put(`./api/articulos/editarubicacion`,info)).data
     }
 }

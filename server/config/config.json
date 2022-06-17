@@ -2,9 +2,9 @@
     "PORT": 3000,
 
     "firebird":{
-        "host":"10.19.0.242",
+        "host":"10.19.0.253",
         "port":"3050",
-        "database":"/var/lib/firebird/2.5/data/DBSIFTEMP.FDB",
+        "database":"/var/lib/firebird/2.5/data/DBSIF.FDB",
         "user":"SYSDBA",
         "password":"masterkey"
     },

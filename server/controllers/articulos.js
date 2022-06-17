@@ -13,7 +13,7 @@ const buscarArticuloporEan = async (req, res) => {
 const buscarImagen = async (req, res) => {
     let cod = req.params.cod;
     res.status(200);
-    res.writeHead(200, {'Content-Type': 'image/jpg'})
+    res.writeHead(200, {'Content-Type': 'image/jpeg'})
     res.end(await repositories.getImagen(cod))
 }
 
@@ -36,6 +36,10 @@ const getCprid = async (req,res)=>{
     res.status(200).send(await repositories.getCprid(req.query));
 }
 
+const editarUbicacion = async (req,res)=>{
+    res.status(200).send(await repositories.putUbicacion(req.body))
+}
+
 
 module.exports = {
     buscarArticulo,
@@ -44,6 +48,7 @@ module.exports = {
     ajustarStock,
     buscarArticuloporEan,
     getCprid,
-    editarArticulo
+    editarArticulo,
+    editarUbicacion
 
 }

@@ -8,5 +8,6 @@ module.exports = function (router) {
 	router.put('/editararticulo/:art_id', ArticulosController.editarArticulo);
 	router.put('/editarstock',ArticulosController.editarStock);
 	router.post('/ajustarstock',ArticulosController.ajustarStock);
+	router.put('/editarubicacion',ArticulosController.editarUbicacion);
 
 }

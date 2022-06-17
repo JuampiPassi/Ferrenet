@@ -14,7 +14,7 @@
             </v-row>
             <v-divider class="orange mb-5" dark></v-divider>
             <v-row>
-                <v-col cols="11">
+                <v-col cols="11" class="text-center">
                     <p class="font-weight-black ml-3 mb-0" style="font-size:16px">{{ean}}</p>
                     <p v-if="this.veriffail" class="float-right mb-0" style="font-size:20px;color:red">{{codeerror}}</p>
                 </v-col>
@@ -78,7 +78,7 @@
             {{mensaje}}
         </v-alert>
         <v-dialog v-model="verbarcode" scrollable transition="dialog-transition">
-            <StreamBarcodeReader v-if="this.verbarcode" @decode="code=> onDecodeBarCode(code)"></StreamBarcodeReader>
+            <StreamBarcodeReader ref="scanner" v-if="this.verbarcode" @decode="code=> onDecodeBarCode(code)"></StreamBarcodeReader>
         </v-dialog>
         <v-dialog v-model="verqr" scrollable transition="dialog-transition">
             <QrcodeStream v-if="this.verqr" @decode="onDecodeQr" @init="onInit" :torch="torchActive" :key="_uid" :track="paintOutline">
@@ -155,6 +155,7 @@ export default {
             this.veriffail=false
             this.verifok=false
             this.verbarcode=false
+            this.$refs.scanner.codeReader.stream.getTracks().forEach(function (track) { track.stop() })
              if(this.ean==code){
                 this.verifok=true
                 this.$emit('validado',true)

@@ -35,7 +35,8 @@ const getImagen = async (cod) => {
 
 const getArtEan = async (ean) => {
     try {
-        let consulta = `SELECT COD_ART from ARTICULOS WHERE ARTICULOS.EAN='${ean}' AND EMP_ID=1`;
+        //let consulta = `SELECT COD_ART from ARTICULOS WHERE ARTICULOS.EAN='${ean}' AND EMP_ID=1`;
+        let consulta = `select A.ART_ID, A.COD_ART, A.DESCRIPCION, A.MOD, A.MED, A.CANT_EMPAQ, A.ESCALA_ID, S.EXISTENCIA, S.ORD_REC_STR,S.STK_ID, cast(S.FECHA_CTRL as char(25)) as FECHA_CTRL from ARTICULOS A LEFT OUTER JOIN STOCK S ON S.ART_ID=A.ART_ID where A.EAN='${ean}' AND A.EMP_ID=1 AND S.DEP_ID=1`;
         let resp = await funcionesexportadas.consultaFirebird(consulta);
         return resp;
     } catch (error) {
@@ -97,6 +98,18 @@ const getCprid = async (data) =>{
             logger.error(error);
             return error;
         } 
+}
+
+const putUbicacion = async(data) =>{
+    let consulta= `UPDATE STOCK SET ORD_REC_STR='${data.pos}' WHERE ART_ID=${data.art_id} AND DEP_ID=1`;
+    try {
+        let resp = await firebirdMetodos.getConsultaPaljet(consulta);
+        return resp;
+    } catch (error) {
+        logger.error('Error en el metodo getCprid');
+        logger.error(error);
+        return error;
+    } 
 }
 
 
@@ -191,6 +204,7 @@ const funcionesexportadas = {
     putArticulo,
     putStock,
     postAjustar,
+    putUbicacion,
     getCprid,
     consultaFirebird,
     consultaFirebirdImagen
