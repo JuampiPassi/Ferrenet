@@ -25,7 +25,8 @@
             </v-row>
             <v-divider class="orange mt-5 mb-5" dark></v-divider>
             <div class="text-center">
-                <v-btn outlined small color="orange" @click="pasar()">Pasar</v-btn>
+                <v-btn outlined small color="orange" @click="verifok=true">Habilitar</v-btn>
+                <v-btn outlined small color="orange" class="ml-3" @click="pasar()">Pasar</v-btn>
                 <v-btn outlined small color="orange" class="ml-3" :disabled="!verifok" @click="aceptar()">Aceptar</v-btn>
                 <v-btn  @click="activarBarcode()" icon color="orange" class="ml-3"><v-icon style="font-size:28px">mdi-barcode-scan</v-icon></v-btn>
                 <v-btn  @click="activarQr()"  icon color="orange" class="ml-3"><v-icon style="font-size:25px">mdi-qrcode-scan</v-icon></v-btn>
