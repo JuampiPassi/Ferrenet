@@ -15,6 +15,7 @@
             x-large
             class="mt-5"
             dark
+            @click="clicAjuste"
         >Ajuste</v-btn>
         <v-btn
             block
@@ -43,6 +44,9 @@ export default {
         },
         clicUbicacion(){
             this.$router.push({name: 'Ubicacion'});   
+        },
+        clicAjuste(){
+            this.$router.push({name: 'Ajuste'});
         }
 
     },

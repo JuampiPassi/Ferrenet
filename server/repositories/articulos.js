@@ -89,7 +89,8 @@ const postAjustar = async (data) =>{
 const getCprid = async (data) =>{
     let fecha=data.fec_actual
     //let consulta = `SELECT CPR_ID from cprdet WHERE COD_ART='AJUSTE' AND MOD='01.02.2022' and DEP_DESTINO_ID=${data.dep_id}`
-    let consulta = `SELECT CPR.CPR_ID FROM CPR,CPRDET WHERE CPR.CPR_ID=CPRDET.CPR_ID AND FEC_EMISION='${fecha}' AND COD_ART='AJUSTE' AND MOD='${fecha}' AND DEP_DESTINO_ID='${data.dep_id}'`;
+    //let consulta = `SELECT CPR.CPR_ID FROM CPR,CPRDET WHERE CPR.CPR_ID=CPRDET.CPR_ID AND FEC_EMISION='${fecha}' AND COD_ART='AJUSTE' AND MOD='${fecha}' AND DEP_DESTINO_ID='${data.dep_id}'`;
+    let consulta = `SELECT CPR.CPR_ID FROM CPR,CPRDET WHERE CPR.CPR_ID=CPRDET.CPR_ID AND FEC_EMISION='01.02.2022' AND COD_ART='AJUSTE' AND MOD='01.02.2022' AND DEP_DESTINO_ID='${data.dep_id}'`;
         try {
             let resp = await firebirdMetodos.getConsultaPaljet(consulta);
             return resp;

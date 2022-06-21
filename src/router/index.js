@@ -7,6 +7,7 @@ import Politicas from '../views/Politicas.vue'
 import Escaner from '../views/Escaner.vue'
 import PoliticaArticulo from '../views/PoliticaArticulo.vue'
 import Ubicacion from '../views/Ubicacion.vue'
+import Ajuste from '../views/Ajuste.vue'
 import Qr from '../views/Qr.vue'
 
 Vue.use(VueRouter)
@@ -76,6 +77,14 @@ const routes = [
     path: '/Ubicacion',
     name: 'Ubicacion',
     component : Ubicacion,
+    meta:{
+      guest: true
+    }
+  },
+  {
+    path: '/Ajuste',
+    name: 'Ajuste',
+    component : Ajuste,
     meta:{
       guest: true
     }
