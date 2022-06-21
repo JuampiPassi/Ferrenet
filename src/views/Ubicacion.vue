@@ -111,7 +111,6 @@ export default {
     data(){
         return{
             verbarcode:false,
-            escanear:true,
             loadingArt:false,
             cargando:false,
             articulo:'',
@@ -138,7 +137,6 @@ export default {
             this.$refs.scanner.codeReader.stream.getTracks().forEach(function (track) { track.stop() })
             try {
                 this.loadingArt=true
-                this.escanear=false
                 let result = await ApiServer.buscarArticuloporEan(this.ean)
                 this.loadingArt=false
                 if(result.length>0){

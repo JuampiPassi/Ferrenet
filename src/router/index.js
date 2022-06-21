@@ -8,7 +8,6 @@ import Escaner from '../views/Escaner.vue'
 import PoliticaArticulo from '../views/PoliticaArticulo.vue'
 import Ubicacion from '../views/Ubicacion.vue'
 import Ajuste from '../views/Ajuste.vue'
-import Qr from '../views/Qr.vue'
 
 Vue.use(VueRouter)
 
@@ -61,14 +60,6 @@ const routes = [
     path: '/Escaner',
     name: 'Escaner',
     component : Escaner,
-    meta:{
-      guest: true
-    }
-  },
-  {
-    path: '/Qr',
-    name: 'Qr',
-    component : Qr,
     meta:{
       guest: true
     }

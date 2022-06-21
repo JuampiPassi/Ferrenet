@@ -16,7 +16,7 @@
             <v-row>
                 <v-col cols="11" class="text-center">
                     <p class="font-weight-black ml-3 mb-0" style="font-size:16px">{{ean}}</p>
-                    <p v-if="this.veriffail" class="float-right mb-0" style="font-size:20px;color:red">{{codeerror}}</p>
+                    <p v-if="this.veriffail" class="ml-3 mb-0" style="font-size:20px;color:red">{{codeerror}}</p>
                 </v-col>
                 <v-col cols="1">
                     <v-icon v-if="this.verifok" class="float-right" style="margin-right: 15px" color="green">mdi-check-circle</v-icon> 
@@ -28,8 +28,7 @@
                 <v-btn outlined small color="orange" @click="verifok=true">Habilitar</v-btn>
                 <v-btn outlined small color="orange" class="ml-3" @click="pasar()">Pasar</v-btn>
                 <v-btn outlined small color="orange" class="ml-3" :disabled="!verifok" @click="aceptar()">Aceptar</v-btn>
-                <v-btn  @click="activarBarcode()" icon color="orange" class="ml-3"><v-icon style="font-size:28px">mdi-barcode-scan</v-icon></v-btn>
-                <v-btn  @click="activarQr()"  icon color="orange" class="ml-3"><v-icon style="font-size:25px">mdi-qrcode-scan</v-icon></v-btn>
+                <v-btn  @click="verbarcode=true" icon color="orange" class="ml-3"><v-icon style="font-size:28px">mdi-barcode-scan</v-icon></v-btn>
             </div>
             <div class="mt-5">
                 <v-simple-table dense>
@@ -81,19 +80,6 @@
         <v-dialog v-model="verbarcode" scrollable transition="dialog-transition">
             <StreamBarcodeReader ref="scanner" v-if="this.verbarcode" @decode="code=> onDecodeBarCode(code)"></StreamBarcodeReader>
         </v-dialog>
-        <v-dialog v-model="verqr" scrollable transition="dialog-transition">
-            <QrcodeStream v-if="this.verqr" @decode="onDecodeQr" @init="onInit" :torch="torchActive" :key="_uid" :track="paintOutline">
-                <v-btn icon color="orange" @click="torchActive = !torchActive" :disabled="torchNotSupported">
-                    <v-icon dark>
-                    {{flashIcon}}
-                    </v-icon>
-                </v-btn>
-                
-            </QrcodeStream>
-            <!--<v-alert class="mt-10"  type="error"  v-model="alertCamara" dense transition="scale-transition">
-                {{mensajeCamara}}
-            </v-alert>-->
-        </v-dialog>
     </v-container>
 </template>
 
@@ -122,15 +108,11 @@ export default {
             posicion:'',
             barcode:'',
             verbarcode:false,
-            verqr: false,
             alert:false,
             mensaje:'',
             tipo:'error',
             verifok:false,
             veriffail:false,
-            camera: 'rear',
-            torchActive: false,
-            torchNotSupported: false,
             alertCamara:false,
             mensajeCamara:'',
             codeerror:'',
@@ -140,18 +122,6 @@ export default {
         }
     },
     methods:{
-        activarBarcode(){
-            this.verqr=false;
-            if(this.verbarcode==true){
-                this.verbarcode=false;
-            }else this.verbarcode=true
-        },
-        activarQr(){
-            this.verbarcode=false;
-            if(this.verqr==true){
-                this.verqr=false
-            }else this.verqr=true
-        },
         onDecodeBarCode(code){
             this.veriffail=false
             this.verifok=false
@@ -165,67 +135,6 @@ export default {
                 this.codeerror=code
             }
             
-        },onDecodeQr(decodedString){
-            this.verqr=false
-            this.veriffail=false
-            this.verifok=false
-            if(this.ean==decodedString){
-                this.verifok=true
-                this.$emit('validado',true)
-            }else{
-              this.veriffail=true  
-              this.codeerror=decodedString
-            }
-        },
-        cambiarCamara(){
-            this.alert=false
-            switch (this.camera) {
-                case 'front':
-                this.camera = 'rear'
-                break
-                case 'rear':
-                this.camera = 'front'
-                break
-            }
-        },
-        async onInit (promise) {
-            try {
-                const { capabilities } = await promise
-                this.torchNotSupported = !capabilities.torch
-            } catch (error) {
-                const triedFrontCamera = this.camera === 'front'
-                const triedRearCamera = this.camera === 'rear'
-
-                const cameraMissingError = error.name === 'OverconstrainedError'
-
-                if (triedRearCamera && cameraMissingError) {
-                this.alertCamara=true;
-                this.mensajeCamara="No se ha encontrado cámara trasera"
-                }
-
-                if (triedFrontCamera && cameraMissingError) {
-                this.alertCamara=true;
-                this.mensajeCamara="No se ha encontrado cámara frontal"
-                }
-
-                console.error(error)
-            }
-        },
-        paintOutline (detectedCodes, ctx) {
-            for (const detectedCode of detectedCodes) {
-                const [ firstPoint, ...otherPoints ] = detectedCode.cornerPoints
-
-                ctx.strokeStyle = "red";
-
-                ctx.beginPath();
-                ctx.moveTo(firstPoint.x, firstPoint.y);
-                for (const { x, y } of otherPoints) {
-                ctx.lineTo(x, y);
-                }
-                ctx.lineTo(firstPoint.x, firstPoint.y);
-                ctx.closePath();
-                ctx.stroke();
-            }
         },
         pasar(){
             this.$emit('pasar')
@@ -281,8 +190,6 @@ export default {
                 this.descripcion="Articulo no encontrado"
                 this.loading=false;
             }
-            
-            
         } catch (error) {
             this.loading=false;
             console.log(error)
@@ -290,12 +197,6 @@ export default {
         
     },
     computed:{
-        flashIcon() {
-            if (this.torchActive)
-                return 'mdi-flashlight-off'
-            else
-                return 'mdi-flashlight'
-        }
     },
     watch:{
     }
