@@ -234,6 +234,7 @@ export default {
             fecha = fecha.replace('-','.')
             fecha = fecha.replace('-','.')
             if(fechaCprid == undefined||fechaCprid == ''||fechaCprid !=fecha){
+                sessionStorage.removeItem("CprId")
                 sessionStorage.setItem("fechaCprid",fecha)
                 this.alertCargando=true
                 let resp = await ApiServer.getCprid(fecha,this.articulos[0].DEPOSITO)

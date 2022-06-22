@@ -140,16 +140,23 @@ export default {
             this.$emit('pasar')
         },
         aceptar(){
-            if(this.nuevacant=='')
-                this.nuevacant=this.cantidad
-          
-            if(this.empaque!=0){
-                let ajuste=(this.nuevacant*this.empaque)-this.stock;
-                this.$emit('aceptar',ajuste)
+            if(sessionStorage.getItem("CprId")==undefined||sessionStorage.getItem("CprId")==''){
+                this.alert=true
+                this.mensaje="No se ha podido cargar CPR_ID"
+                this.tipo="error"
             }else{
-                let ajuste=this.nuevacant-this.stock;
-                this.$emit('aceptar',ajuste)
-            }  
+
+                if(this.nuevacant=='')
+                    this.nuevacant=this.cantidad
+              
+                if(this.empaque!=0){
+                    let ajuste=(this.nuevacant*this.empaque)-this.stock;
+                    this.$emit('aceptar',ajuste)
+                }else{
+                    let ajuste=this.nuevacant-this.stock;
+                    this.$emit('aceptar',ajuste)
+                }  
+            }
         }
         
     },

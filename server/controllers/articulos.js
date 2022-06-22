@@ -12,9 +12,11 @@ const buscarArticuloporEan = async (req, res) => {
 }
 const buscarImagen = async (req, res) => {
     let cod = req.params.cod;
-    res.status(200);
+    //res.status(200);
     res.writeHead(200, {'Content-Type': 'image/jpeg'})
-    res.end(await repositories.getImagen(cod))
+    res.write(await repositories.getImagen(cod))
+    //res.end(await repositories.getImagen(cod))
+    res.end()
 }
 
 const editarArticulo = async (req,res)=>{

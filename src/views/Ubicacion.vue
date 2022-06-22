@@ -29,7 +29,7 @@
             </v-row>
             <v-divider class="orange mt-2 mb-5" dark></v-divider>
             <div class="text-center">
-                <v-btn outlined small color="orange" @click="clicaceptar()">Aceptar</v-btn>
+                <v-btn outlined small color="orange" :disabled="verificar" @click="clicaceptar()">Aceptar</v-btn>
                 <v-btn outlined small color="orange" class="ml-3" @click="clicatras()">Atrás</v-btn>
             </div>
             <div class="mt-5">
@@ -148,10 +148,14 @@ export default {
                 if(this.articulo.MOD.length>0){
                     this.datosArticulo=this.datosArticulo+'-'+this.articulo.MOD;
                 }
-                this.sector=this.articulo.ORD_REC_STR.substring(0,2)
-                this.modulo=this.articulo.ORD_REC_STR.substring(2,4)
-                this.estante=this.articulo.ORD_REC_STR.substring(4,6)
-                this.posicion=this.articulo.ORD_REC_STR.substring(6,8)
+                if(this.articulo.ORD_REC_STR=='Z'){
+                    this.posicion=''
+                }else{
+                    this.sector=this.articulo.ORD_REC_STR.substring(0,2)
+                    this.modulo=this.articulo.ORD_REC_STR.substring(2,4)
+                    this.estante=this.articulo.ORD_REC_STR.substring(4,6)
+                    this.posicion=this.articulo.ORD_REC_STR.substring(6,8)
+                }
                 if(this.posicion.length==1){
                     this.posicion='0'+this.posicion
                 }
@@ -215,6 +219,19 @@ export default {
             if(this.verbarcode==false){
                 this.$refs.scanner.codeReader.stream.getTracks().forEach(function (track) { track.stop() })
             }
+        }
+    },
+    computed:{
+        verificar(){
+            if(this.nuevosector=='' && this.sector=='')
+                return true
+            if(this.nuevomodulo=='' && this.modulo=='')
+                return true
+            if(this.nuevoestante=='' && this.estante=='')
+                return true
+            if(this.nuevapos=='' && this.posicion=='')
+                return true
+            return false
         }
     }
 }
