@@ -33,34 +33,44 @@
                 <v-btn outlined small color="orange" class="ml-3" @click="clicatras()">Atrás</v-btn>
             </div>
             <div class="mt-5">
-                <v-simple-table dense>
-                    <tbody>
-                        <tr>
-                            <td><p class="mb-0" style="font-size:18px; font-weight: bold;">Sector</p></td>
-                            <td>
-                                <input maxlength="2" style="font-size:18px; font-weight: bold;" type="text" v-model="nuevosector" :placeholder="sector" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><p class="mb-0" style="font-size:18px; font-weight: bold;">Módulo</p></td>
-                            <td>
-                                <input maxlength="2" style="font-size:18px; font-weight: bold;" type="text" v-model="nuevomodulo" :placeholder="modulo" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><p class="mb-0" style="font-size:18px; font-weight: bold;">Estante</p></td>
-                            <td>
-                                <input maxlength="2" style="font-size:18px; font-weight: bold;" type="text" v-model="nuevoestante" :placeholder="estante" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><p class="mb-0" style="font-size:18px; font-weight: bold;">Posición</p></td>
-                            <td>
-                                <input maxlength="2" style="font-size:18px; font-weight: bold;" type="text" v-model="nuevapos" :placeholder="posicion" />
-                            </td>
-                        </tr>
-                    </tbody>
-                </v-simple-table>
+                <v-row>
+                    <v-col cols="6">
+                        <v-simple-table dense>
+                            <tbody>
+                                <tr>
+                                    <td><p class="mb-0" style="font-size:18px; font-weight: bold;">Sector</p></td>
+                                    <td>
+                                        <input maxlength="2" style="font-size:18px; font-weight: bold;" type="text" v-model="nuevosector" :placeholder="sector" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><p class="mb-0" style="font-size:18px; font-weight: bold;">Módulo</p></td>
+                                    <td>
+                                        <input maxlength="2" style="font-size:18px; font-weight: bold;" type="text" v-model="nuevomodulo" :placeholder="modulo" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </v-simple-table>
+                    </v-col>
+                    <v-col cols="6">
+                        <v-simple-table dense>
+                            <tbody>
+                                <tr>
+                                    <td><p class="mb-0" style="font-size:18px; font-weight: bold;">Estante</p></td>
+                                    <td>
+                                        <input maxlength="2" style="font-size:18px; font-weight: bold;" type="text" v-model="nuevoestante" :placeholder="estante" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><p class="mb-0" style="font-size:18px; font-weight: bold;">Posición</p></td>
+                                    <td>
+                                        <input maxlength="2" style="font-size:18px; font-weight: bold;" type="text" v-model="nuevapos" :placeholder="posicion" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </v-simple-table>
+                    </v-col>
+                </v-row>
                        
             </div>
         </template>
@@ -206,6 +216,7 @@ export default {
                 },5000)
                 console.log(result)
                 this.articulo=''
+                this.verbarcode=true
             } catch (error) {
                 this.cargando=false
                 console.log(error)
