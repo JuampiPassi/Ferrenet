@@ -4,10 +4,14 @@
           <v-toolbar-title style="font-weight: 500;">Escanear Artículo</v-toolbar-title>
           <v-card-text>
               <v-btn  @click="verbarcode=true" icon color="orange" ><v-icon style="font-size:28px">mdi-barcode-scan</v-icon></v-btn>
+              <v-btn  @click="verqr=true" icon color="orange" class="ml-5"><v-icon style="font-size:28px">mdi-qrcode-scan</v-icon></v-btn>
           </v-card-text>
       </v-card>
       <v-dialog v-model="verbarcode" scrollable transition="dialog-transition">
           <StreamBarcodeReader ref="scanner" v-if="this.verbarcode" @decode="code=> onDecodeBarCode(code)" />
+      </v-dialog>
+      <v-dialog v-model="verqr" scrollable transition="dialog-transition">
+        <QrcodeStream  @decode="onDecode"></QrcodeStream>
       </v-dialog>
 
       <template v-if="articulo!=''">
@@ -31,6 +35,7 @@
           <div class="text-center">
               <v-btn outlined small color="orange" class="ml-3" @click="clicatras()">Atrás</v-btn>
               <v-btn  @click="verbarcode=true" icon color="orange" class="ml-3"><v-icon style="font-size:28px">mdi-barcode-scan</v-icon></v-btn>
+              <v-btn  @click="verqr=true" icon color="orange" class="ml-3"><v-icon style="font-size:28px">mdi-qrcode-scan</v-icon></v-btn>
           </div>
             <div class="mt-5">
               <v-simple-table dense>
@@ -84,15 +89,17 @@
 import ApiServer from './../api';
 import Imagen from '../components/Imagen.vue';
 import { StreamBarcodeReader } from "vue-barcode-reader";
+import { QrcodeStream} from 'vue-qrcode-reader'
 export default {
   name: 'Escaner',
   components: {
-    StreamBarcodeReader,Imagen
+    StreamBarcodeReader,Imagen,QrcodeStream
   },
   data(){
         return{
           articulo: '',
           verbarcode:false,
+          verqr:false,
           datosArticulo:'',
           ean:'',
           loadingArt:false,
@@ -103,6 +110,7 @@ export default {
     },
     methods: {
       async onDecodeBarCode(code){
+            this.articulo=''
             this.ean=code
             this.alert=false
             this.verbarcode=false
@@ -136,6 +144,40 @@ export default {
                 this.mensaje='Se ha producido un error'
             }
             
+        },
+        async onDecode (decodedString){
+            this.articulo=''
+            this.ean=decodedString
+            this.alert=false
+            this.verqr=false
+            try {
+                this.loadingArt=true
+                let result = await ApiServer.buscarArticuloporEan(this.ean)
+                this.loadingArt=false
+                if(result.length>0){
+                  this.articulo=result[0]
+                  this.datosArticulo=this.articulo.COD_ART+'-'+this.articulo.DESCRIPCION;
+                  if(this.articulo.MED.length>0){
+                      this.datosArticulo=this.datosArticulo+'-'+this.articulo.MED;
+                  }
+                  if(this.articulo.MOD.length>0){
+                      this.datosArticulo=this.datosArticulo+'-'+this.articulo.MOD;
+                  }
+                  if(this.articulo.CANT_EMPAQ==0){
+                    this.cantidad=this.articulo.EXISTENCIA
+                  }else{
+                      this.cantidad=this.articulo.EXISTENCIA/this.articulo.CANT_EMPAQ
+                  }
+                }else{
+                    this.alert=true,
+                    this.mensaje='No se encontró articulo con EAN: '+this.ean
+                }
+            } catch (error) {
+                this.loadingArt=false
+                console.log(error)
+                this.alert=true
+                this.mensaje='Se ha producido un error'
+            }
         },
         clicatras(){
             this.$router.push({name: 'Home'})
