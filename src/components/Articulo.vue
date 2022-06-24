@@ -36,7 +36,7 @@
                         <tr>
                             <td><p class="mb-0" style="font-size:20px; font-weight: bold;">Cantidad</p></td>
                             <td>
-                                <input style="font-size:20px; font-weight: bold;" type="number" v-model="nuevacant" :placeholder="cantidad" :readonly="!verifok"/>
+                                <input style="font-size:20px; font-weight: bold; width:100%" type="number" v-model="nuevacant" :placeholder="cantidad" :readonly="!verifok"/>
                             </td>
                         </tr>
                         <tr>
@@ -50,6 +50,10 @@
                         <tr v-if="this.fecha_ctrl">
                             <td>Fecha ctrl</td>
                             <td>{{fecha_ctrl}}</td>
+                        </tr>
+                        <tr v-if="this.fec_ingreso">
+                            <td>Fec ingreso</td>
+                            <td>{{fec_ingreso}}</td>
                         </tr>
                     </tbody>
                 </v-simple-table>
@@ -88,6 +92,7 @@ import ApiServer from '../api';
 import Imagen from './Imagen.vue'
 import { StreamBarcodeReader } from "vue-barcode-reader";
 import { QrcodeStream } from 'vue-qrcode-reader'
+import moment from 'moment';
 export default {
     name: 'Articulo',
     components:{ Imagen,StreamBarcodeReader,QrcodeStream },
@@ -105,6 +110,7 @@ export default {
             stock: '',
             cantidad:'',
             fecha_ctrl:'',
+            fec_ingreso:'',
             posicion:'',
             barcode:'',
             verbarcode:false,
@@ -177,6 +183,7 @@ export default {
                 this.mod=resp[0].MOD
                 this.stock=resp[0].EXISTENCIA
                 this.fecha_ctrl=resp[0].FECHA_CTRL
+                this.fecha_ctrl=(moment(this.fecha_ctrl).format('DD-MM-YYYY'))
                 this.posicion=resp[0].ORD_REC_STR
                 let info={art_id:this.articulo[0].ART_ID,stk_id:this.articulo[0].STK_ID, escala_id:this.articulo[0].ESCALA_ID}
                 this.$emit('info',info)
@@ -192,6 +199,9 @@ export default {
                 if(this.mod.length>0){
                     this.datos=this.datos+'-'+this.mod;
                 }
+                let fechaingreso = await ApiServer.verFecIngreso(this.articulo[0].ART_ID);
+                this.fec_ingreso= fechaingreso[0].FEC_INGRESO
+                this.fec_ingreso=(moment(this.fec_ingreso).format('DD-MM-YYYY'))
                 this.loading=false;
             }else{
                 this.descripcion="Articulo no encontrado"

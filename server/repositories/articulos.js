@@ -10,12 +10,23 @@ const axios = require('axios')
 const getArticulo = async (cod) => {
     try {
     
-        let consulta = `select A.ART_ID, A.DESCRIPCION, A.EAN, A.MOD, A.MED, A.CANT_EMPAQ, A.ESCALA_ID, S.EXISTENCIA, S.ORD_REC_STR,S.STK_ID, cast(S.FECHA_CTRL as char(25)) as FECHA_CTRL from ARTICULOS A LEFT OUTER JOIN STOCK S ON S.ART_ID=A.ART_ID where A.COD_ART='${cod}' AND A.EMP_ID=1 AND S.DEP_ID=1`;
-        //let resp = await funcionesexportadas.consultaFirebird(consulta);
+        let consulta = `select A.ART_ID, A.DESCRIPCION, A.EAN, A.MOD, A.MED, A.CANT_EMPAQ, A.ESCALA_ID, S.EXISTENCIA, S.ORD_REC_STR,S.STK_ID, cast(S.FECHA_CTRL as date) as FECHA_CTRL from ARTICULOS A LEFT OUTER JOIN STOCK S ON S.ART_ID=A.ART_ID where A.COD_ART='${cod}' AND A.EMP_ID=1 AND S.DEP_ID=1`;
         let resp = await firebirdMetodos.getConsultaPaljet(consulta);
         return resp;
     } catch (error) {
         logger.error('Error en el metodo getArticulo');
+        logger.error(error);
+        return error;
+    }
+}
+
+const getFecIngreso = async(art_id)=>{
+    try {
+        let consulta = `select cast(max(fec_ingreso) as date) as fec_ingreso from STOCKMOV where art_id=${art_id} AND stk_tipomov_id='4'`;
+        let resp = await firebirdMetodos.getConsultaPaljet(consulta);
+        return resp;
+    } catch (error) {
+        logger.error('Error en el metodo getFecIngreso');
         logger.error(error);
         return error;
     }
@@ -207,6 +218,7 @@ const funcionesexportadas = {
     postAjustar,
     putUbicacion,
     getCprid,
+    getFecIngreso,
     consultaFirebird,
     consultaFirebirdImagen
 }

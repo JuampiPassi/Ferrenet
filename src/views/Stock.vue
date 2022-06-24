@@ -5,7 +5,8 @@
             color="#ef6b01"
             elevation="2"
             x-large
-            dark
+            style="color:white"
+            :disabled="!verPoliticas"
             @click="clicPoliticas"
         >Política</v-btn>
         <v-btn
@@ -14,7 +15,8 @@
             elevation="2"
             x-large
             class="mt-5"
-            dark
+            style="color:white"
+            :disabled="!verAjuste"
             @click="clicAjuste"
         >Ajuste</v-btn>
         <v-btn
@@ -23,7 +25,8 @@
             elevation="2"
             x-large
             class="mt-5"
-            dark
+            style="color:white"
+            :disabled="!verUbicacion"
             @click="clicUbicacion"
         >Ubicación</v-btn>
        
@@ -50,6 +53,47 @@ export default {
         }
 
     },
+    computed:{
+        verPoliticas(){
+            let modulo = JSON.parse(sessionStorage.getItem('modulos'))
+            if(sessionStorage.getItem('rol')==1)
+                return true;
+            if(modulo!=''&&modulo!=null){
+                if((modulo.find(x => x.id_modulo == 1.1))!=undefined){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            return false;
+        },
+         verAjuste(){
+            let modulo = JSON.parse(sessionStorage.getItem('modulos'))
+            if(sessionStorage.getItem('rol')==1)
+                return true;
+            if(modulo!=''&&modulo!=null){
+                if((modulo.find(x => x.id_modulo == 1.2))!=undefined){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            return false;
+        },
+         verUbicacion(){
+            let modulo = JSON.parse(sessionStorage.getItem('modulos'))
+            if(sessionStorage.getItem('rol')==1)
+                return true;
+            if(modulo!=''&&modulo!=null){
+                if((modulo.find(x => x.id_modulo == 1.3))!=undefined){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            return false;
+        },
+    }
 
 }
 </script>

@@ -75,10 +75,17 @@ export default {
                 try {
                     let resp = await ApiServer.verifUser(pass);
                     if(resp!=''){
+                        let rol = await ApiServer.verRol(resp[0].USUARIO) ;
                         this.loading=false;
                         console.log(resp[0])
                         sessionStorage.setItem('logged', true);
                         sessionStorage.setItem('usuario', resp[0].USUARIO);
+                        if(rol.id_rol==1){
+                            sessionStorage.setItem('rol', 1);
+                        }else{
+                            sessionStorage.setItem('rol', rol.id_rol);
+                            sessionStorage.setItem('modulos',JSON.stringify(rol.modulos))
+                        }
                         this.$router.push({ name: 'Home'});
                         window.location.reload();
                     }else{

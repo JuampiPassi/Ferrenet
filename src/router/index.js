@@ -8,6 +8,7 @@ import Escaner from '../views/Escaner.vue'
 import PoliticaArticulo from '../views/PoliticaArticulo.vue'
 import Ubicacion from '../views/Ubicacion.vue'
 import Ajuste from '../views/Ajuste.vue'
+import Auditoria from '../views/Auditoria.vue'
 
 Vue.use(VueRouter)
 
@@ -38,7 +39,19 @@ const routes = [
     component: Stock,
     meta: {
       guest: true
-    }
+    },
+    beforeEnter: (to, from,next) => {
+      if(sessionStorage.getItem('rol')==1){
+        next();
+      }else if(sessionStorage.getItem('modulos')!=null){
+        let modulos =JSON.parse(sessionStorage.getItem('modulos'));
+        modulos.forEach(element => {
+            if(element.id_modulo==1)
+              next()
+        });
+      }
+      next(false)
+    },
   },
   {
     path: '/Politicas',
@@ -46,7 +59,19 @@ const routes = [
     component: Politicas,
     meta: {
       guest: true
-    }
+    },
+    beforeEnter: (to, from,next) => {
+      if(sessionStorage.getItem('rol')==1){
+        next();
+      }else if(sessionStorage.getItem('modulos')!=null){
+        let modulos =JSON.parse(sessionStorage.getItem('modulos'));
+        modulos.forEach(element => {
+            if(element.id_modulo==1.1)
+              next()
+        });
+      }
+      next(false)
+    },
   },
   {
     path: '/PoliticaArticulo',
@@ -70,7 +95,19 @@ const routes = [
     component : Ubicacion,
     meta:{
       guest: true
-    }
+    },
+    beforeEnter: (to, from,next) => {
+      if(sessionStorage.getItem('rol')==1){
+        next();
+      }else if(sessionStorage.getItem('modulos')!=null){
+        let modulos =JSON.parse(sessionStorage.getItem('modulos'));
+        modulos.forEach(element => {
+            if(element.id_modulo==1.3)
+              next()
+        });
+      }
+      next(false)
+    },
   },
   {
     path: '/Ajuste',
@@ -78,7 +115,39 @@ const routes = [
     component : Ajuste,
     meta:{
       guest: true
-    }
+    },
+    beforeEnter: (to, from,next) => {
+      if(sessionStorage.getItem('rol')==1){
+        next();
+      }else if(sessionStorage.getItem('modulos')!=null){
+        let modulos =JSON.parse(sessionStorage.getItem('modulos'));
+        modulos.forEach(element => {
+            if(element.id_modulo==1.2)
+              next()
+        });
+      }
+      next(false)
+    },
+  },
+  {
+    path: '/Auditoria',
+    name: 'Auditoria',
+    component : Auditoria,
+    meta:{
+      guest: true
+    },
+    beforeEnter: (to, from,next) => {
+      if(sessionStorage.getItem('rol')==1){
+        next();
+      }else if(sessionStorage.getItem('modulos')!=null){
+        let modulos =JSON.parse(sessionStorage.getItem('modulos'));
+        modulos.forEach(element => {
+            if(element.id_modulo==8)
+              next()
+        });
+      }
+      next(false)
+    },
   },
 ]
 

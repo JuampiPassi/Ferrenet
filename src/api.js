@@ -9,11 +9,17 @@ export default{
     async verifUser(pass){
         return (await axios.get(`./api/usuarios/verif?pass=${pass}`)).data;
     },
+    async verRol(usuario){
+        return(await axios.get(`./api/usuarios/rol/${usuario}`)).data;
+    },
     async guardarTexto(info){
         return (await axios.post(`./api/politicas/obsinteligente`,info)).data;
     },
     async verArticulos(id){
         return (await axios.get(`./api/politicas/articulos/${id}`)).data;
+    },
+    async verFecIngreso(art_id){
+        return (await axios.get(`./api/articulos/fecingreso/${art_id}`)).data;
     },
     async buscarArticulo(cod){
         return (await axios.get(`./api/articulos/${cod}`)).data;

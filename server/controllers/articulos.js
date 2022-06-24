@@ -42,6 +42,10 @@ const editarUbicacion = async (req,res)=>{
     res.status(200).send(await repositories.putUbicacion(req.body))
 }
 
+const getFecIngreso = async (req,res)=>{
+    res.status(200).send(await repositories.getFecIngreso(req.params.art_id))
+}
+
 
 module.exports = {
     buscarArticulo,
@@ -51,6 +55,7 @@ module.exports = {
     buscarArticuloporEan,
     getCprid,
     editarArticulo,
-    editarUbicacion
+    editarUbicacion,
+    getFecIngreso
 
 }

@@ -1,12 +1,13 @@
 <template>
      <v-container class="mt-5">
-        <v-btn block color="#ef6b01" elevation="2" x-large  dark  @click="clicStock">Stock</v-btn>
-        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" dark>Pedido</v-btn>
-        <v-btn block color="#ef6b01"  elevation="2" x-large class="mt-5" dark>Despacho</v-btn>
-        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" dark>Ingreso</v-btn>
-        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" dark>Ventas</v-btn>
-        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" dark @click="dialogObservador=true; texto=''">Observador Inteligente</v-btn>
-
+        <v-btn block color="#ef6b01" elevation="2" x-large :disabled="!verStock" @click="clicStock" style="color:white">Stock</v-btn>
+        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" :disabled="!verPedido">Pedido</v-btn>
+        <v-btn block color="#ef6b01"  elevation="2" x-large class="mt-5" style="color:white" :disabled="!verDespacho">Despacho</v-btn>
+        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" :disabled="!verIngreso">Ingreso</v-btn>
+        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" :disabled="!verVentas">Ventas</v-btn>
+        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" @click="dialogObservador=true; texto=''" style="color:white" :disabled="!verObsInt">Observador Inteligente</v-btn>
+        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" :disabled="!verTareas">Tareas</v-btn>
+        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" :disabled="!verAudit" @click="clicAuditoria">Auditoría</v-btn>
 
         <v-alert class="mt-10" text border="left" colored-border elevation="24" type="success"  v-model="alert" dense dismissible transition="scale-transition">
                 Guardado
@@ -38,12 +39,16 @@ export default {
             dialogObservador:false,
             texto:'',
             loadingText:false,
-            alert:false
+            alert:false,
+            modulos:'',
         }
     },
     methods:{
         clicStock(){
-             this.$router.push({name: 'Stock'});
+            this.$router.push({name: 'Stock'});
+        },
+        clicAuditoria(){
+            this.$router.push({name: 'Auditoria'});
         },
         async guardarTexto(){
             let info={
@@ -63,6 +68,114 @@ export default {
             } catch (error) {
                 console.log(error)
             }
+        }
+    },
+    mounted(){
+    },
+    computed:{
+        verStock(){
+            let modulo = JSON.parse(sessionStorage.getItem('modulos'))
+            if(sessionStorage.getItem('rol')==1)
+                return true;
+            if(modulo!=''&&modulo!=null){
+                if((modulo.find(x => x.id_modulo == 1))!=undefined){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            return false;
+        },
+        verPedido(){
+            let modulo = JSON.parse(sessionStorage.getItem('modulos'))
+            if(sessionStorage.getItem('rol')==1)
+                return true;
+            if(modulo!=''&&modulo!=null){
+                if((modulo.find(x => x.id_modulo == 2))!=undefined){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            return false;
+        },
+        verDespacho(){
+            let modulo = JSON.parse(sessionStorage.getItem('modulos'))
+            if(sessionStorage.getItem('rol')==1)
+                return true;
+            if(modulo!=''&&modulo!=null){
+                if((modulo.find(x => x.id_modulo == 3))!=undefined){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            return false;
+        },
+        verIngreso(){
+            let modulo = JSON.parse(sessionStorage.getItem('modulos'))
+            if(sessionStorage.getItem('rol')==1)
+                return true;
+            if(modulo!=''&&modulo!=null){
+                if((modulo.find(x => x.id_modulo == 4))!=undefined){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            return false;
+        },
+        verVentas(){
+            let modulo = JSON.parse(sessionStorage.getItem('modulos'))
+            if(sessionStorage.getItem('rol')==1)
+                return true;
+            if(modulo!=''&&modulo!=null){
+                if((modulo.find(x => x.id_modulo == 5))!=undefined){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            return false;
+        },
+        verObsInt(){
+            let modulo = JSON.parse(sessionStorage.getItem('modulos'))
+            if(sessionStorage.getItem('rol')==1)
+                return true;
+            if(modulo!=''&&modulo!=null){
+                if((modulo.find(x => x.id_modulo == 6))!=undefined){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            return false;
+        },
+        verTareas(){
+            let modulo = JSON.parse(sessionStorage.getItem('modulos'))
+            if(sessionStorage.getItem('rol')==1)
+                return true;
+            if(modulo!=''&&modulo!=null){
+                if((modulo.find(x => x.id_modulo == 7))!=undefined){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            return false;
+        },
+        verAudit(){
+            let modulo = JSON.parse(sessionStorage.getItem('modulos'))
+            if(sessionStorage.getItem('rol')==1)
+                return true;
+            if(modulo!=''&&modulo!=null){
+                if((modulo.find(x => x.id_modulo == 8))!=undefined){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            return false;
         }
     }
 }
