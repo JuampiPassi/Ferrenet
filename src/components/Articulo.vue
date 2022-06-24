@@ -47,11 +47,15 @@
                             <td>Empaque</td>
                             <td>{{empaque}}</td>
                         </tr>
-                        <tr v-if="this.fecha_ctrl">
-                            <td style="width: 10%;">Fecha ctrl</td>
-                            <td style="width: 104px;">{{fecha_ctrl}}</td>
-                            <td style="width: 10%;">Fec ingreso</td>
-                            <td >{{fec_ingreso}}</td>
+                        <tr v-if="this.fecha_ctrl || this.fec_ingreso">
+                            <template v-if="this.fecha_ctrl">
+                                <td style="width: 10%;">Fec ctrl</td>
+                                <td style="width: 90px;">{{fecha_ctrl}}</td>
+                            </template>
+                            <template v-if="this.fec_ingreso">
+                                <td style="width: 83px;">Fec ingr</td>
+                                <td >{{fec_ingreso}}</td>
+                            </template>
                         </tr>
                     </tbody>
                 </v-simple-table>
@@ -181,7 +185,8 @@ export default {
                 this.mod=resp[0].MOD
                 this.stock=resp[0].EXISTENCIA
                 this.fecha_ctrl=resp[0].FECHA_CTRL
-                this.fecha_ctrl=(moment(this.fecha_ctrl).format('DD-MM-YYYY'))
+                if(this.fecha_ctrl!=null)
+                this.fecha_ctrl=(moment(this.fecha_ctrl).format('DD-MM-YY'))
                 this.posicion=resp[0].ORD_REC_STR
                 let info={art_id:this.articulo[0].ART_ID,stk_id:this.articulo[0].STK_ID, escala_id:this.articulo[0].ESCALA_ID}
                 this.$emit('info',info)
@@ -199,7 +204,8 @@ export default {
                 }
                 let fechaingreso = await ApiServer.verFecIngreso(this.articulo[0].ART_ID);
                 this.fec_ingreso= fechaingreso[0].FEC_INGRESO
-                this.fec_ingreso=(moment(this.fec_ingreso).format('DD-MM-YYYY'))
+                if(this.fec_ingreso!=null)
+                this.fec_ingreso=(moment(this.fec_ingreso).format('DD-MM-YY'))
                 this.loading=false;
             }else{
                 this.descripcion="Articulo no encontrado"
