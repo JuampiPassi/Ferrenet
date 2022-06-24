@@ -6,7 +6,7 @@
             elevation="2"
             x-large
             style="color:white"
-            :disabled="!verPoliticas"
+            v-if="verPoliticas"
             @click="clicPoliticas"
         >Política</v-btn>
         <v-btn
@@ -16,7 +16,7 @@
             x-large
             class="mt-5"
             style="color:white"
-            :disabled="!verAjuste"
+            v-if="verAjuste"
             @click="clicAjuste"
         >Ajuste</v-btn>
         <v-btn
@@ -26,7 +26,7 @@
             x-large
             class="mt-5"
             style="color:white"
-            :disabled="!verUbicacion"
+            v-if="verUbicacion"
             @click="clicUbicacion"
         >Ubicación</v-btn>
        

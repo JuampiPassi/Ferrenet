@@ -8,6 +8,7 @@ module.exports = function (router) {
         let consulta= `SELECT u.id_rol FROM  usuarios_roles u WHERE u.usuario='${req.params.usuario}'`;
         conexion.query(consulta,(error,results)=>{
 			if(error){
+                console.log("El usuario no tiene rol")
 				throw(error)
 			}else{
                 if(results[0].id_rol==1){

@@ -1,13 +1,13 @@
 <template>
      <v-container class="mt-5">
-        <v-btn block color="#ef6b01" elevation="2" x-large :disabled="!verStock" @click="clicStock" style="color:white">Stock</v-btn>
-        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" :disabled="!verPedido">Pedido</v-btn>
-        <v-btn block color="#ef6b01"  elevation="2" x-large class="mt-5" style="color:white" :disabled="!verDespacho">Despacho</v-btn>
-        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" :disabled="!verIngreso">Ingreso</v-btn>
-        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" :disabled="!verVentas">Ventas</v-btn>
-        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" @click="dialogObservador=true; texto=''" style="color:white" :disabled="!verObsInt">Observador Inteligente</v-btn>
-        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" :disabled="!verTareas">Tareas</v-btn>
-        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" :disabled="!verAudit" @click="clicAuditoria">Auditoría</v-btn>
+        <v-btn block color="#ef6b01" elevation="2" x-large v-if="verStock" @click="clicStock" style="color:white">Stock</v-btn>
+        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" v-if="verPedido">Pedido</v-btn>
+        <v-btn block color="#ef6b01"  elevation="2" x-large class="mt-5" style="color:white" v-if="verDespacho">Despacho</v-btn>
+        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" v-if="verIngreso">Ingreso</v-btn>
+        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" v-if="verVentas">Ventas</v-btn>
+        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" @click="dialogObservador=true; texto=''" style="color:white" v-if="verObsInt">Observador Inteligente</v-btn>
+        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" v-if="verTareas">Tareas</v-btn>
+        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" v-if="verAudit" @click="clicAuditoria">Auditoría</v-btn>
 
         <v-alert class="mt-10" text border="left" colored-border elevation="24" type="success"  v-model="alert" dense dismissible transition="scale-transition">
                 Guardado

@@ -6,7 +6,7 @@
             elevation="2"
             x-large
             style="color:white"
-            :disabled="!verOrd"
+            v-if="verOrd"
         >Orden y limpieza</v-btn>
         <v-btn
             block
@@ -15,7 +15,7 @@
             class="mt-5"
             x-large
             style="color:white"
-            :disabled="!verArmonia"
+            v-if="verArmonia"
         >Armonía</v-btn>
     </v-container>
 </template>

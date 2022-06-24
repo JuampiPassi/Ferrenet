@@ -48,12 +48,10 @@
                             <td>{{empaque}}</td>
                         </tr>
                         <tr v-if="this.fecha_ctrl">
-                            <td>Fecha ctrl</td>
-                            <td>{{fecha_ctrl}}</td>
-                        </tr>
-                        <tr v-if="this.fec_ingreso">
-                            <td>Fec ingreso</td>
-                            <td>{{fec_ingreso}}</td>
+                            <td style="width: 10%;">Fecha ctrl</td>
+                            <td style="width: 104px;">{{fecha_ctrl}}</td>
+                            <td style="width: 10%;">Fec ingreso</td>
+                            <td >{{fec_ingreso}}</td>
                         </tr>
                     </tbody>
                 </v-simple-table>
