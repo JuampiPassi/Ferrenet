@@ -218,6 +218,23 @@ export default {
         },
         volver(){
             this.$router.push({name: 'Politicas'});
+        },
+        async generarCprID(){
+           try {
+            let fecha = moment().format('DD-MM-YYYY')
+            fecha = fecha.replace('-','.')
+            fecha = fecha.replace('-','.')
+            let resp = await ApiServer.postGenerarCpr(fecha)
+            let cpr_id = resp.CPR_ID
+            sessionStorage.removeItem("CprId")
+            sessionStorage.setItem("CprId",cpr_id)
+            sessionStorage.setItem("fechaCprid",fecha)
+           } catch (error) {
+             console.log(error)
+              this.alert=true
+             this.mensaje="No se pudo generar cpr"
+             this.tipo="error"
+           }
         }
     },
     async mounted(){
@@ -238,15 +255,24 @@ export default {
                 sessionStorage.setItem("fechaCprid",fecha)
                 this.alertCargando=true
                 let resp = await ApiServer.getCprid(fecha,this.articulos[0].DEPOSITO)
-                this.alertCargando=false
-                sessionStorage.setItem("CprId",resp[0].CPR_ID)
-                console.log("Cpr id cargado correctamente")
+                console.log(resp)
+                if(resp=='' || resp==null){
+                    this.generarCprID()
+                    this.alertCargando=false
+                }else{
+                    this.alertCargando=false
+                    sessionStorage.setItem("CprId",resp[0].CPR_ID)
+                }
             }else if(sessionStorage.getItem("CprId")==undefined||sessionStorage.getItem("CprId")==''){
                 this.alertCargando=true
                 let resp = await ApiServer.getCprid(fecha,this.articulos[0].DEPOSITO)
-                this.alertCargando=false
-                sessionStorage.setItem("CprId",resp[0].CPR_ID)
-                console.log("Cpr id cargado correctamente")
+                if(resp=='' || resp==null){
+                    this.generarCprID()
+                    this.alertCargando=false
+                }else{
+                    this.alertCargando=false
+                    sessionStorage.setItem("CprId",resp[0].CPR_ID)
+                }
             }
         } catch (error) {
              this.alert=true

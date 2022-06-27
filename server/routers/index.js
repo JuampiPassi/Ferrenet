@@ -12,5 +12,11 @@ module.exports = (app) => {
     require('./articulos') (router);
     app.use('/api/articulos', router);
 
+    require('./empleados') (router);
+    app.use('/api/empleados', router);
+
+    require('./logistica') (router);
+    app.use('/api/logistica', router);
+
 
 }

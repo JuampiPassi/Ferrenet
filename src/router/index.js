@@ -9,6 +9,8 @@ import PoliticaArticulo from '../views/PoliticaArticulo.vue'
 import Ubicacion from '../views/Ubicacion.vue'
 import Ajuste from '../views/Ajuste.vue'
 import Auditoria from '../views/Auditoria.vue'
+import Pedidos from '../views/Pedidos.vue'
+import Consolidados from '../views/Consolidados.vue'
 
 Vue.use(VueRouter)
 
@@ -143,6 +145,46 @@ const routes = [
         let modulos =JSON.parse(sessionStorage.getItem('modulos'));
         modulos.forEach(element => {
             if(element.id_modulo==8)
+              next()
+        });
+      }
+      next(false)
+    },
+  },
+  {
+    path: '/Pedidos',
+    name: 'Pedidos',
+    component: Pedidos,
+    meta: {
+      guest: true
+    },
+    beforeEnter: (to, from,next) => {
+      if(sessionStorage.getItem('rol')==1){
+        next();
+      }else if(sessionStorage.getItem('modulos')!=null){
+        let modulos =JSON.parse(sessionStorage.getItem('modulos'));
+        modulos.forEach(element => {
+            if(element.id_modulo==2)
+              next()
+        });
+      }
+      next(false)
+    },
+  },
+  {
+    path: '/Consolidados',
+    name: 'Consolidados',
+    component: Consolidados,
+    meta: {
+      guest: true
+    },
+    beforeEnter: (to, from,next) => {
+      if(sessionStorage.getItem('rol')==1){
+        next();
+      }else if(sessionStorage.getItem('modulos')!=null){
+        let modulos =JSON.parse(sessionStorage.getItem('modulos'));
+        modulos.forEach(element => {
+            if(element.id_modulo==2.1)
               next()
         });
       }

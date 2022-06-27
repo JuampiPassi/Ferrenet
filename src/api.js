@@ -22,7 +22,7 @@ export default{
         return (await axios.get(`./api/articulos/fecingreso/${art_id}`)).data;
     },
     async buscarArticulo(cod){
-        return (await axios.get(`./api/articulos/${cod}`)).data;
+        return (await axios.get(`./api/articulos/codigo/${cod}`)).data;
     },
     async buscarImagen(cod){
         return(await axios.get(`./api/articulos/imagen/${cod}`)).data;
@@ -59,5 +59,17 @@ export default{
     },
     async putUbicacion(info){
         return (await axios.put(`./api/articulos/editarubicacion`,info)).data
+    },
+    async postGenerarCpr(fechaHoy){
+        let data={
+            fecha: fechaHoy
+        }
+        return (await axios.post(`./api/articulos/generarcpr`,data)).data
+    },
+    async getEmpleadosLegajos(){
+        return (await axios.get(`./api/empleados/legajos`)).data
+    },
+    async getLogisticaCons(){
+        return (await axios.get(`./api/logistica/cons`)).data
     }
 }

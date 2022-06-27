@@ -46,6 +46,11 @@ const getFecIngreso = async (req,res)=>{
     res.status(200).send(await repositories.getFecIngreso(req.params.art_id))
 }
 
+const postGenerarCpr = async (req,res)=>{
+    
+    res.status(200).send(await repositories.generarCpr(req.body.fecha))
+}
+
 
 module.exports = {
     buscarArticulo,
@@ -56,6 +61,7 @@ module.exports = {
     getCprid,
     editarArticulo,
     editarUbicacion,
-    getFecIngreso
+    getFecIngreso,
+    postGenerarCpr,
 
 }

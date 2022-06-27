@@ -1,0 +1,71 @@
+<template>
+    <v-container>
+        <template v-if="loading">
+            <v-row  class="fill-height" align-content="center" justify="center">
+                <v-col
+                class="text-subtitle-1 text-center"
+                cols="12"
+                >
+                Cargando datos..
+                </v-col>
+                <v-col cols="6">
+                <v-progress-linear
+                    color="deep-orange accent-4"
+                    indeterminate
+                    rounded
+                    height="6"
+                ></v-progress-linear>
+                </v-col>
+            </v-row>
+        </template>
+        <v-alert class="mt-10"  :type="tipo"  v-model="alert" dense transition="scale-transition">
+            {{mensaje}}
+        </v-alert>
+    </v-container>
+</template>
+
+<script>
+import ApiServer from '../api';
+import moment from 'moment';
+export default {
+    name: 'Consolidados',
+     data(){
+        return{
+            loading:false,
+            alert:false,
+            mensaje:'',
+            tipo:'error'
+        }
+    },
+    async mounted(){
+        try {
+            this.loading=true
+            let emp = await ApiServer.getEmpleadosLegajos();
+            let logistica = await ApiServer.getLogisticaCons();
+            console.log(logistica)
+            console.log(emp)
+            let logisticaEmp=[]
+            logistica.forEach(log => {
+                let datos={
+                    id:log.cons_id,
+                    usuario:(emp.find(x => x.LEGAJO == log.usuario)).RZ,
+                    fecha:(moment(log.fecha).format('DD-MM-YYYY'))
+                }
+                logisticaEmp.push(datos)
+            });
+            this.loading=false
+            console.log('datos',logisticaEmp)
+        } catch (error) {
+           console.log(error) 
+           this.alert=true,
+           this.mensaje="Se ha producido un error"
+           this.tipo="error"
+           this.loading=false
+        }
+    }
+}
+</script>
+
+<style>
+
+</style>

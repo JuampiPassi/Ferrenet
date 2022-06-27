@@ -1,7 +1,7 @@
 <template>
      <v-container class="mt-5">
         <v-btn block color="#ef6b01" elevation="2" x-large v-if="verStock" @click="clicStock" style="color:white">Stock</v-btn>
-        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" v-if="verPedido">Pedido</v-btn>
+        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" v-if="verPedido" @click="clicPedidos">Pedidos</v-btn>
         <v-btn block color="#ef6b01"  elevation="2" x-large class="mt-5" style="color:white" v-if="verDespacho">Despacho</v-btn>
         <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" v-if="verIngreso">Ingreso</v-btn>
         <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" v-if="verVentas">Ventas</v-btn>
@@ -49,6 +49,9 @@ export default {
         },
         clicAuditoria(){
             this.$router.push({name: 'Auditoria'});
+        },
+        clicPedidos(){
+            this.$router.push({name: 'Pedidos'});
         },
         async guardarTexto(){
             let info={

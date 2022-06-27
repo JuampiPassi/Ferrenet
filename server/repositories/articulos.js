@@ -100,8 +100,8 @@ const postAjustar = async (data) =>{
 const getCprid = async (data) =>{
     let fecha=data.fec_actual
     //let consulta = `SELECT CPR_ID from cprdet WHERE COD_ART='AJUSTE' AND MOD='01.02.2022' and DEP_DESTINO_ID=${data.dep_id}`
-    //let consulta = `SELECT CPR.CPR_ID FROM CPR,CPRDET WHERE CPR.CPR_ID=CPRDET.CPR_ID AND FEC_EMISION='${fecha}' AND COD_ART='AJUSTE' AND MOD='${fecha}' AND DEP_DESTINO_ID='${data.dep_id}'`;
-    let consulta = `SELECT CPR.CPR_ID FROM CPR,CPRDET WHERE CPR.CPR_ID=CPRDET.CPR_ID AND FEC_EMISION='01.02.2022' AND COD_ART='AJUSTE' AND MOD='01.02.2022' AND DEP_DESTINO_ID='${data.dep_id}'`;
+    let consulta = `SELECT CPR.CPR_ID FROM CPR,CPRDET WHERE CPR.CPR_ID=CPRDET.CPR_ID AND FEC_EMISION='${fecha}' AND COD_ART='AJUSTE' AND MOD='${fecha}' AND DEP_DESTINO_ID='${data.dep_id}'`;
+    //let consulta = `SELECT CPR.CPR_ID FROM CPR,CPRDET WHERE CPR.CPR_ID=CPRDET.CPR_ID AND FEC_EMISION='01.02.2022' AND COD_ART='AJUSTE' AND MOD='01.02.2022' AND DEP_DESTINO_ID='${data.dep_id}'`;
         try {
             let resp = await firebirdMetodos.getConsultaPaljet(consulta);
             return resp;
@@ -118,10 +118,38 @@ const putUbicacion = async(data) =>{
         let resp = await firebirdMetodos.getConsultaPaljet(consulta);
         return resp;
     } catch (error) {
-        logger.error('Error en el metodo getCprid');
+        logger.error('Error en el metodo putUbicacion');
         logger.error(error);
         return error;
     } 
+}
+
+const generarCpr = async(fecha) =>{
+    try {
+        let cpr_id = await firebirdMetodos.getConsultaPaljet('execute procedure GET_CPR_ID')
+        let cprdet_id = await firebirdMetodos.getConsultaPaljet('execute procedure GET_CPRDET_ID')
+        let consulta1 = `INSERT INTO CPR (CPR_ID,EMP_ID,CPRETC_ID,CPR_TIPO_ID,CPR_CLASIF_ID,CPR_EST_ID,CTRL_ERR_CLASIF_ID,METODO_CALC_ID,DISCRIMINA_IMP,COMPUTA_IVA,BIEN_USO,FEC_EMISION,ENTTIPO_ID,NRO_ENT_ID,RZ,CUIT,IVA_ID,DOM,LOC_ID,LOCALIDAD,PROVINCIA_ID,TIPO_PAGO_ID,PORC_FINAN,DISCRIMINA_PORC,DECIMALES,MONEDA_ID,MONEDACAMBIO_ID,NOTA_CPR,ESQ_ID)
+        VALUES (${cpr_id.CPR_ID},'1','34','SK','0','1','10','R','N','N','N','${fecha}','EMP','1','CMS S.A.','30708225300','RI','CMS S.A.  -  DEAN J. ALVAREZ 262','2','PARANA','A','CO','0','N','4','1','1','Comprobante generado con lector de Stock','1')`
+        try {
+            let resp1 = await firebirdMetodos.getConsultaPaljet(consulta1)
+        } catch (error) {
+            console.log('Error en CPR') 
+            console.log(error) 
+        }
+        let consulta2 = `INSERT INTO CPRDET (CPRDET_ID,CPR_ID,ART_ID,COD_ART,DESCRIPCION,MOD,MED,DESC_IF,CANT,CANT_NO_PROC,ESCALA_ID,EQUIVALENCIA,MONEDA_COSTO_ID,PR_CTO_CPRA,PR_COSTO,UTILIDAD,PORC_DR,MONTO_DR,PR_VTA,PR_FINAL,PR_VTA_ORIG,PR_FINAL_ORIG,PR_NETO,MONEDACAMBIO_ID,DEP_ORIGEN_ID,DEP_DESTINO_ID,EQUIV_CANT,EQUIV_PR,TIPO_OPER_CANT)
+        VALUES (${cprdet_id.CPRDET_ID},'${cpr_id.CPR_ID}','652161','AJUSTE','AJUSTE DE STOCK','${fecha}','','AJUSTE DE STOCK','1','1','12','1','1','1','0.01','0.0102','0','0','0','0','0','0','0','1','1','1','1','1','*')`
+        try {
+            let resp2 = await firebirdMetodos.getConsultaPaljet(consulta2);
+        } catch (error) {
+            console.log('Error en CPRDET')
+            console.log(error)
+        }
+        return cpr_id
+    } catch (error) {
+        logger.error('Error en el metodo generarCpr');
+        logger.error(error);
+        return error;
+    }
 }
 
 
@@ -219,6 +247,7 @@ const funcionesexportadas = {
     putUbicacion,
     getCprid,
     getFecIngreso,
+    generarCpr,
     consultaFirebird,
     consultaFirebirdImagen
 }
