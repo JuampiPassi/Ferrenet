@@ -210,13 +210,13 @@ export default {
                 this.cargando=true
                 let result = await ApiServer.putUbicacion({pos:pos, art_id:this.articulo.ART_ID})
                 this.cargando=false
+                this.verbarcode=true
                 this.alertok=true
                 setTimeout(()=>{
                     this.alertok=false
                 },5000)
                 console.log(result)
                 this.articulo=''
-                this.verbarcode=true
             } catch (error) {
                 this.cargando=false
                 console.log(error)

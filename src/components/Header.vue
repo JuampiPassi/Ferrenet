@@ -41,13 +41,73 @@
                 </v-list-item-content>
             </v-list-item>
 
-            <v-list-item link @click="IrStock">
+            <v-list-item link @click="IrStock" v-if="verStock">
+                <v-list-item-action>
+                <font-awesome-icon style="color:#ef6b01" icon="cubes" />
+                </v-list-item-action>
+
+                <v-list-item-content>
+                <v-list-item-title style="color: #424242">Stock</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item link @click="IrPedidos" v-if="verPedidos">
+                <v-list-item-action>
+                <font-awesome-icon style="color:#ef6b01" icon="boxes-packing" />
+                </v-list-item-action>
+
+                <v-list-item-content>
+                <v-list-item-title style="color: #424242">Pedidos</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item link @click="IrDespacho" v-if="verDespacho">
+                <v-list-item-action>
+                <font-awesome-icon style="color:#ef6b01" icon="dolly" />
+                </v-list-item-action>
+
+                <v-list-item-content>
+                <v-list-item-title style="color: #424242">Despacho</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item link @click="IrIngreso" v-if="verIngreso">
                 <v-list-item-action>
                 <v-icon color="#ef6b01" >mdi-archive-outline</v-icon>
                 </v-list-item-action>
 
                 <v-list-item-content>
-                <v-list-item-title style="color: #424242">Stock</v-list-item-title>
+                <v-list-item-title style="color: #424242">Ingreso</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item link @click="IrVentas" v-if="verVentas">
+                <v-list-item-action>
+                <v-icon color="#ef6b01" >mdi-cart-check</v-icon>
+                </v-list-item-action>
+
+                <v-list-item-content>
+                <v-list-item-title style="color: #424242">Ventas</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item link @click="IrTareas" v-if="verTareas">
+                <v-list-item-action>
+                <font-awesome-icon style="color: #ef6b01" icon="list-check" />
+                </v-list-item-action>
+
+                <v-list-item-content>
+                <v-list-item-title style="color: #424242">Tareas</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item link @click="IrAuditoria" v-if="verAuditoria">
+                <v-list-item-action>
+                <font-awesome-icon style="color: #ef6b01" icon="person-chalkboard" />
+                </v-list-item-action>
+
+                <v-list-item-content>
+                <v-list-item-title style="color: #424242">Auditoría</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
 
@@ -105,6 +165,19 @@ export default {
             if (this.$route.path !== 'Stock') 
             this.$router.push({name: 'Stock'});
         },
+        IrPedidos(){
+            if (this.$route.path !== 'Pedidos') 
+            this.$router.push({name: 'Pedidos'});
+        },
+        IrDespacho(){
+        },
+        IrIngreso(){},
+        IrVentas(){},
+        IrTareas(){},
+        IrAuditoria(){
+            if (this.$route.path !== 'Auditoria') 
+            this.$router.push({name: 'Auditoria'});
+        },
         IrEscaner(){
           if (this.$route.path !== 'Escaner') 
             this.$router.push({name: 'Escaner'});  
@@ -116,7 +189,100 @@ export default {
     },
     mounted(){
         this.usuario = sessionStorage.getItem("usuario");
-    }
+    },
+     computed:{
+        verStock(){
+            let modulo = JSON.parse(sessionStorage.getItem('modulos'))
+            if(sessionStorage.getItem('rol')==1)
+                return true;
+            if(modulo!=''&&modulo!=null){
+                if((modulo.find(x => x.id_modulo == 1))!=undefined){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            return false;
+        },
+        verPedidos(){
+            let modulo = JSON.parse(sessionStorage.getItem('modulos'))
+            if(sessionStorage.getItem('rol')==1)
+                return true;
+            if(modulo!=''&&modulo!=null){
+                if((modulo.find(x => x.id_modulo == 2))!=undefined){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            return false;
+        },
+        verDespacho(){
+            let modulo = JSON.parse(sessionStorage.getItem('modulos'))
+            if(sessionStorage.getItem('rol')==1)
+                return true;
+            if(modulo!=''&&modulo!=null){
+                if((modulo.find(x => x.id_modulo == 3))!=undefined){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            return false;
+        },
+        verIngreso(){
+            let modulo = JSON.parse(sessionStorage.getItem('modulos'))
+            if(sessionStorage.getItem('rol')==1)
+                return true;
+            if(modulo!=''&&modulo!=null){
+                if((modulo.find(x => x.id_modulo == 4))!=undefined){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            return false;
+        },
+        verVentas(){
+            let modulo = JSON.parse(sessionStorage.getItem('modulos'))
+            if(sessionStorage.getItem('rol')==1)
+                return true;
+            if(modulo!=''&&modulo!=null){
+                if((modulo.find(x => x.id_modulo == 5))!=undefined){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            return false;
+        },
+        verTareas(){
+            let modulo = JSON.parse(sessionStorage.getItem('modulos'))
+            if(sessionStorage.getItem('rol')==1)
+                return true;
+            if(modulo!=''&&modulo!=null){
+                if((modulo.find(x => x.id_modulo == 7))!=undefined){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            return false;
+        },
+        verAuditoria(){
+            let modulo = JSON.parse(sessionStorage.getItem('modulos'))
+            if(sessionStorage.getItem('rol')==1)
+                return true;
+            if(modulo!=''&&modulo!=null){
+                if((modulo.find(x => x.id_modulo == 8))!=undefined){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            return false;
+        },
+     }
 
 }
 </script>

@@ -1,5 +1,19 @@
 <template>
     <v-container>
+
+         <template v-if="this.consolidados.length>0">
+             <template v-for="(item, index) in this.consolidados">
+                <v-btn :key=index
+                    block
+                    color="#ef6b01"
+                    elevation="2"
+                    x-large
+                    dark
+                    class="mt-5"
+                >{{item.id}}-{{item.usuario}}-{{item.fecha}}</v-btn>
+             </template>
+        </template>
+
         <template v-if="loading">
             <v-row  class="fill-height" align-content="center" justify="center">
                 <v-col
@@ -34,7 +48,8 @@ export default {
             loading:false,
             alert:false,
             mensaje:'',
-            tipo:'error'
+            tipo:'error',
+            consolidados:[]
         }
     },
     async mounted(){
@@ -42,19 +57,15 @@ export default {
             this.loading=true
             let emp = await ApiServer.getEmpleadosLegajos();
             let logistica = await ApiServer.getLogisticaCons();
-            console.log(logistica)
-            console.log(emp)
-            let logisticaEmp=[]
             logistica.forEach(log => {
                 let datos={
                     id:log.cons_id,
                     usuario:(emp.find(x => x.LEGAJO == log.usuario)).RZ,
                     fecha:(moment(log.fecha).format('DD-MM-YYYY'))
                 }
-                logisticaEmp.push(datos)
+                this.consolidados.push(datos)
             });
             this.loading=false
-            console.log('datos',logisticaEmp)
         } catch (error) {
            console.log(error) 
            this.alert=true,
