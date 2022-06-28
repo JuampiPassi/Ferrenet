@@ -10,6 +10,7 @@
                     x-large
                     dark
                     class="mt-5"
+                    @click="verConsolidado(item.id)"
                 >{{item.id}}-{{item.usuario}}-{{item.fecha}}</v-btn>
              </template>
         </template>
@@ -50,6 +51,11 @@ export default {
             mensaje:'',
             tipo:'error',
             consolidados:[]
+        }
+    },
+    methods:{
+        verConsolidado(id){
+            this.$router.push({name: 'ConsolidadosArticulo', params:{ id: id}}); 
         }
     },
     async mounted(){

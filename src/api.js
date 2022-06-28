@@ -61,9 +61,7 @@ export default{
         return (await axios.put(`./api/articulos/editarubicacion`,info)).data
     },
     async postGenerarCpr(fechaHoy){
-        let data={
-            fecha: fechaHoy
-        }
+        let data={fecha: fechaHoy}
         return (await axios.post(`./api/articulos/generarcpr`,data)).data
     },
     async getEmpleadosLegajos(){
@@ -71,5 +69,8 @@ export default{
     },
     async getLogisticaCons(){
         return (await axios.get(`./api/logistica/cons`)).data
+    },
+    async getLogisticaConsDet(id){
+        return (await axios.get(`./api/logistica/consdet/${id}`)).data
     }
 }

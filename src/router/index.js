@@ -11,6 +11,7 @@ import Ajuste from '../views/Ajuste.vue'
 import Auditoria from '../views/Auditoria.vue'
 import Pedidos from '../views/Pedidos.vue'
 import Consolidados from '../views/Consolidados.vue'
+import ConsolidadosArticulo from '../views/ConsolidadosArticulo.vue'
 
 Vue.use(VueRouter)
 
@@ -79,6 +80,14 @@ const routes = [
     path: '/PoliticaArticulo',
     name: 'PoliticaArticulo',
     component : PoliticaArticulo,
+    meta:{
+      guest: true
+    }
+  },
+  {
+    path: '/ConsolidadosArticulo',
+    name: 'ConsolidadosArticulo',
+    component : ConsolidadosArticulo,
     meta:{
       guest: true
     }

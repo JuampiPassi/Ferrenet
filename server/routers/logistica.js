@@ -13,4 +13,16 @@ module.exports = function (router) {
 			}
 		})
 	});
+
+	router.get('/consdet/:id', (req,res) =>{
+		let id = req.params.id
+		let consulta = `SELECT cod_art, descripcion,MOD1, med, cant_no_proc, stock,empaque, orden_str,fec_ctrol,fec_ult_ingr FROM LOGISTICA_CONS_DET WHERE cons_id=${id} AND deleted=0 ORDER BY orden_str,descripcion,MOD1,med`;
+		conexion.query(consulta,(error,results)=>{
+			if(error){
+				throw(error)
+			}else{
+				res.status(200).send(results);
+			}
+		})
+	});
 }

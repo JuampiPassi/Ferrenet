@@ -2,16 +2,16 @@
     "PORT": 3000,
 
     "firebird":{
-        "host":"10.19.0.242",
+        "host":"10.19.0.253",
         "port":"3050",
-        "database":"/var/lib/firebird/2.5/data/DBSIFTEMP.FDB",
+        "database":"/var/lib/firebird/2.5/data/DBSIF.FDB",
         "user":"SYSDBA",
         "password":"masterkey"
     },
     "mariadb":{
         "host":"10.19.0.251",
         "port":"3306",
-        "database":"Copia-bdp",
+        "database":"bdp",
         "user":"root",
         "password":"q987a987",
         "dialect": "mysql"

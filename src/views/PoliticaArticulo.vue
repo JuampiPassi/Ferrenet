@@ -238,49 +238,52 @@ export default {
         }
     },
     async mounted(){
-        
-        try {
-            let resp = await ApiServer.verArticulos(this.id);
-            this.motivos = await ApiServer.verMotivos();
-            this.articulos = resp;
-            this.codigo = this.articulos[0].COD_ART;
-            console.log('articulos: ',resp)
-            //Me fijo el dep_id y la fecha guardadas en el session storage
-            let fechaCprid = sessionStorage.getItem("fechaCprid")
-            let fecha = moment().format('DD-MM-YYYY')
-            fecha = fecha.replace('-','.')
-            fecha = fecha.replace('-','.')
-            if(fechaCprid == undefined||fechaCprid == ''||fechaCprid !=fecha){
-                sessionStorage.removeItem("CprId")
-                sessionStorage.setItem("fechaCprid",fecha)
-                this.alertCargando=true
-                let resp = await ApiServer.getCprid(fecha,this.articulos[0].DEPOSITO)
-                console.log(resp)
-                if(resp=='' || resp==null){
-                    this.generarCprID()
-                    this.alertCargando=false
-                }else{
-                    this.alertCargando=false
-                    sessionStorage.setItem("CprId",resp[0].CPR_ID)
+        if(this.$route.params.id==undefined){
+            this.$router.push({name: 'Politicas'});
+        }else{
+            try {
+                let resp = await ApiServer.verArticulos(this.id);
+                this.motivos = await ApiServer.verMotivos();
+                this.articulos = resp;
+                this.codigo = this.articulos[0].COD_ART;
+                console.log('articulos: ',resp)
+                //Me fijo el dep_id y la fecha guardadas en el session storage
+                let fechaCprid = sessionStorage.getItem("fechaCprid")
+                let fecha = moment().format('DD-MM-YYYY')
+                fecha = fecha.replace('-','.')
+                fecha = fecha.replace('-','.')
+                if(fechaCprid == undefined||fechaCprid == ''||fechaCprid !=fecha){
+                    sessionStorage.removeItem("CprId")
+                    sessionStorage.setItem("fechaCprid",fecha)
+                    this.alertCargando=true
+                    let resp = await ApiServer.getCprid(fecha,this.articulos[0].DEPOSITO)
+                    console.log(resp)
+                    if(resp=='' || resp==null){
+                        this.generarCprID()
+                        this.alertCargando=false
+                    }else{
+                        this.alertCargando=false
+                        sessionStorage.setItem("CprId",resp[0].CPR_ID)
+                    }
+                }else if(sessionStorage.getItem("CprId")==undefined||sessionStorage.getItem("CprId")==''){
+                    this.alertCargando=true
+                    let resp = await ApiServer.getCprid(fecha,this.articulos[0].DEPOSITO)
+                    if(resp=='' || resp==null){
+                        this.generarCprID()
+                        this.alertCargando=false
+                    }else{
+                        this.alertCargando=false
+                        sessionStorage.setItem("CprId",resp[0].CPR_ID)
+                    }
                 }
-            }else if(sessionStorage.getItem("CprId")==undefined||sessionStorage.getItem("CprId")==''){
-                this.alertCargando=true
-                let resp = await ApiServer.getCprid(fecha,this.articulos[0].DEPOSITO)
-                if(resp=='' || resp==null){
-                    this.generarCprID()
-                    this.alertCargando=false
-                }else{
-                    this.alertCargando=false
-                    sessionStorage.setItem("CprId",resp[0].CPR_ID)
-                }
+            } catch (error) {
+                 this.alert=true
+                 this.mensaje="Se produjo un error"
+                 this.tipo="error"
+                 this.finalizada=false
+                console.log(error)
             }
-        } catch (error) {
-             this.alert=true
-             this.mensaje="Se produjo un error"
-             this.tipo="error"
-             this.finalizada=false
-            console.log(error)
-        }
+        }    
     },
     computed: {
         disabledAceptarMotivo(){
