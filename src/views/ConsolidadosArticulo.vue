@@ -33,7 +33,7 @@
                 <v-simple-table dense>
                     <tbody>
                         <tr>
-                            <td><p class="mb-0" style="font-size:20px; font-weight: bold;">Cantidad</p></td>
+                            <td><p class="mb-0" style="font-size:20px; font-weight: bold;width: max-content;">Cantidad pedida</p></td>
                             <td>
                                 <input style="font-size:20px; font-weight: bold; width:100%" type="number" v-model="nuevacant" :placeholder="cantidad"/>
                             </td>
@@ -42,15 +42,20 @@
                             <td>Stock</td>
                             <td>{{articulos[0].stock}}</td>
                         </tr>
-                        <tr>
-                            <td>Stock Ingreso</td>
-                            <td>{{stockingreso}}</td>
+                        <tr v-if="stockingreso>0">
+                            <td style="font-weight: bold; color: red;">Stock Ingreso</td>
+                            <td style="font-weight: bold; color: red;">{{stockingreso}}</td>
                         </tr>
                         <tr>
                             <td>Empaque</td>
                             <td>{{articulos[0].empaque}}</td>
                         </tr>
-                        <tr v-if="articulos[0].fec_ctrol || articulos[0].fec_ult_ingr">
+                        <tr>
+                            <td>Fec ctrl: <b>{{this.articulos[0].fec_ctrol}}</b></td>
+                            <td>Fec ingr: <b>{{articulos[0].fec_ult_ingr}}</b></td>
+
+                        </tr>
+                       <!-- <tr v-if="articulos[0].fec_ctrol || articulos[0].fec_ult_ingr">
                             <template v-if="articulos[0].fec_ctrol">
                                 <td style="width: 10%;">Fec ctrl</td>
                                 
@@ -60,7 +65,7 @@
                                 <td style="width: 83px;">Fec ingr</td>
                                 <td >{{ articulos[0].fec_ult_ingr}}</td>
                             </template>
-                        </tr>
+                        </tr>-->
                     </tbody>
                 </v-simple-table>
             </div>
@@ -68,6 +73,7 @@
         
         <v-alert class="mt-10"  :type="tipo"  v-model="alert" dense transition="scale-transition">
             {{mensaje}}
+            <v-btn outlined small class="ml-5" @click="volver()">Volver</v-btn>
         </v-alert>
         <v-dialog v-model="verbarcode" scrollable transition="dialog-transition">
             <StreamBarcodeReader ref="scanner" v-if="this.verbarcode" @decode="code=> onDecodeBarCode(code)"></StreamBarcodeReader>
@@ -187,10 +193,10 @@ export default {
                 this.cantidad=this.articulos[0].cant_no_proc
             }
             if(this.articulos[0].fec_ctrol){
-                this.articulos[0].fec_ctrol = moment(this.articulos[0].fec_ctrol).format('DD-MM-YY');
+                this.articulos[0].fec_ctrol = moment(this.articulos[0].fec_ctrol).format('DD-MM-YYYY');
             }
             if(this.articulos[0].fec_ult_ingr){
-                this.articulos[0].fec_ult_ingr = moment(this.articulos[0].fec_ult_ingr).format('DD-MM-YY');  
+                this.articulos[0].fec_ult_ingr = moment(this.articulos[0].fec_ult_ingr).format('DD-MM-YYYY');  
             }
             this.verimagen=true
         },
@@ -215,19 +221,24 @@ export default {
                  }
                  ApiServer.putVisualizando(datos) 
             }
+        },
+        volver(){
+            this.$router.push({name: 'Consolidados'}); 
         }
+
     },
     async mounted(){
+        this.articulos=''
         if(this.$route.params.id==undefined){
             this.$router.push({name: 'Consolidados'}); 
         }else{
             try {
                 let resp = await ApiServer.getLogisticaConsDet(this.$route.params.id)
                 console.log(resp)
-                if(resp.lenght==0){
+                if(resp.length==0){
                     this.alert=true,
-                    this.tipo='error',
-                    this.mensaje="No se encontraron artículos"
+                    this.tipo='info',
+                    this.mensaje="No se encontraron resultados"
                 }else{
                     this.articulos=resp
                     this.cargarArticulo()
