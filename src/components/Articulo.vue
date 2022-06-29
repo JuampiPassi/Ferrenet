@@ -5,7 +5,7 @@
             <p class="font-weight-black" style="color:black">
                 {{datos}}
             </p>
-            <Imagen v-if="!loading" :cod="this.cod" style="inline-size: fit-content;"/>
+            <Imagen v-if="verimagen" :cod="this.cod" style="inline-size: fit-content;"/>
             <v-divider class="orange" dark></v-divider>
             <v-row class="mt-2">
                 <v-col cols="11" class="text-center">
@@ -124,7 +124,8 @@ export default {
             alertCamara:false,
             mensajeCamara:'',
             codeerror:'',
-            nuevacant:''
+            nuevacant:'',
+            verimagen:false
 
               
         }
@@ -207,6 +208,7 @@ export default {
                 if(this.fec_ingreso!=null)
                 this.fec_ingreso=(moment(this.fec_ingreso).format('DD-MM-YY'))
                 this.loading=false;
+                this.verimagen=true
             }else{
                 this.descripcion="Articulo no encontrado"
                 this.loading=false;

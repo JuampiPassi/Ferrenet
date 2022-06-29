@@ -4,7 +4,7 @@
             <p class="font-weight-black" style="color:black">
                 {{datosArt}}
             </p>
-            <Imagen :cod="articulos[0].cod_art" style="inline-size: fit-content;"/>
+            <Imagen v-if="verimagen" :cod="articulos[0].cod_art" style="inline-size: fit-content;"/>
             <v-divider class="orange" dark></v-divider>
             <v-row class="mt-0">
                 <v-col cols="11" class="text-center" style="padding:5px">
@@ -107,12 +107,14 @@ export default {
             verifok:false,
             veriffail:false,
             verbarcode:false,
-            cargando:false
+            cargando:false,
+            verimagen:false,
         }
     },
     methods:{
         async aceptar(){
             this.cargando=true
+            this.verimagen=false
             if(this.nuevacant=='')
                 this.nuevacant=this.cantidad
             /*if(this.articulos[0].empaque!=0){
@@ -149,12 +151,10 @@ export default {
         async cargarArticulo(){
             try {
                 let art = await ApiServer.buscarArticulo(this.articulos[0].cod_art)
-                console.log(art)
                 this.ean = art[0].EAN
                 this.art_id = art[0].ART_ID
                 let stockingreso = await ApiServer.getStockIngreso(this.art_id)
                 this.stockingreso = stockingreso[0].EXISTENCIA
-                console.log(this.stockingreso)
             } catch (error) {
                 console.log(error)
                 this.alert=true,
@@ -192,6 +192,7 @@ export default {
             if(this.articulos[0].fec_ult_ingr){
                 this.articulos[0].fec_ult_ingr = moment(this.articulos[0].fec_ult_ingr).format('DD-MM-YY');  
             }
+            this.verimagen=true
         },
         onDecodeBarCode(code){
             this.veriffail=false
