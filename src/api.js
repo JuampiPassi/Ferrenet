@@ -72,5 +72,14 @@ export default{
     },
     async getLogisticaConsDet(id){
         return (await axios.get(`./api/logistica/consdet/${id}`)).data
+    },
+    async putVisualizando(datos){
+        return (await axios.put(`./api/logistica/visualizando`,datos)).data
+    },
+    async putEditarLogisticaDet(datos){
+        return (await axios.put(`./api/logistica/editararticulo`,datos)).data
+    },
+    async getStockIngreso(art_id){
+        return (await axios.get(`./api/articulos/stockingreso/${art_id}`)).data
     }
 }

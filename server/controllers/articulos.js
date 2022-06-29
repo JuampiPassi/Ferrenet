@@ -51,6 +51,10 @@ const postGenerarCpr = async (req,res)=>{
     res.status(200).send(await repositories.generarCpr(req.body.fecha))
 }
 
+const getStockIngreso = async (req,res)=>{
+    res.status(200).send(await repositories.getStockIngreso(req.params.art_id))
+}
+
 
 module.exports = {
     buscarArticulo,
@@ -63,5 +67,6 @@ module.exports = {
     editarUbicacion,
     getFecIngreso,
     postGenerarCpr,
+    getStockIngreso
 
 }

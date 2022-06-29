@@ -81,6 +81,8 @@ export default {
                             console.log(resp[0])
                             sessionStorage.setItem('logged', true);
                             sessionStorage.setItem('usuario', resp[0].USUARIO);
+                            sessionStorage.setItem('usu_id', resp[0].USU_ID);
+
                             if(rol.id_rol==1){
                                 sessionStorage.setItem('rol', 1);
                             }else{

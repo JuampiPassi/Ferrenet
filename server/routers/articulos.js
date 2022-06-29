@@ -6,6 +6,7 @@ module.exports = function (router) {
 	router.get('/imagen/:cod', ArticulosController.buscarImagen);
 	router.get('/cprdet/id', ArticulosController.getCprid);
 	router.get('/fecingreso/:art_id',ArticulosController.getFecIngreso);
+	router.get('/stockingreso/:art_id',ArticulosController.getStockIngreso);
 	router.put('/editararticulo/:art_id', ArticulosController.editarArticulo);
 	router.put('/editarstock',ArticulosController.editarStock);
 	router.put('/editarubicacion',ArticulosController.editarUbicacion);

@@ -20,7 +20,7 @@ const getUsuarios = async () => {
 const getVerifPass = async (pass) =>{
     try {
         if(pass){
-            let consulta = `select USUARIO from USUARIOS where USUARIOS.PASS='${pass}'`;
+            let consulta = `select USUARIO, USU_ID from USUARIOS where USUARIOS.PASS='${pass}'`;
             let resp = await funcionesexportadas.consultaFirebird(consulta);
 
             return resp;

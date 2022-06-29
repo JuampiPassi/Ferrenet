@@ -152,6 +152,17 @@ const generarCpr = async(fecha) =>{
     }
 }
 
+const getStockIngreso = async(art_id) =>{
+    let consulta = `select existencia from stock where art_id=${art_id} and dep_id=31`
+    try {
+        let resp = await firebirdMetodos.getConsultaPaljet(consulta);
+        return resp;
+    } catch (error) {
+        logger.error('Error en el metodo getStockIngreso');
+        logger.error(error);
+        return error;
+    } 
+}
 
 
 
@@ -248,6 +259,7 @@ const funcionesexportadas = {
     getCprid,
     getFecIngreso,
     generarCpr,
+    getStockIngreso,
     consultaFirebird,
     consultaFirebirdImagen
 }
