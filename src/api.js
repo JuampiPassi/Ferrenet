@@ -81,5 +81,17 @@ export default{
     },
     async getStockIngreso(art_id){
         return (await axios.get(`./api/articulos/stockingreso/${art_id}`)).data
+    },
+    async getOrdenyLimpieza(){
+        return(await axios.get(`./api/auditoria/ordylimp`)).data
+    },
+    async getOrdenyLimpiezaSectores(id){
+        return(await axios.get(`./api/auditoria/ordylimpsectores/${id}`)).data
+    },
+    async getOrdenyLimpiezaEvaluacion(){
+        return(await axios.get(`./api/auditoria/ordylimpevaluacion`)).data
+    },
+    async putOrdenyLimpieza(datos){
+        return(await axios.put(`./api/auditoria/ordylimp`,datos)).data
     }
 }

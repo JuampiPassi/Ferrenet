@@ -1,5 +1,5 @@
 <template>
-     <v-container class="mt-5">
+     <v-container>
         <template v-if="this.politicas.length>0">
              <template v-for="(item, index) in this.politicas">
                 <v-btn :key=index

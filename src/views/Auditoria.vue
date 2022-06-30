@@ -7,6 +7,7 @@
             x-large
             style="color:white"
             v-if="verOrd"
+            @click="clicOrd()"
         >Orden y limpieza</v-btn>
         <v-btn
             block
@@ -29,6 +30,9 @@ export default {
         }
     },
     methods:{
+        clicOrd(){
+            this.$router.push({name: 'Ordylimp'}); 
+        }
 
     },
     computed:{

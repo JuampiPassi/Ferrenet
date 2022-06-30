@@ -18,5 +18,8 @@ module.exports = (app) => {
     require('./logistica') (router);
     app.use('/api/logistica', router);
 
+    require('./auditoria') (router);
+    app.use('/api/auditoria', router);
+
 
 }
