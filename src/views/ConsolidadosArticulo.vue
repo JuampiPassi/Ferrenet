@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <template v-if="articulos!=''">
+        <template v-if="articulos!='' && !cargandoArticulo">
             <p class="font-weight-black" style="color:black">
                 {{datosArt}}
             </p>
@@ -85,6 +85,24 @@
                 width="7"
             ></v-progress-circular>
         </v-overlay>
+        <template v-if="cargandoArticulo">
+            <v-row  class="fill-height" align-content="center" justify="center">
+                <v-col
+                class="text-subtitle-1 text-center"
+                cols="12"
+                >
+                Cargando Artículo
+                </v-col>
+                <v-col cols="6">
+                <v-progress-linear
+                    color="deep-orange accent-4"
+                    indeterminate
+                    rounded
+                    height="6"
+                ></v-progress-linear>
+                </v-col>
+            </v-row>
+        </template>
     </v-container>
 </template>
 
@@ -115,6 +133,8 @@ export default {
             verbarcode:false,
             cargando:false,
             verimagen:false,
+            preparado:'',
+            cargandoArticulo:false
         }
     },
     methods:{
@@ -123,14 +143,13 @@ export default {
             this.verimagen=false
             if(this.nuevacant=='')
                 this.nuevacant=this.cantidad
-            /*if(this.articulos[0].empaque!=0){
-                preparado = this.nuevacant*this.articulos[0].empaque;
+            if(this.articulos[0].empaque!=0){
+                this.preparado = this.nuevacant*this.articulos[0].empaque;
             }else{
-                preparado = this.nuevacant;
-            }  
-            console.log(preparado)*/
+                this.preparado = this.nuevacant;
+            }
             let datos ={
-                preparado: this.nuevacant,
+                preparado: this.preparado,
                 usuario: sessionStorage.getItem('usu_id'),
                 cons_det_id: this.articulos[0].cons_det_id,
             }
@@ -140,7 +159,7 @@ export default {
                 if(this.articulos.length>0){
                        this.verifok=false
                        this.nuevacant=''
-                       this.ean='',this.art_id=''
+                       this.ean='',this.art_id='',this.datosArt=''
                        this.cargarArticulo()
                        this.cargando=false
                     }else{
@@ -155,13 +174,17 @@ export default {
             }
         },
         async cargarArticulo(){
+            this.cargandoArticulo=true
             try {
                 let art = await ApiServer.buscarArticulo(this.articulos[0].cod_art)
                 this.ean = art[0].EAN
                 this.art_id = art[0].ART_ID
                 let stockingreso = await ApiServer.getStockIngreso(this.art_id)
-                this.stockingreso = stockingreso[0].EXISTENCIA
+                if(stockingreso.length>0){
+                    this.stockingreso = stockingreso[0].EXISTENCIA
+                }
             } catch (error) {
+                this.cargandoArticulo=false
                 console.log(error)
                 this.alert=true,
                 this.tipo='error',
@@ -174,6 +197,7 @@ export default {
                 }
                 await ApiServer.putVisualizando(datos)
             } catch (error) {
+                this.cargandoArticulo=false
                 console.log(error)
                 this.alert=true,
                 this.tipo='error',
@@ -199,6 +223,7 @@ export default {
                 this.articulos[0].fec_ult_ingr = moment(this.articulos[0].fec_ult_ingr).format('DD-MM-YYYY');  
             }
             this.verimagen=true
+            this.cargandoArticulo=false
         },
         onDecodeBarCode(code){
             this.veriffail=false
