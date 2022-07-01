@@ -3,8 +3,9 @@ const conexion = require('../config/mysql');
 module.exports = function (router) {
 
 	
-	router.get('/ordylimp', (req,res) =>{
-		let consulta = `SELECT id_persona_auditar, persona_auditar FROM auditoria_orden_y_limpieza WHERE VISIBLE='S' GROUP BY persona_auditar,id_persona_auditar`;
+	router.get('/ordylimp/:usuario', (req,res) =>{
+        let usuario=req.params.usuario
+		let consulta = `SELECT id_persona_auditar, persona_auditar FROM auditoria_orden_y_limpieza WHERE VISIBLE='S' AND USUARIO='${usuario}' GROUP BY persona_auditar,id_persona_auditar`;
 		conexion.query(consulta,(error,results)=>{
 			if(error){
 				throw(error)

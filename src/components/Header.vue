@@ -162,11 +162,11 @@ export default {
             this.$router.push({name: 'Home'});
         },
         IrStock(){
-            if (this.$route.path !== 'Stock') 
+            if (this.$route.path !== '/Stock') 
             this.$router.push({name: 'Stock'});
         },
         IrPedidos(){
-            if (this.$route.path !== 'Pedidos') 
+            if (this.$route.path !== '/Pedidos') 
             this.$router.push({name: 'Pedidos'});
         },
         IrDespacho(){
@@ -175,11 +175,11 @@ export default {
         IrVentas(){},
         IrTareas(){},
         IrAuditoria(){
-            if (this.$route.path !== 'Auditoria') 
+            if (this.$route.path !== '/Auditoria') 
             this.$router.push({name: 'Auditoria'});
         },
         IrEscaner(){
-          if (this.$route.path !== 'Escaner') 
+          if (this.$route.path !== '/Escaner') 
             this.$router.push({name: 'Escaner'});  
         },
         cerrarSesion(){

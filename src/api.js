@@ -82,8 +82,8 @@ export default{
     async getStockIngreso(art_id){
         return (await axios.get(`./api/articulos/stockingreso/${art_id}`)).data
     },
-    async getOrdenyLimpieza(){
-        return(await axios.get(`./api/auditoria/ordylimp`)).data
+    async getOrdenyLimpieza(usuario){
+        return(await axios.get(`./api/auditoria/ordylimp/${usuario}`)).data
     },
     async getOrdenyLimpiezaSectores(id){
         return(await axios.get(`./api/auditoria/ordylimpsectores/${id}`)).data

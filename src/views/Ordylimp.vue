@@ -6,7 +6,7 @@
                     block color="#ef6b01"
                     elevation="2" x-large
                     dark class="mt-5"
-                    @click="clicPersona(item.id_persona_auditar)"
+                    @click="clicPersona(item.id_persona_auditar,item.persona_auditar)"
                 >{{item.persona_auditar}}</v-btn>
             </template>
         </template>
@@ -17,10 +17,11 @@
             Guardado
         </v-alert>
         <!-------------Dialog Sectores--------------------->
-        <v-dialog  v-model="dialogSectores" max-width="500px" scrollable transition="dialog-bottom-transition">
+        <v-dialog  v-model="dialogSectores" fullscreen hide-overlay transition="dialog-bottom-transition">
             <v-card>
                 <v-toolbar color="#ef6b01">
-                    <v-card-title style="color:black">Sector</v-card-title>
+                    <v-btn icon dark @click="dialogSectores=false"><v-icon>mdi-arrow-left</v-icon></v-btn>
+                    <v-card-title style="color:black">Sector/es {{nombrePersona}}</v-card-title>
                 </v-toolbar>
                 <div style="margin-inline: 15px;" class="mb-5">
                     <template v-for="(item, index) in this.sectores">
@@ -35,9 +36,10 @@
             </v-card>   
         </v-dialog>
         <!-------------Dialog Evaluación--------------------->
-        <v-dialog  v-model="dialogEvaluacion" max-width="500px" scrollable transition="dialog-bottom-transition">
+        <v-dialog  v-model="dialogEvaluacion" fullscreen hide-overlay transition="dialog-bottom-transition">
             <v-card>
                 <v-toolbar color="#ef6b01">
+                    <v-btn icon dark @click="dialogEvaluacion=false"><v-icon>mdi-arrow-left</v-icon></v-btn>
                     <v-card-title style="color:black">Evaluación</v-card-title>
                 </v-toolbar>
                 <div style="margin-inline: 15px;" class="mb-5">
@@ -53,18 +55,18 @@
             </v-card>   
         </v-dialog>
         <!-------------Dialog Nota--------------------->
-        <v-dialog transition="dialog-bottom-transition" max-width="600" v-model="dialogNota">
+        <v-dialog transition="dialog-bottom-transition" fullscreen hide-overlay v-model="dialogNota">
             <v-card>
                 <v-toolbar color="#ef6b01">
+                    <v-btn icon dark @click="dialogNota=false"><v-icon>mdi-arrow-left</v-icon></v-btn>
                     <v-card-title style="color:black">Nota</v-card-title>
                 </v-toolbar>
-                <v-card-text>
-                    <v-textarea  v-model="nota" clearable color="orange">
+                <v-card-text class="mt-5">
+                    <v-textarea placeholder="" style="font-size: large;" filled full-width outlined v-model="nota" clearable color="orange">
                     </v-textarea>
                 </v-card-text>
-                <v-card-actions class="justify-end">
-                    <v-btn text @click="guardar()" color="orange">Guardar</v-btn>
-                    <v-btn text @click="dialogNota = false">Cancelar</v-btn>
+                <v-card-actions>
+                    <v-btn outlined color="orange" class="ml-3" text @click="guardar()">Guardar</v-btn>
                 </v-card-actions>
             </v-card>
          </v-dialog>
@@ -91,6 +93,7 @@ export default {
             cargando:false,
             personasAuditar:'',
             idPersona:'',
+            nombrePersona:'',
             sectores:'',
             idSector:'',
             dialogSectores:false,
@@ -102,7 +105,8 @@ export default {
         }
     },
     methods:{
-        async clicPersona(id){
+        async clicPersona(id,nombre){
+            this.nombrePersona=nombre
             try {
                 this.idPersona=id
                 this.sectores = await ApiServer.getOrdenyLimpiezaSectores(id)
@@ -110,6 +114,7 @@ export default {
                     this.dialogSectores=true
                 }
             } catch (error) {
+                this.alert=true
                 this.mensaje="Se produjo un error al cargar sectores"
                 this.tipo="error"
                 this.loading=false
@@ -138,37 +143,53 @@ export default {
                 }
                 let result = await ApiServer.putOrdenyLimpieza(datos)
                 this.cargando=false
+                this.inicio()
                 this.alertGuardado=true
                 setTimeout(()=>{
                     this.alertGuardado=false
                 },3000)
             } catch (error) {
-                 this.cargando=false
+                this.cargando=false
+                this.alert=true
                 this.mensaje="Se produjo un error al guardar"
                 this.tipo="error"
                 this.loading=false 
             }
-        }
-
-    },
-    async mounted(){
-        try {
-           let result = await ApiServer.getOrdenyLimpieza()
-           this.personasAuditar= result
-           try {
-            this.evaluacion = await ApiServer.getOrdenyLimpiezaEvaluacion()
-           } catch (error) {
+        },
+        async inicio(){
+            try {
+                let result = await ApiServer.getOrdenyLimpieza(sessionStorage.getItem("usuario"))
+                this.personasAuditar= result
+                if(this.personasAuditar.length>0){
+                    try {
+                        this.evaluacion = await ApiServer.getOrdenyLimpiezaEvaluacion()
+                    } catch (error) {
+                            console.log(error)
+                            this.alert=true
+                            this.mensaje="Se ha producido un error"
+                            this.tipo="error"
+                            this.loading=false
+                    }
+                }else{
+                    this.alert=true
+                    this.mensaje="No se encontraron resultados"
+                    this.tipo="warning"
+                    setTimeout(()=>{
+                    this.$router.push({name: 'Auditoria'});
+                },2000)
+                }
+            } catch (error) {
                 console.log(error)
+                this.alert=true
                 this.mensaje="Se ha producido un error"
                 this.tipo="error"
                 this.loading=false
-           }
-        } catch (error) {
-            console.log(error)
-            this.mensaje="Se ha producido un error"
-            this.tipo="error"
-            this.loading=false
+            }
         }
+
+    },
+    mounted(){
+        this.inicio()
     }
 }
 </script>
