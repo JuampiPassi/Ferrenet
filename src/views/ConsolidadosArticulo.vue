@@ -8,7 +8,7 @@
             <v-divider class="orange" dark></v-divider>
             <v-row class="mt-0">
                 <v-col cols="11" class="text-center" style="padding:5px">
-                    <p class="font-weight-black" style="font-size:20px">{{articulos[0].orden_str}}</p>
+                    <p class="font-weight-black" style="font-size:20px">{{articulos[0].cod_art}}</p>
                 </v-col>
             </v-row>
             <v-divider class="orange mb-5" dark></v-divider>
@@ -47,6 +47,10 @@
                             <td style="font-weight: bold; color: red;">{{stockingreso}}</td>
                         </tr>
                         <tr>
+                            <td>Ubicación</td>
+                            <td>{{articulos[0].orden_str}}</td>
+                        </tr>
+                        <tr>
                             <td>Empaque</td>
                             <td>{{articulos[0].empaque}}</td>
                         </tr>
@@ -55,17 +59,10 @@
                             <td>Fec ingr: <b>{{articulos[0].fec_ult_ingr}}</b></td>
 
                         </tr>
-                       <!-- <tr v-if="articulos[0].fec_ctrol || articulos[0].fec_ult_ingr">
-                            <template v-if="articulos[0].fec_ctrol">
-                                <td style="width: 10%;">Fec ctrl</td>
-                                
-                                <td style="width: 90px;">{{this.articulos[0].fec_ctrol}}</td>
-                            </template>
-                            <template v-if="articulos[0].fec_ult_ingr">
-                                <td style="width: 83px;">Fec ingr</td>
-                                <td >{{ articulos[0].fec_ult_ingr}}</td>
-                            </template>
-                        </tr>-->
+                        <tr>
+                            <td>Arts. pendientes</td>
+                            <td>{{articulos.length}}</td>
+                        </tr>
                     </tbody>
                 </v-simple-table>
             </div>
@@ -116,7 +113,7 @@ export default {
     components:{ Imagen, StreamBarcodeReader},
     data(){
         return{
-            id:this.$route.params.id,
+            cons_id:'',
             alert:false,
             tipo:'error',
             mensaje:'',
@@ -155,16 +152,11 @@ export default {
             }
             try {
                 let resp = await ApiServer.putEditarLogisticaDet(datos)
-                this.articulos.shift();
-                if(this.articulos.length>0){
-                       this.verifok=false
-                       this.nuevacant=''
-                       this.ean='',this.art_id='',this.datosArt=''
-                       this.cargarArticulo()
-                       this.cargando=false
-                    }else{
-                        this.$router.push({name: 'Consolidados'}); 
-                    }
+                this.verifok=false
+                this.nuevacant=''
+                this.ean='',this.art_id='',this.datosArt=''
+                this.cargando=false
+                this.cargarArticulo()
             } catch (error) {
                 this.cargando=false
                 console.log(error)
@@ -176,54 +168,75 @@ export default {
         async cargarArticulo(){
             this.cargandoArticulo=true
             try {
-                let art = await ApiServer.buscarArticulo(this.articulos[0].cod_art)
-                this.ean = art[0].EAN
-                this.art_id = art[0].ART_ID
-                let stockingreso = await ApiServer.getStockIngreso(this.art_id)
-                if(stockingreso.length>0){
-                    this.stockingreso = stockingreso[0].EXISTENCIA
-                }
-            } catch (error) {
-                this.cargandoArticulo=false
-                console.log(error)
-                this.alert=true,
-                this.tipo='error',
-                this.mensaje="Se ha producido un error"
-            }
-            try {//Se está visualizando el articulo
-                let datos={
-                    cons_det_id: this.articulos[0].cons_det_id,
-                    usuario: sessionStorage.getItem('usu_id')
-                }
-                await ApiServer.putVisualizando(datos)
-            } catch (error) {
-                this.cargandoArticulo=false
-                console.log(error)
-                this.alert=true,
-                this.tipo='error',
-                this.mensaje="Se ha producido un error"
-            }
+                this.articulos=''
+                let resp = await ApiServer.getLogisticaConsDet(this.cons_id)
+                console.log(resp)
+                if(resp.length==0){
+                    this.cargandoArticulo=false
+                    this.alert=true,
+                    this.tipo='warning',
+                    this.mensaje="No se encontraron resultados"
+                    setTimeout(()=>{
+                    this.$router.push({name: 'Consolidados'});
+                    },2000)
+                }else{
+                    this.articulos=resp
+                    try {
+                        let art = await ApiServer.buscarArticulo(this.articulos[0].cod_art)
+                        this.ean = art[0].EAN
+                        this.art_id = art[0].ART_ID
+                        let stockingreso = await ApiServer.getStockIngreso(this.art_id)
+                        if(stockingreso.length>0){
+                            this.stockingreso = stockingreso[0].EXISTENCIA
+                        }
+                        try {//Se está visualizando el articulo
+                            let datos={
+                                cons_det_id: this.articulos[0].cons_det_id,
+                                usuario: sessionStorage.getItem('usu_id')
+                            }
+                            await ApiServer.putVisualizando(datos)
+                        } catch (error) {
+                            this.cargandoArticulo=false
+                            console.log(error)
+                            this.alert=true,
+                            this.tipo='error',
+                            this.mensaje="Se ha producido un error"
+                        }
 
-            this.datosArt=this.articulos[0].cod_art+"-"+this.articulos[0].descripcion
-            if(this.articulos[0].med!=''){
-                this.datosArt+="-"+this.articulos[0].med
+                        this.datosArt=this.articulos[0].cod_art+"-"+this.articulos[0].descripcion
+                        if(this.articulos[0].med!=''){
+                            this.datosArt+="-"+this.articulos[0].med
+                        }
+                        if(this.articulos[0].MOD1!=''){
+                            this.datosArt+="-"+this.articulos[0].MOD1
+                        }
+                        if(this.articulos[0].empaque!=0){
+                            this.cantidad=this.articulos[0].cant_no_proc/this.articulos[0].empaque
+                        }else{
+                            this.cantidad=this.articulos[0].cant_no_proc
+                        }
+                        if(this.articulos[0].fec_ctrol){
+                            this.articulos[0].fec_ctrol = moment(this.articulos[0].fec_ctrol).format('DD-MM-YYYY');
+                        }
+                        if(this.articulos[0].fec_ult_ingr){
+                            this.articulos[0].fec_ult_ingr = moment(this.articulos[0].fec_ult_ingr).format('DD-MM-YYYY');  
+                        }
+                        this.verimagen=true
+                        this.cargandoArticulo=false
+                    } catch (error) {
+                        this.cargandoArticulo=false
+                        console.log(error)
+                        this.alert=true,
+                        this.tipo='error',
+                        this.mensaje="Se ha producido un error"
+                    }
+                }
+            } catch (error) {
+                console.log(error)
+                this.alert=true,
+                this.tipo='error',
+                this.mensaje="Se ha producido un error"
             }
-            if(this.articulos[0].MOD1!=''){
-                this.datosArt+="-"+this.articulos[0].MOD1
-            }
-            if(this.articulos[0].empaque!=0){
-                this.cantidad=this.articulos[0].cant_no_proc/this.articulos[0].empaque
-            }else{
-                this.cantidad=this.articulos[0].cant_no_proc
-            }
-            if(this.articulos[0].fec_ctrol){
-                this.articulos[0].fec_ctrol = moment(this.articulos[0].fec_ctrol).format('DD-MM-YYYY');
-            }
-            if(this.articulos[0].fec_ult_ingr){
-                this.articulos[0].fec_ult_ingr = moment(this.articulos[0].fec_ult_ingr).format('DD-MM-YYYY');  
-            }
-            this.verimagen=true
-            this.cargandoArticulo=false
         },
         onDecodeBarCode(code){
             this.veriffail=false
@@ -249,20 +262,15 @@ export default {
         },
         volver(){
             this.$router.push({name: 'Consolidados'}); 
-        }
-
-    },
-    async mounted(){
-        this.articulos=''
-        if(this.$route.params.id==undefined){
-            this.$router.push({name: 'Consolidados'}); 
-        }else{
+        },
+       /* async Inicio(){
             try {
-                let resp = await ApiServer.getLogisticaConsDet(this.$route.params.id)
+                this.articulos=''
+                let resp = await ApiServer.getLogisticaConsDet(this.cons_id)
                 console.log(resp)
                 if(resp.length==0){
                     this.alert=true,
-                    this.tipo='info',
+                    this.tipo='warning',
                     this.mensaje="No se encontraron resultados"
                 }else{
                     this.articulos=resp
@@ -274,6 +282,15 @@ export default {
                 this.tipo='error',
                 this.mensaje="Se ha producido un error"
             }
+        }*/
+
+    },
+    async mounted(){
+        if(this.$route.params.id==undefined){
+            this.$router.push({name: 'Consolidados'}); 
+        }else{
+            this.cons_id=this.$route.params.id
+            this.cargarArticulo()
         }
     },
     destroyed(){

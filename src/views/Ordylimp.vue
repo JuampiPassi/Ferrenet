@@ -134,6 +134,7 @@ export default {
         async guardar(){
             this.dialogNota=false
             this.cargando=true
+            this.alert=false
             try {
                 let datos={
                     persona_id:this.idPersona,
