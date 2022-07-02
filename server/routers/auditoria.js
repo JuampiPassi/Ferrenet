@@ -42,7 +42,7 @@ module.exports = function (router) {
         let eval_id=req.body.eval_id
         let nota=req.body.nota
         let sector_id=req.body.sector_id
-		let consulta = `UPDATE auditoria_orden_y_limpieza set evaluacion_id=${eval_id},nota='${nota}',visible='N' where id_persona_auditar='${persona_id}' AND sector_id=${sector_id}`;
+		let consulta = `UPDATE auditoria_orden_y_limpieza set evaluacion_id=${eval_id},nota='${nota}',visible='N' where id_persona_auditar='${persona_id}' AND sector_id='${sector_id}'`;
 		conexion.query(consulta,(error,results)=>{
 			if(error){
 				throw(error)
