@@ -164,6 +164,12 @@ export default {
                 if(this.personasAuditar.length>0){
                     try {
                         this.evaluacion = await ApiServer.getOrdenyLimpiezaEvaluacion()
+                        if(this.idPersona!=''){
+                            this.sectores = await ApiServer.getOrdenyLimpiezaSectores(this.idPersona)
+                            if(this.sectores.length>0){
+                                this.dialogSectores=true
+                            }
+                        }
                     } catch (error) {
                             console.log(error)
                             this.alert=true
