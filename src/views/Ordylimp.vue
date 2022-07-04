@@ -29,7 +29,7 @@
                             block color="#ef6b01"
                             elevation="2" x-large
                             dark class="mt-5"
-                            @click="clicSector(item.id)"
+                            @click="clicSector(item.id,item.descripcion)"
                         >{{item.sector}}</v-btn>
                 </template>
                 </div>
@@ -40,7 +40,7 @@
             <v-card>
                 <v-toolbar color="#ef6b01">
                     <v-btn icon dark @click="dialogEvaluacion=false"><v-icon>mdi-arrow-left</v-icon></v-btn>
-                    <v-card-title style="color:black">Evaluación</v-card-title>
+                    <v-card-title style="color:black">Evaluación {{nombrePersona}}</v-card-title>
                 </v-toolbar>
                 <div style="margin-inline: 15px;" class="mb-5">
                     <template v-for="(item, index) in this.evaluacion">
@@ -50,8 +50,10 @@
                             dark class="mt-5"
                             @click="clicEvaluacion(item.id)"
                         >{{item.evaluacion}}</v-btn>
-                </template>
+                    </template>
+                    <v-textarea v-if="descripcionSector!=''& descripcionSector!=undefined" v-model="descripcionSector" class="mt-10" style="font-size: large;" outlined readonly color="orange" />
                 </div>
+                    
             </v-card>   
         </v-dialog>
         <!-------------Dialog Nota--------------------->
@@ -96,6 +98,7 @@ export default {
             nombrePersona:'',
             sectores:'',
             idSector:'',
+            descripcionSector:'',
             dialogSectores:false,
             evaluacion:'',
             idEvaluacion:'',
@@ -120,8 +123,9 @@ export default {
                 this.loading=false
             }       
         },
-        clicSector(id){
+        clicSector(id,descripcion){
             this.idSector=id
+            this.descripcionSector=descripcion
             this.dialogSectores=false
             this.dialogEvaluacion=true
         },

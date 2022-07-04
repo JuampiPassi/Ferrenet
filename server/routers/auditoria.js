@@ -16,7 +16,7 @@ module.exports = function (router) {
 	});
 
     router.get('/ordylimpsectores/:id', (req,res) =>{
-		let consulta = `SELECT s.id, s.sector FROM auditoria_orden_y_limpieza_sectores s, auditoria_orden_y_limpieza a WHERE s.id=a.sector_id AND a.id_persona_auditar='${req.params.id}' AND a.visible='S'`
+		let consulta = `SELECT s.id, s.sector,s.descripcion FROM auditoria_orden_y_limpieza_sectores s, auditoria_orden_y_limpieza a WHERE s.id=a.sector_id AND a.id_persona_auditar='${req.params.id}' AND a.visible='S'`
 		//let consulta = `SELECT id,sector FROM auditoria_orden_y_limpieza_sectores WHERE id_persona='${req.params.id}'`;
 		conexion.query(consulta,(error,results)=>{
 			if(error){
