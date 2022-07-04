@@ -14,9 +14,10 @@ module.exports = function (router) {
 		})
 	});
 
-	router.get('/consdet/:id', (req,res) =>{
+	router.get('/consdet/:id/:usuario', (req,res) =>{
 		let id = req.params.id
-		let consulta = `SELECT cons_det_id, cod_art, descripcion,MOD1, med, cant_no_proc, stock,empaque, orden_str,fec_ctrol,fec_ult_ingr FROM LOGISTICA_CONS_DET WHERE cons_id=${id} AND deleted=0 AND art_cargado='N' AND (visualizando=0 OR visualizando is null) ORDER BY orden_str,descripcion,MOD1,med`;
+		let usuario = req.params.usuario
+		let consulta = `SELECT cons_det_id, cod_art, descripcion,MOD1, med, cant_no_proc, stock,empaque, orden_str,fec_ctrol,fec_ult_ingr FROM LOGISTICA_CONS_DET WHERE cons_id=${id} AND deleted=0 AND art_cargado='N' AND (visualizando=0 OR visualizando is null OR visualizando=${usuario}) ORDER BY orden_str,descripcion,MOD1,med`;
 		conexion.query(consulta,(error,results)=>{
 			if(error){
 				throw(error)

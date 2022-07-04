@@ -70,8 +70,8 @@ export default{
     async getLogisticaCons(){
         return (await axios.get(`./api/logistica/cons`)).data
     },
-    async getLogisticaConsDet(id){
-        return (await axios.get(`./api/logistica/consdet/${id}`)).data
+    async getLogisticaConsDet(id,usuario){
+        return (await axios.get(`./api/logistica/consdet/${id}/${usuario}`)).data
     },
     async putVisualizando(datos){
         return (await axios.put(`./api/logistica/visualizando`,datos)).data

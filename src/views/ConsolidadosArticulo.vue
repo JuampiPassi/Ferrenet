@@ -169,7 +169,7 @@ export default {
             this.cargandoArticulo=true
             try {
                 this.articulos=''
-                let resp = await ApiServer.getLogisticaConsDet(this.cons_id)
+                let resp = await ApiServer.getLogisticaConsDet(this.cons_id,sessionStorage.getItem('usu_id'))
                 console.log(resp)
                 if(resp.length==0){
                     this.cargandoArticulo=false
