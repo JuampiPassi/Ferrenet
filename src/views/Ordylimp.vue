@@ -29,7 +29,7 @@
                             block color="#ef6b01"
                             elevation="2" x-large
                             dark class="mt-5"
-                            @click="clicSector(item.id,item.descripcion)"
+                            @click="clicSector(item.id,item.descripcion,item.sector)"
                         >{{item.sector}}</v-btn>
                 </template>
                 </div>
@@ -40,7 +40,14 @@
             <v-card>
                 <v-toolbar color="#ef6b01">
                     <v-btn icon dark @click="dialogEvaluacion=false"><v-icon>mdi-arrow-left</v-icon></v-btn>
-                    <v-card-title style="color:black">Evaluación {{nombrePersona}}</v-card-title>
+                    <template v-if="sector.length>25">
+                        <v-card-title style="color:black; font-size: initial;" >{{sector}} <p style="line-height: 7px;">{{nombrePersona}}</p></v-card-title>
+                    </template>
+                    <template v-else>
+                       <v-card-title style="color:black">{{sector}}</v-card-title> 
+                        <v-card-title style="color:black; font-size: medium; line-height: initial;">{{nombrePersona}}</v-card-title>
+                    </template>
+                    <!--<p style="align-self: flex-end; line-height: 13px;">{{nombrePersona}}</p>-->
                 </v-toolbar>
                 <div style="margin-inline: 15px;" class="mb-5">
                     <template v-for="(item, index) in this.evaluacion">
@@ -98,6 +105,7 @@ export default {
             nombrePersona:'',
             sectores:'',
             idSector:'',
+            sector:'',
             descripcionSector:'',
             dialogSectores:false,
             evaluacion:'',
@@ -123,9 +131,10 @@ export default {
                 this.loading=false
             }       
         },
-        clicSector(id,descripcion){
+        clicSector(id,descripcion,sector){
             this.idSector=id
             this.descripcionSector=descripcion
+            this.sector=sector
             this.dialogSectores=false
             this.dialogEvaluacion=true
         },
