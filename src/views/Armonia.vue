@@ -6,7 +6,7 @@
                     block color="#ef6b01"
                     elevation="2" x-large
                     dark class="mt-5"
-                    @click="clicPersona(item.id,item.persona_auditar)"
+                    @click="clicPersona(item.id_persona_auditar,item.persona_auditar)"
                 >{{item.persona_auditar}}</v-btn>
             </template>
         </template>
@@ -95,8 +95,8 @@ export default {
             personasAuditar:'',
             evaluacion:'',
             evaluar:'',
-            idArmonia:'',
             nombrePersona:'',
+            idPersonaAuditar:'',
             dialogEvaluar:false,
             evaluarSelected:'',
             evaluarSelectedId:'',
@@ -111,10 +111,14 @@ export default {
             try {
                 let result = await ApiServer.getArmonia(sessionStorage.getItem("usuario"))
                 this.personasAuditar = result
-                console.log(result)
                 if(this.personasAuditar.length>0){
                     this.evaluacion = await ApiServer.getArmoniaEvaluacion()
-                    this.evaluar = await ApiServer.getArmoniaEvaluar()
+                    if(this.idPersonaAuditar!=''){
+                            this.evaluar = await ApiServer.getArmoniaEvaluar(this.idPersonaAuditar)
+                            if(this.evaluar.length>0){
+                                this.dialogEvaluar=true
+                            }
+                        }
                 }else{
                     this.alert=true
                     this.mensaje="No se encontraron resultados"
@@ -130,10 +134,20 @@ export default {
                 this.tipo="error"
             }
         },
-        clicPersona(id,nombre){
+        async clicPersona(id,nombre){
             this.nombrePersona=nombre  
-            this.idArmonia=id
-            this.dialogEvaluar=true
+            this.idPersonaAuditar=id
+            try {
+                this.evaluar = await ApiServer.getArmoniaEvaluar(id)
+                if(this.evaluar.length>0){
+                    this.dialogEvaluar=true
+                }
+            } catch (error) {
+                console.log(error)
+                this.alert=true
+                this.mensaje="Se ha producido un error"
+                this.tipo="error"
+            }
         },
         clicEvaluar(id,nombre){
             this.evaluarSelected=nombre
@@ -152,7 +166,7 @@ export default {
             this.alert=false
             try {
                 let datos={
-                    armonia_id:this.idArmonia,
+                    id_persona:this.idPersonaAuditar,
                     evaluar_id:this.evaluarSelectedId,
                     evaluacion_id:this.evaluacionId,
                     nota:this.nota

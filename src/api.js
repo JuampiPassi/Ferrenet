@@ -100,8 +100,8 @@ export default{
     async getArmoniaEvaluacion(){
         return(await axios.get(`./api/auditoria/armoniaevaluacion`)).data
     },
-    async getArmoniaEvaluar(){
-        return(await axios.get(`./api/auditoria/armoniaevaluar`)).data
+    async getArmoniaEvaluar(id){
+        return(await axios.get(`./api/auditoria/armoniaevaluar/${id}`)).data
     },
     async putArmonia(datos){
         return (await axios.put(`./api/auditoria/armonia`,datos)).data

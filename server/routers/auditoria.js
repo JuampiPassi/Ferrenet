@@ -55,7 +55,7 @@ module.exports = function (router) {
 
 	router.get('/armonia/:usuario', (req,res) =>{
         let usuario=req.params.usuario
-		let consulta = `SELECT id,persona_auditar FROM auditoria_armonia WHERE VISIBLE='S' AND USUARIO='${usuario}'`;
+		let consulta = `SELECT persona_auditar,id_persona_auditar FROM auditoria_armonia WHERE VISIBLE='S' AND USUARIO='${usuario}' GROUP BY persona_auditar, id_persona_auditar`;
 		conexion.query(consulta,(error,results)=>{
 			if(error){
 				throw(error)
@@ -76,8 +76,8 @@ module.exports = function (router) {
 		})
 	});
 
-	router.get('/armoniaevaluar', (req,res) =>{
-		let consulta = `SELECT id,evaluar FROM auditoria_armonia_evaluar`;
+	router.get('/armoniaevaluar/:id', (req,res) =>{
+		let consulta = `SELECT e.id,e.evaluar FROM auditoria_armonia_evaluar e, auditoria_armonia a WHERE a.evaluar_id=e.id AND a.id_persona_auditar='${req.params.id}' AND a.visible='S'`;
 		conexion.query(consulta,(error,results)=>{
 			if(error){
 				throw(error)
@@ -88,11 +88,11 @@ module.exports = function (router) {
 	});
 
 	router.put('/armonia', (req,res) =>{
-        let armonia_id=req.body.armonia_id
+        let id_persona=req.body.id_persona
         let evaluar_id=req.body.evaluar_id
         let evaluacion_id=req.body.evaluacion_id
         let nota=req.body.nota
-		let consulta = `UPDATE auditoria_armonia set evaluar_id=${evaluar_id}, evaluacion_id=${evaluacion_id},nota='${nota}',visible='N' where id=${armonia_id}`;
+		let consulta = `UPDATE auditoria_armonia set evaluacion_id=${evaluacion_id},nota='${nota}',visible='N' where evaluar_id=${evaluar_id} AND id_persona_auditar='${id_persona}'`;
 		conexion.query(consulta,(error,results)=>{
 			if(error){
 				throw(error)
