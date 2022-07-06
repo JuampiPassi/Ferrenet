@@ -93,5 +93,18 @@ export default{
     },
     async putOrdenyLimpieza(datos){
         return(await axios.put(`./api/auditoria/ordylimp`,datos)).data
+    },
+    async getArmonia(usuario){
+        return (await axios.get(`./api/auditoria/armonia/${usuario}`)).data
+    },
+    async getArmoniaEvaluacion(){
+        return(await axios.get(`./api/auditoria/armoniaevaluacion`)).data
+    },
+    async getArmoniaEvaluar(){
+        return(await axios.get(`./api/auditoria/armoniaevaluar`)).data
+    },
+    async putArmonia(datos){
+        return (await axios.put(`./api/auditoria/armonia`,datos)).data
     }
+
 }

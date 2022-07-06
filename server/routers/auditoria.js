@@ -52,4 +52,53 @@ module.exports = function (router) {
 			}
 		})
 	});
+
+	router.get('/armonia/:usuario', (req,res) =>{
+        let usuario=req.params.usuario
+		let consulta = `SELECT id,persona_auditar FROM auditoria_armonia WHERE VISIBLE='S' AND USUARIO='${usuario}'`;
+		conexion.query(consulta,(error,results)=>{
+			if(error){
+				throw(error)
+			}else{
+				res.status(200).send(results);
+			}
+		})
+	});
+
+	router.get('/armoniaevaluacion', (req,res) =>{
+		let consulta = `SELECT id,evaluacion,descripcion FROM auditoria_armonia_evaluacion`;
+		conexion.query(consulta,(error,results)=>{
+			if(error){
+				throw(error)
+			}else{
+				res.status(200).send(results);
+			}
+		})
+	});
+
+	router.get('/armoniaevaluar', (req,res) =>{
+		let consulta = `SELECT id,evaluar FROM auditoria_armonia_evaluar`;
+		conexion.query(consulta,(error,results)=>{
+			if(error){
+				throw(error)
+			}else{
+				res.status(200).send(results);
+			}
+		})
+	});
+
+	router.put('/armonia', (req,res) =>{
+        let armonia_id=req.body.armonia_id
+        let evaluar_id=req.body.evaluar_id
+        let evaluacion_id=req.body.evaluacion_id
+        let nota=req.body.nota
+		let consulta = `UPDATE auditoria_armonia set evaluar_id=${evaluar_id}, evaluacion_id=${evaluacion_id},nota='${nota}',visible='N' where id=${armonia_id}`;
+		conexion.query(consulta,(error,results)=>{
+			if(error){
+				throw(error)
+			}else{
+				res.status(200).send(results);
+			}
+		})
+	});
 }

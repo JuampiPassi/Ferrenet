@@ -13,6 +13,7 @@ import Pedidos from '../views/Pedidos.vue'
 import Consolidados from '../views/Consolidados.vue'
 import ConsolidadosArticulo from '../views/ConsolidadosArticulo.vue'
 import Ordylimp from '../views/Ordylimp.vue'
+import Armonia from '../views/Armonia.vue'
 
 Vue.use(VueRouter)
 
@@ -175,6 +176,26 @@ const routes = [
         let modulos =JSON.parse(sessionStorage.getItem('modulos'));
         modulos.forEach(element => {
             if(element.id_modulo==8.1)
+              next()
+        });
+      }
+      next(false)
+    },
+  },
+  {
+    path: '/Armonia',
+    name: 'Armonia',
+    component : Armonia,
+    meta:{
+      guest: true
+    },
+    beforeEnter: (to, from,next) => {
+      if(sessionStorage.getItem('rol')==1){
+        next();
+      }else if(sessionStorage.getItem('modulos')!=null){
+        let modulos =JSON.parse(sessionStorage.getItem('modulos'));
+        modulos.forEach(element => {
+            if(element.id_modulo==8.2)
               next()
         });
       }

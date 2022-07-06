@@ -17,6 +17,7 @@
             x-large
             style="color:white"
             v-if="verArmonia"
+            @click="clicArmonia()"
         >Armonía</v-btn>
     </v-container>
 </template>
@@ -32,6 +33,9 @@ export default {
     methods:{
         clicOrd(){
             this.$router.push({name: 'Ordylimp'}); 
+        },
+        clicArmonia(){
+           this.$router.push({name: 'Armonia'});  
         }
 
     },
