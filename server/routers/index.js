@@ -21,5 +21,6 @@ module.exports = (app) => {
     require('./auditoria') (router);
     app.use('/api/auditoria', router);
 
-
+    require('./tareas') (router);
+    app.use('/api/tareas', router);
 }

@@ -40,13 +40,11 @@
             <v-card>
                 <v-toolbar color="#ef6b01">
                     <v-btn icon dark @click="dialogEvaluacion=false"><v-icon>mdi-arrow-left</v-icon></v-btn>
-                    <template v-if="sector.length>25">
-                        <v-card-title style="color:black; font-size: initial;" >{{sector}} <p style="line-height: 7px;">{{nombrePersona}}</p></v-card-title>
-                    </template>
-                    <template v-else>
-                       <v-card-title style="color:black">{{sector}}</v-card-title> 
-                        <v-card-title style="color:black; font-size: medium; line-height: initial;">{{nombrePersona}}</v-card-title>
-                    </template>
+                    
+                    <v-card-title style="color:black">{{sector}}
+                        <div class="subheading" style="font-size:medium">{{nombrePersona}}</div>
+                    </v-card-title> 
+                    
                     <!--<p style="align-self: flex-end; line-height: 13px;">{{nombrePersona}}</p>-->
                 </v-toolbar>
                 <div style="margin-inline: 15px;" class="mb-5">

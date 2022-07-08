@@ -173,7 +173,10 @@ export default {
         },
         IrIngreso(){},
         IrVentas(){},
-        IrTareas(){},
+        IrTareas(){
+            if (this.$route.path !== '/Tareas') 
+            this.$router.push({name: 'Tareas'});
+        },
         IrAuditoria(){
             if (this.$route.path !== '/Auditoria') 
             this.$router.push({name: 'Auditoria'});

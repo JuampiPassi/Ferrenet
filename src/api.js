@@ -105,6 +105,12 @@ export default{
     },
     async putArmonia(datos){
         return (await axios.put(`./api/auditoria/armonia`,datos)).data
+    },
+    async getTareas(usuario){
+        return (await axios.get(`./api/tareas/todas/${usuario}`)).data
+    },
+    async putTareas(data){
+        return (await axios.put(`./api/tareas/editar`,data)).data
     }
 
 }

@@ -66,7 +66,7 @@ module.exports = function (router) {
 	});
 
 	router.get('/armoniaevaluacion', (req,res) =>{
-		let consulta = `SELECT id,evaluacion,descripcion FROM auditoria_armonia_evaluacion`;
+		let consulta = `SELECT id,evaluacion FROM auditoria_armonia_evaluacion`;
 		conexion.query(consulta,(error,results)=>{
 			if(error){
 				throw(error)
@@ -77,7 +77,7 @@ module.exports = function (router) {
 	});
 
 	router.get('/armoniaevaluar/:id', (req,res) =>{
-		let consulta = `SELECT e.id,e.evaluar FROM auditoria_armonia_evaluar e, auditoria_armonia a WHERE a.evaluar_id=e.id AND a.id_persona_auditar='${req.params.id}' AND a.visible='S'`;
+		let consulta = `SELECT e.id,e.evaluar,e.descripcion FROM auditoria_armonia_evaluar e, auditoria_armonia a WHERE a.evaluar_id=e.id AND a.id_persona_auditar='${req.params.id}' AND a.visible='S'`;
 		conexion.query(consulta,(error,results)=>{
 			if(error){
 				throw(error)

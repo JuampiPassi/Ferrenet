@@ -29,7 +29,7 @@
                             block color="#ef6b01"
                             elevation="2" x-large
                             dark class="mt-5"
-                            @click="clicEvaluar(item.id,item.evaluar)"
+                            @click="clicEvaluar(item.id,item.evaluar,item.descripcion)"
                         >{{item.evaluar}}</v-btn>
                 </template>
                 </div>
@@ -39,9 +39,11 @@
         <v-dialog  v-model="dialogEvaluacion" fullscreen hide-overlay transition="dialog-bottom-transition">
             <v-card>
                 <v-toolbar color="#ef6b01">
-                    <v-btn icon dark @click="dialogEvaluacion=false"><v-icon>mdi-arrow-left</v-icon></v-btn>
-                       <v-card-title style="color:black">{{evaluarSelected}}</v-card-title> 
-                        <v-card-title style="color:black; font-size: medium; margin-top: 4px;">{{nombrePersona}}</v-card-title>
+                       <v-btn icon dark @click="dialogEvaluacion=false"><v-icon>mdi-arrow-left</v-icon></v-btn>
+                        <v-toolbar-title style="color:black">{{evaluarSelected}}
+                            <div class="subheading" style="font-size:medium">{{nombrePersona}}</div>
+                        </v-toolbar-title> 
+                        <!--<v-toolbar-title style="color:black; font-size: medium; margin-top: 4px;">{{nombrePersona}}</v-toolbar-title>-->
                 </v-toolbar>
                 <div style="margin-inline: 15px;" class="mb-5">
                     <template v-for="(item, index) in this.evaluacion">
@@ -52,6 +54,7 @@
                             @click="clicEvaluacion(item.id)"
                         >{{item.evaluacion}}</v-btn>
                     </template>
+                    <v-textarea v-if="evaluarDescripcion!=''& evaluarDescripcion!=undefined" v-model="evaluarDescripcion" class="mt-10" style="font-size: large;" outlined readonly color="orange" />
                 </div>
             </v-card>   
         </v-dialog>
@@ -98,6 +101,7 @@ export default {
             nombrePersona:'',
             idPersonaAuditar:'',
             dialogEvaluar:false,
+            evaluarDescripcion:'',
             evaluarSelected:'',
             evaluarSelectedId:'',
             evaluacionId:'',
@@ -149,9 +153,10 @@ export default {
                 this.tipo="error"
             }
         },
-        clicEvaluar(id,nombre){
+        clicEvaluar(id,nombre,descripcion){
             this.evaluarSelected=nombre
             this.evaluarSelectedId=id
+            this.evaluarDescripcion=descripcion
             this.dialogEvaluar=false
             this.dialogEvaluacion=true
         },
@@ -192,6 +197,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>

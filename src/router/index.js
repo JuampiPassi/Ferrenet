@@ -14,6 +14,7 @@ import Consolidados from '../views/Consolidados.vue'
 import ConsolidadosArticulo from '../views/ConsolidadosArticulo.vue'
 import Ordylimp from '../views/Ordylimp.vue'
 import Armonia from '../views/Armonia.vue'
+import Tareas from '../views/Tareas/Tareas.vue'
 
 Vue.use(VueRouter)
 
@@ -136,6 +137,26 @@ const routes = [
         let modulos =JSON.parse(sessionStorage.getItem('modulos'));
         modulos.forEach(element => {
             if(element.id_modulo==1.2)
+              next()
+        });
+      }
+      next(false)
+    },
+  },
+  {
+    path: '/Tareas',
+    name: 'Tareas',
+    component : Tareas,
+    meta:{
+      guest: true
+    },
+    beforeEnter: (to, from,next) => {
+      if(sessionStorage.getItem('rol')==1){
+        next();
+      }else if(sessionStorage.getItem('modulos')!=null){
+        let modulos =JSON.parse(sessionStorage.getItem('modulos'));
+        modulos.forEach(element => {
+            if(element.id_modulo==7)
               next()
         });
       }

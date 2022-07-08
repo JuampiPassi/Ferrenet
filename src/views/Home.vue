@@ -6,7 +6,7 @@
         <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" v-if="verIngreso">Ingreso</v-btn>
         <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" v-if="verVentas">Ventas</v-btn>
         <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" @click="dialogObservador=true; texto=''" style="color:white" v-if="verObsInt">Observador Inteligente</v-btn>
-        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" v-if="verTareas">Tareas</v-btn>
+        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" v-if="verTareas" @click="clicTareas">Tareas</v-btn>
         <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" v-if="verAudit" @click="clicAuditoria">Auditoría</v-btn>
 
         <v-alert class="mt-10" text border="left" colored-border elevation="24" type="success"  v-model="alert" dense dismissible transition="scale-transition">
@@ -52,6 +52,9 @@ export default {
         },
         clicPedidos(){
             this.$router.push({name: 'Pedidos'});
+        },
+        clicTareas(){
+            this.$router.push({name: 'Tareas'});
         },
         async guardarTexto(){
             let info={

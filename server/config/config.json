@@ -15,5 +15,13 @@
         "user":"root",
         "password":"q987a987",
         "dialect": "mysql"
+    },
+    "mysql":{
+        "host":"10.19.0.243",
+        "port":"3306",
+        "database":"suitecms",
+        "user":"root",
+        "password":"q987a987",
+        "dialect": "mysql"
     }
 }
