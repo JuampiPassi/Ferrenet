@@ -4,7 +4,7 @@ module.exports = function (router) {
 
 	
 	router.get('/todas/:usuario', (req,res) =>{
-		let consulta = `SELECT t.id,t.name,u.user_name,t.description, DATE(t.date_due) AS fecha FROM tasks t, users u WHERE t.assigned_user_id=u.id AND t.status <> 'Completed' AND u.user_name='${req.params.usuario}' ORDER BY t.date_due asc`;
+		let consulta = `SELECT t.id,t.name,u.user_name,t.description, DATE(t.date_due) AS fecha FROM tasks t, users u WHERE t.assigned_user_id=u.id AND t.deleted=0 AND t.status <> 'Completed' AND u.user_name='${req.params.usuario}' ORDER BY t.date_due asc`;
 		conexion.query(consulta,(error,results)=>{
 			if(error){
 				throw(error)

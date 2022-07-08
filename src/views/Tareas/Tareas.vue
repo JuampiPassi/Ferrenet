@@ -1,14 +1,36 @@
 <template>
     <v-container>
         <template v-if="this.tareas.length>0">
-            <template v-for="(item, index) in this.tareas">
+            <!--<template v-for="(item, index) in this.tareas">
                 <v-btn :key=index
                     block color="#ef6b01"
                     elevation="2" x-large
                     dark class="mt-5"
                     @click="clicTarea(item.id,item.name,item.description)"
                 >{{item.name}}  {{item.fecha}}</v-btn>
-            </template>
+            </template>-->
+
+            <v-data-table
+                :headers="headers"
+                :items="tareas"
+                :items-per-page="5"
+                class="elevation-1"
+                locale="es"
+                @click:row="clicTarea"
+                
+            >
+                <template v-slot:item.fecha="{ item }">
+                    <v-chip :color="colorFecha(item.fecha)" dark>
+                        {{ item.fecha }}
+                    </v-chip>
+                </template>
+                <template v-slot:expanded-item="{headers, item}"> 
+                    <td :colspan="headers.length">
+                        {{item.description}}
+                    </td>
+                </template>
+            </v-data-table>
+
         </template>
          <v-alert class="mt-10"  :type="tipo"  v-model="alert" dense transition="scale-transition">
             {{mensaje}}
@@ -49,6 +71,7 @@ export default {
     name: 'Tareas',
     data(){
         return{
+            headers:[{text:'Tarea',value:'name'},{text:'Vencimiento',value:'fecha'}],
             tipo:'error',
             alert:false,
             mensaje:'',
@@ -62,10 +85,10 @@ export default {
         }
     },
     methods:{
-        clicTarea(id,tarea,desc){
-            this.idTarea=id
-            this.tareaSelected=tarea
-            this.descripcionTarea=desc
+        clicTarea(fila){
+            this.idTarea=fila.id
+            this.tareaSelected=fila.name
+            this.descripcionTarea=fila.description
             this.dialogTarea=true
         },
         async guardar(){
@@ -114,10 +137,21 @@ export default {
                 this.mensaje="Se ha producido un error"
                 this.tipo="error"
             }
-        }  
+        },
+        colorFecha (fecha) {
+            let hoy=moment().format('DD-MM-YYYY')
+            let dif = moment(hoy,"DD-MM-YYYY").diff(moment(fecha,"DD-MM-YYYY"),'days')
+            if (dif>0) return 'red darken-1'
+            else if (dif==0) return '#ffaa00'
+            else if(dif<0) return 'green darken-1'
+            else return 'black'
+      },
     },
     async mounted(){
         this.Inicio()
+        let hoy=moment().format('DD-MM-YYYY')
+        let fecha = moment('08-07-2022').format('DD-MM-YYYY')
+        console.log(moment('08-07-2022').isSame(moment().format('DD-MM-YYYY')))
     },
     computed:{
     }
