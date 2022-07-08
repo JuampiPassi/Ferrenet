@@ -17,7 +17,9 @@
                 class="elevation-1"
                 locale="es"
                 @click:row="clicTarea"
-                
+                :single-expand="true"
+                item-key="id"
+                :expanded.sync="expanded"
             >
                 <template v-slot:item.fecha="{ item }">
                     <v-chip :color="colorFecha(item.fecha)" dark>
@@ -25,9 +27,14 @@
                     </v-chip>
                 </template>
                 <template v-slot:expanded-item="{headers, item}"> 
-                    <td :colspan="headers.length">
-                        {{item.description}}
-                    </td>
+                    <v-card style="background-color:#e0f6b6">
+                        <v-card-text>
+                            {{item.description}}
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-btn outlined color="green" small class="ml-3"  @click="guardar()">Completada</v-btn>
+                        </v-card-actions>
+                    </v-card>
                 </template>
             </v-data-table>
 
@@ -81,15 +88,21 @@ export default {
             descripcionTarea:'',
             dialogTarea:false,
             alertGuardado:false,
-            cargando:false
+            cargando:false,
+            expanded:[]
         }
     },
     methods:{
-        clicTarea(fila){
+        clicTarea(fila,event){
+            if(event.isExpanded){
+               const index = this.expanded.findIndex(i => i=== fila);
+               this.expanded.splice(index,1)
+            }else{
+                this.expanded.push(fila)
+            }
             this.idTarea=fila.id
             this.tareaSelected=fila.name
             this.descripcionTarea=fila.description
-            this.dialogTarea=true
         },
         async guardar(){
             var fecha = moment().add(3,'hours').format('YYYY-MM-DD hh:mm:ss')
@@ -149,9 +162,6 @@ export default {
     },
     async mounted(){
         this.Inicio()
-        let hoy=moment().format('DD-MM-YYYY')
-        let fecha = moment('08-07-2022').format('DD-MM-YYYY')
-        console.log(moment('08-07-2022').isSame(moment().format('DD-MM-YYYY')))
     },
     computed:{
     }
