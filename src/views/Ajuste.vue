@@ -57,7 +57,7 @@
                         <tr>
                             <td><p class="mb-0" style="font-size:20px; font-weight: bold;">Cantidad</p></td>
                             <td>
-                                <input style="font-size:20px; font-weight: bold;" type="number" v-model="nuevacant" :placeholder="cantidad"/>
+                                <input autofocus style="font-size:20px; font-weight: bold;" type="number" v-model="nuevacant" :placeholder="cantidad"/>
                             </td>
                         </tr>
                         <tr>
