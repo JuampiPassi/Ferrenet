@@ -36,7 +36,7 @@
                         <tr>
                             <td><p class="mb-0" style="font-size:20px; font-weight: bold;">Cantidad</p></td>
                             <td>
-                                <input style="font-size:20px; font-weight: bold; width:100%" type="number" v-model="nuevacant" :placeholder="cantidad" :readonly="!verifok"/>
+                                <v-text-field autofocus="true" dense flat color="orange" style="font-size:20px; font-weight: bold; width:100%; height: inherit;" type="number" v-model="nuevacant" :placeholder="cantidad" :readonly="!verifok"/>
                             </td>
                         </tr>
                         <tr>

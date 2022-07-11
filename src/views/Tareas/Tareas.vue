@@ -21,12 +21,12 @@
                 item-key="id"
                 :expanded.sync="expanded"
             >
-                <template v-slot:item.fecha="{ item }">
+                <template v-slot:[`item.fecha`]="{ item }">
                     <v-chip :color="colorFecha(item.fecha)" dark>
                         {{ item.fecha }}
                     </v-chip>
                 </template>
-                <template v-slot:expanded-item="{headers, item}"> 
+                <template v-slot:expanded-item="{item}"> 
                     <v-card style="background-color:#e0f6b6">
                         <v-card-text>
                             {{item.description}}
