@@ -103,11 +103,21 @@
 
             <v-list-item link @click="IrAuditoria" v-if="verAuditoria">
                 <v-list-item-action>
-                <font-awesome-icon style="color: #ef6b01" icon="person-chalkboard" />
+                    <v-icon color="#ef6b01" >mdi-account-search</v-icon>
                 </v-list-item-action>
 
                 <v-list-item-content>
                 <v-list-item-title style="color: #424242">Auditoría</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item link @click="IrCapacitacion" v-if="verCapacitacion">
+                <v-list-item-action>
+                    <font-awesome-icon style="color: #ef6b01" icon="person-chalkboard" />
+                </v-list-item-action>
+
+                <v-list-item-content>
+                <v-list-item-title style="color: #424242">Capacitación</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
 
@@ -180,6 +190,10 @@ export default {
         IrAuditoria(){
             if (this.$route.path !== '/Auditoria') 
             this.$router.push({name: 'Auditoria'});
+        },
+        IrCapacitacion(){
+            if (this.$route.path !== '/Capacitaciones') 
+            this.$router.push({name: 'Capacitaciones'});
         },
         IrEscaner(){
           if (this.$route.path !== '/Escaner') 
@@ -278,6 +292,19 @@ export default {
                 return true;
             if(modulo!=''&&modulo!=null){
                 if((modulo.find(x => x.id_modulo == 8))!=undefined){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            return false;
+        },
+        verCapacitacion(){
+            let modulo = JSON.parse(sessionStorage.getItem('modulos'))
+            if(sessionStorage.getItem('rol')==1)
+                return true;
+            if(modulo!=''&&modulo!=null){
+                if((modulo.find(x => x.id_modulo == 9))!=undefined){
                     return true
                 }else{
                     return false

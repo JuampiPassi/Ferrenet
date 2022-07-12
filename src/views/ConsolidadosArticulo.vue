@@ -48,7 +48,12 @@
                         </tr>
                         <tr>
                             <td>Ubicación</td>
-                            <td>{{articulos[0].orden_str}}</td>
+                            <template v-if="articulos[0].orden_str!='Z'">
+                                <td>{{articulos[0].orden_str}}</td>
+                            </template>
+                            <template v-else>
+                                <td>{{articulos[0].cod_art}}</td>
+                            </template>
                         </tr>
                         <tr>
                             <td>Empaque</td>
