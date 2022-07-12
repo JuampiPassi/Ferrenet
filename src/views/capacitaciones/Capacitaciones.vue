@@ -95,6 +95,14 @@
                         </v-row>
                         <v-row>
                             <v-col cols="12" sm="6">
+                                 <v-text-field color="orange" v-model="nombre" label="Nombre de la capacitación" required :rules="nombreRules"></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                                <v-text-field color="orange" v-model="descripcion" label="Descripción"></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="12" sm="6">
                                 <v-select
                                 v-model="participantesSelected"
                                 :items="participantes"
@@ -138,6 +146,9 @@ export default {
             lugarRules: [v => !!v || 'Lugar requerido'],
             capacitador:"CMS SA - permite cambiar",
             capacitadorRules: [v => !!v || 'Capacitador requerido'],
+            nombre:'',
+            nombreRules:[v => !!v || 'Nombre requerido'],
+            descripcion:'',
             participantes:[],
             participantesSelected:[],
             participantesRules: {
