@@ -1,5 +1,6 @@
 const UsuariosController = require('../controllers/usuarios');
 const conexion = require('../config/mysql');
+const conexion2 = require('../config/mysql2');
 
 module.exports = function (router) {
 	//router.get('/', UsuariosController.verUsuarios);
@@ -26,4 +27,15 @@ module.exports = function (router) {
 			}
 		})
     });
+
+    router.get('/todos', (req,res) =>{
+		let consulta = `SELECT first_name,last_name FROM users WHERE status='Active' order by last_name`;
+		conexion2.query(consulta,(error,results)=>{
+			if(error){
+				throw(error)
+			}else{
+				res.status(200).send(results);
+			}
+		})
+	});
 }

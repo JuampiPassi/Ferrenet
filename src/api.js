@@ -111,6 +111,9 @@ export default{
     },
     async putTareas(data){
         return (await axios.put(`./api/tareas/editar`,data)).data
+    },
+    async getUsers(){
+        return (await axios.get(`./api/usuarios/todos`)).data
     }
 
 }

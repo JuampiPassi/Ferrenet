@@ -8,6 +8,7 @@
         <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" @click="dialogObservador=true; texto=''" style="color:white" v-if="verObsInt">Observador Inteligente</v-btn>
         <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" v-if="verTareas" @click="clicTareas">Tareas</v-btn>
         <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" v-if="verAudit" @click="clicAuditoria">Auditoría</v-btn>
+        <v-btn block color="#ef6b01" elevation="2" x-large class="mt-5" style="color:white" v-if="verCapacitaciones" @click="clicCapacitaciones">Capacitaciones</v-btn>
 
         <v-alert class="mt-10" text border="left" colored-border elevation="24" type="success"  v-model="alert" dense dismissible transition="scale-transition">
                 Guardado
@@ -55,6 +56,9 @@ export default {
         },
         clicTareas(){
             this.$router.push({name: 'Tareas'});
+        },
+        clicCapacitaciones(){
+            this.$router.push({name: 'Capacitaciones'});
         },
         async guardarTexto(){
             let info={
@@ -176,6 +180,19 @@ export default {
                 return true;
             if(modulo!=''&&modulo!=null){
                 if((modulo.find(x => x.id_modulo == 8))!=undefined){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            return false;
+        },
+        verCapacitaciones(){
+            let modulo = JSON.parse(sessionStorage.getItem('modulos'))
+            if(sessionStorage.getItem('rol')==1)
+                return true;
+            if(modulo!=''&&modulo!=null){
+                if((modulo.find(x => x.id_modulo == 9))!=undefined){
                     return true
                 }else{
                     return false
