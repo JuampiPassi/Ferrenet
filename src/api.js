@@ -114,6 +114,12 @@ export default{
     },
     async getUsers(){
         return (await axios.get(`./api/usuarios/todos`)).data
+    },
+    async postCapacitacion(datos){
+        return (await axios.post(`./api/capacitaciones/registro`,datos)).data
+    },
+    async postCapacitacionParticipantes(datos){
+        return (await axios.post(`./api/capacitaciones/participantes`,datos)).data
     }
 
 }

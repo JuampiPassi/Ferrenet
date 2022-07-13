@@ -47,15 +47,9 @@
                             <td>Empaque</td>
                             <td>{{empaque}}</td>
                         </tr>
-                        <tr v-if="this.fecha_ctrl || this.fec_ingreso">
-                            <template v-if="this.fecha_ctrl">
-                                <td style="width: 10%;">Fec ctrl</td>
-                                <td style="width: 90px;">{{fecha_ctrl}}</td>
-                            </template>
-                            <template v-if="this.fec_ingreso">
-                                <td style="width: 83px;">Fec ingr</td>
-                                <td >{{fec_ingreso}}</td>
-                            </template>
+                        <tr>
+                            <td v-if="fec_ctrol">Fec ctrl: <b>{{fec_ctrol}}</b></td>
+                            <td v-if="fec_ingreso" style="width: 150px">Fec ingr: <b>{{fec_ingreso}}</b></td>
                         </tr>
                     </tbody>
                 </v-simple-table>

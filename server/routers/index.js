@@ -23,4 +23,7 @@ module.exports = (app) => {
 
     require('./tareas') (router);
     app.use('/api/tareas', router);
+
+    require('./capacitaciones') (router);
+    app.use('/api/capacitaciones', router);
 }

@@ -43,7 +43,9 @@
         <v-alert class="mt-10" text outlined type="error" v-model="alert" dense transition="scale-transition">
             {{mensaje}}
         </v-alert>
-
+        <v-alert class="mt-10"  type="success"  v-model="alertGuardado" dense transition="scale-transition">
+            Guardado
+        </v-alert>
         <!-------------Dialog Formulario--------------------->
         <v-dialog  v-model="dialogForm" fullscreen hide-overlay transition="dialog-bottom-transition">
             <v-card>
@@ -106,6 +108,8 @@
                                 <v-select
                                 v-model="participantesSelected"
                                 :items="participantes"
+                                item-text="nombre"
+                                item-value="id"
                                 label="Participantes"
                                 multiple
                                 chips
@@ -117,8 +121,8 @@
                                 ></v-select>
                             </v-col>
                         </v-row>
-                         <v-btn color="orange"  elevation="10" outlined class="mr-4 mt-10" @click="aceptar">
-                            Aceptar
+                         <v-btn color="#ef6b01" class="mr-4 mt-5 mb-5" @click="aceptar">
+                            <b>Guardar</b>
                         </v-btn>
                     </v-form>
                 </div>
@@ -129,6 +133,7 @@
 
 <script>
 import ApiServer from '../../api';
+const { v4: uuidv4 } = require('uuid');
 export default {
     name: 'Capacitaciones',
     data(){
@@ -136,15 +141,16 @@ export default {
             dialogForm:false,
             formValid:true,
             alert:false,
+            alertGuardado:false,
             mensaje:'',
             clicBoton:'',
             menuFecha:false,
             fecha:(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
             cargaHoraria:'',
             cargaHorariaRules: [v => !!v || 'Carga horaria requerida'],
-            lugar:"CMS SA - permite cambiar",
+            lugar:"CMS SA",
             lugarRules: [v => !!v || 'Lugar requerido'],
-            capacitador:"CMS SA - permite cambiar",
+            capacitador:"CMS SA",
             capacitadorRules: [v => !!v || 'Capacitador requerido'],
             nombre:'',
             nombreRules:[v => !!v || 'Nombre requerido'],
@@ -168,15 +174,45 @@ export default {
             this.dialogForm=true
         },
         clicSeg(){
-            this.clicBoton="Seg e Hig"
+            this.clicBoton="Seguridad e Higiene"
             this.dialogForm=true
         },
         clicIns(){
             this.clicBoton="Institucional"
             this.dialogForm=true
         },
-        aceptar(){
-            this.$refs.form.validate()
+        async aceptar(){
+            if(this.$refs.form.validate()){
+                let id_capacitacion = uuidv4()
+                let datos ={
+                    id: id_capacitacion,
+                    descripcion:this.descripcion,
+                    fecha: this.fecha,
+                    lugar: this.lugar,
+                    capacitador: this.capacitador,
+                    carga_horaria: this.cargaHoraria,
+                    nombre:this.clicBoton+" - "+this.nombre,
+                    participantes:this.participantesSelected
+                }
+                this.dialogForm=false
+                try {
+                    let result = await ApiServer.postCapacitacion(datos);
+                    let result1 = await ApiServer.postCapacitacionParticipantes({
+                        participantes:this.participantesSelected,
+                        id_capacitacion:id_capacitacion})
+                    this.cargaHoraria='',this.descripcion='',this.nombre='',this.participantesSelected=[],
+                    this.lugar="CMS SA",this.capacitador="CMS SA",this.fecha=(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+                    this.alertGuardado=true
+                    setTimeout(()=>{
+                        this.alertGuardado=false
+                    },3000)
+                } catch (error) {
+                    this.dialogForm=false
+                    console.log(error)
+                    this.alert=true
+                    this.mensaje="Se produjo un error"
+                }
+            }
         }
 
     },
@@ -241,7 +277,7 @@ export default {
             if(resp.length>0){
                 resp.forEach(element => {
                     if(element.first_name!=null&&element.last_name!=null)
-                        this.participantes.push(element.first_name+" "+element.last_name)
+                        this.participantes.push({id:element.id ,nombre:element.first_name+" "+element.last_name})
                 });
             }
         } catch (error) {
