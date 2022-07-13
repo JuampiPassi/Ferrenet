@@ -202,6 +202,7 @@ export default {
                         id_capacitacion:id_capacitacion})
                     this.cargaHoraria='',this.descripcion='',this.nombre='',this.participantesSelected=[],
                     this.lugar="CMS SA",this.capacitador="CMS SA",this.fecha=(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+                    this.$refs.form.resetValidation()
                     this.alertGuardado=true
                     setTimeout(()=>{
                         this.alertGuardado=false
