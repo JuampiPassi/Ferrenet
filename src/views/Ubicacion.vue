@@ -40,13 +40,13 @@
                                 <tr>
                                     <td><p class="mb-0" style="font-size:18px; font-weight: bold;">Sector</p></td>
                                     <td>
-                                        <input maxlength="2" style="font-size:18px; font-weight: bold; width: 30px;" type="text" v-model="nuevosector" :placeholder="sector" />
+                                        <v-text-field maxlength="2" flat color="orange" style="font-size:18px; font-weight: bold; width: 30px;" type="text" v-model="nuevosector" :placeholder="sector" />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td><p class="mb-0" style="font-size:18px; font-weight: bold;">Módulo</p></td>
                                     <td>
-                                        <input maxlength="2" style="font-size:18px; font-weight: bold;width: 30px;" type="text" v-model="nuevomodulo" :placeholder="modulo" />
+                                        <v-text-field maxlength="2" flat color="orange" style="font-size:18px; font-weight: bold;width: 30px;" type="text" v-model="nuevomodulo" :placeholder="modulo" />
                                     </td>
                                 </tr>
                             </tbody>
@@ -58,13 +58,13 @@
                                 <tr>
                                     <td><p class="mb-0" style="font-size:18px; font-weight: bold;">Estante</p></td>
                                     <td>
-                                        <input maxlength="2" style="font-size:18px; font-weight: bold;width: 30px;" type="text" v-model="nuevoestante" :placeholder="estante" />
+                                        <v-text-field maxlength="2" flat color="orange" style="font-size:18px; font-weight: bold;width: 30px;" type="text" v-model="nuevoestante" :placeholder="estante" />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td><p class="mb-0" style="font-size:18px; font-weight: bold;">Posición</p></td>
                                     <td>
-                                        <input maxlength="2" style="font-size:18px; font-weight: bold;width: 30px;" type="text" v-model="nuevapos" :placeholder="posicion" />
+                                        <v-text-field maxlength="2" flat color="orange" style="font-size:18px; font-weight: bold;width: 30px;" type="text" v-model="nuevapos" :placeholder="posicion" />
                                     </td>
                                 </tr>
                             </tbody>

@@ -170,14 +170,17 @@ export default {
         IrPrincipal(){
             if (this.$route.path !== '/') 
             this.$router.push({name: 'Home'});
+            this.drawer = !this.drawer
         },
         IrStock(){
             if (this.$route.path !== '/Stock') 
             this.$router.push({name: 'Stock'});
+            this.drawer = !this.drawer
         },
         IrPedidos(){
             if (this.$route.path !== '/Pedidos') 
             this.$router.push({name: 'Pedidos'});
+            this.drawer = !this.drawer
         },
         IrDespacho(){
         },
@@ -186,18 +189,22 @@ export default {
         IrTareas(){
             if (this.$route.path !== '/Tareas') 
             this.$router.push({name: 'Tareas'});
+            this.drawer = !this.drawer
         },
         IrAuditoria(){
             if (this.$route.path !== '/Auditoria') 
             this.$router.push({name: 'Auditoria'});
+            this.drawer = !this.drawer
         },
         IrCapacitacion(){
             if (this.$route.path !== '/Capacitaciones') 
             this.$router.push({name: 'Capacitaciones'});
+            this.drawer = !this.drawer
         },
         IrEscaner(){
           if (this.$route.path !== '/Escaner') 
             this.$router.push({name: 'Escaner'});  
+            this.drawer = !this.drawer
         },
         cerrarSesion(){
             sessionStorage.clear();

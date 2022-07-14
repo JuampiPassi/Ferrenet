@@ -57,7 +57,7 @@
                         <tr>
                             <td><p class="mb-0" style="font-size:20px; font-weight: bold;">Cantidad</p></td>
                             <td>
-                                <input autofocus style="font-size:20px; font-weight: bold;" type="number" v-model="nuevacant" :placeholder="cantidad"/>
+                                <v-text-field autofocus dense flat color="orange" style="font-size:20px; font-weight: bold;width:30%; height: inherit;" type="number" v-model="nuevacant" :placeholder="cantidad"/>
                             </td>
                         </tr>
                         <tr>
@@ -127,6 +127,7 @@ export default {
                 if(result.length>0){
                     this.articulo=result[0]
                     this.componentKey++//para que cambie la imagen
+                    this.articulo.FECHA_CTRL=moment(this.articulo.FECHA_CTRL).format('DD-MM-YYYY')
                     this.datosArticulo=this.articulo.COD_ART+'-'+this.articulo.DESCRIPCION;
                 if(this.articulo.MED.length>0){
                     this.datosArticulo=this.datosArticulo+'-'+this.articulo.MED;

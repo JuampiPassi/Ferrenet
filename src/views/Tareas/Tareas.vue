@@ -1,15 +1,7 @@
 <template>
     <v-container>
         <template v-if="this.tareas.length>0">
-            <!--<template v-for="(item, index) in this.tareas">
-                <v-btn :key=index
-                    block color="#ef6b01"
-                    elevation="2" x-large
-                    dark class="mt-5"
-                    @click="clicTarea(item.id,item.name,item.description)"
-                >{{item.name}}  {{item.fecha}}</v-btn>
-            </template>-->
-
+            <h3>Tareas Pendientes</h3>
             <v-data-table
                 :headers="headers"
                 :items="tareas"
@@ -20,6 +12,9 @@
                 :single-expand="true"
                 item-key="id"
                 :expanded.sync="expanded"
+                :disable-sort="ordenar"
+                :hide-default-footer="footer"
+                show-expand
             >
                 <template v-slot:[`item.fecha`]="{ item }">
                     <v-chip :color="colorFecha(item.fecha)" dark>
@@ -89,7 +84,10 @@ export default {
             dialogTarea:false,
             alertGuardado:false,
             cargando:false,
-            expanded:[]
+            expanded:[],
+            ordenar:false,
+            footer:false
+            
         }
     },
     methods:{
@@ -136,6 +134,10 @@ export default {
                     this.tareas.forEach(element => {
                         element.fecha = moment(element.fecha).format('DD-MM-YYYY')
                     });
+                    if(this.tareas.length<=5){//desactivo el ordenar y el paginado
+                        this.ordenar=true
+                        this.footer=true
+                    }
                 }else{
                     this.alert=true
                     this.mensaje="No se encontraron resultados"

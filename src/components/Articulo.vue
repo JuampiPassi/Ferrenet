@@ -36,7 +36,7 @@
                         <tr>
                             <td><p class="mb-0" style="font-size:20px; font-weight: bold;">Cantidad</p></td>
                             <td>
-                                <v-text-field autofocus dense flat color="orange" style="font-size:20px; font-weight: bold; width:100%; height: inherit;" type="number" v-model="nuevacant" :placeholder="cantidad" :readonly="!verifok"/>
+                                <v-text-field autofocus dense flat color="orange" style="font-size:20px; font-weight: bold; width:30%; height: inherit;" type="number" v-model="nuevacant" :placeholder="cantidad" :readonly="!verifok"/>
                             </td>
                         </tr>
                         <tr>
@@ -47,9 +47,17 @@
                             <td>Empaque</td>
                             <td>{{empaque}}</td>
                         </tr>
-                        <tr>
-                            <td v-if="fec_ctrol">Fec ctrl: <b>{{fec_ctrol}}</b></td>
-                            <td v-if="fec_ingreso" style="width: 150px">Fec ingr: <b>{{fec_ingreso}}</b></td>
+                        <tr v-if="fecha_ctrl!=null && fec_ingreso!=null">
+                            <td style="width: 10px;">Fec ctrl: <b>{{fecha_ctrl}}</b></td>
+                            <td style="width: 150px">Fec ingr: <b>{{fec_ingreso}}</b></td>
+                        </tr>
+                        <tr v-if="fecha_ctrl!=null && fec_ingreso==null">
+                            <td style="width: 10px;">Fec ctrl:</td>
+                            <td><b>{{fecha_ctrl}}</b></td>
+                        </tr>
+                        <tr v-if="fec_ingreso!=null && fecha_ctrl==null">
+                            <td style="width: 10px;">Fec ingr:</td>
+                            <td><b>{{fec_ingreso}}</b></td>
                         </tr>
                     </tbody>
                 </v-simple-table>
@@ -154,10 +162,12 @@ export default {
               
                 if(this.empaque!=0){
                     let ajuste=(this.nuevacant*this.empaque)-this.stock;
-                    this.$emit('aceptar',ajuste)
+                    //this.$emit('aceptar',ajuste)
+                    console.log(ajuste)
                 }else{
                     let ajuste=this.nuevacant-this.stock;
-                    this.$emit('aceptar',ajuste)
+                   // this.$emit('aceptar',ajuste)
+                   console.log(ajuste)
                 }  
             }
         }
