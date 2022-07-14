@@ -9,7 +9,7 @@
             v-if="verConsolidados"
             @click="clicConsolidados"
         >Consolidados</v-btn>
-         <v-btn
+        <v-btn
             block
             color="#ef6b01"
             elevation="2"
@@ -18,6 +18,15 @@
             style="color:white"
             v-if="verIndividuales"
         >Individuales</v-btn>
+        <v-btn
+            block
+            color="#ef6b01"
+            elevation="2"
+            class="mt-5"
+            x-large
+            style="color:white"
+            v-if="verAsignarBox"
+        >Asignar Box</v-btn>
     </v-container>
 </template>
 
@@ -54,6 +63,19 @@ export default {
                 return true;
             if(modulo!=''&&modulo!=null){
                 if((modulo.find(x => x.id_modulo == 2.2))!=undefined){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            return false;
+        },
+        verAsignarBox(){
+            let modulo = JSON.parse(sessionStorage.getItem('modulos'))
+            if(sessionStorage.getItem('rol')==1)
+                return true;
+            if(modulo!=''&&modulo!=null){
+                if((modulo.find(x => x.id_modulo == 2.3))!=undefined){
                     return true
                 }else{
                     return false
