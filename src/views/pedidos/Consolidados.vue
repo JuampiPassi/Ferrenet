@@ -1,6 +1,5 @@
 <template>
     <v-container>
-
          <template v-if="this.consolidados.length>0">
              <template v-for="(item, index) in this.consolidados">
                 <v-btn :key=index
@@ -40,7 +39,7 @@
 </template>
 
 <script>
-import ApiServer from '../api';
+import ApiServer from '../../api';
 import moment from 'moment';
 export default {
     name: 'Consolidados',
@@ -63,14 +62,23 @@ export default {
             this.loading=true
             let emp = await ApiServer.getEmpleadosLegajos();
             let logistica = await ApiServer.getLogisticaCons();
-            logistica.forEach(log => {
-                let datos={
-                    id:log.cons_id,
-                    usuario:(emp.find(x => x.LEGAJO == log.usuario)).RZ,
-                    fecha:(moment(log.fecha).format('DD-MM-YYYY'))
-                }
-                this.consolidados.push(datos)
-            });
+            if(logistica.length>0){
+                logistica.forEach(log => {
+                    let datos={
+                        id:log.cons_id,
+                        usuario:(emp.find(x => x.LEGAJO == log.usuario)).RZ,
+                        fecha:(moment(log.fecha).format('DD-MM-YYYY'))
+                    }
+                    this.consolidados.push(datos)
+                });
+            }else{
+                this.alert=true,
+                this.mensaje="No se encontraron resultados"
+                this.tipo="warning"        
+                setTimeout(()=>{
+                        this.$router.push({name: 'Pedidos'});
+                    },2000)
+            }
             this.loading=false
         } catch (error) {
            console.log(error) 

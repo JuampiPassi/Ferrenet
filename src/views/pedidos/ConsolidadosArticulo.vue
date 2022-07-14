@@ -109,8 +109,8 @@
 </template>
 
 <script>
-import ApiServer from '../api';
-import Imagen from '../components/Imagen.vue'
+import ApiServer from '../../api';
+import Imagen from '../../components/Imagen.vue'
 import moment from 'moment';
 import { StreamBarcodeReader } from "vue-barcode-reader";
 export default {

@@ -120,6 +120,9 @@ export default{
     },
     async postCapacitacionParticipantes(datos){
         return (await axios.post(`./api/capacitaciones/participantes`,datos)).data
+    },
+    async getRemito(cprdet_id){
+        return (await axios.get(`./api/comprobantes/remito/${cprdet_id}`)).data
     }
 
 }

@@ -26,4 +26,7 @@ module.exports = (app) => {
 
     require('./capacitaciones') (router);
     app.use('/api/capacitaciones', router);
+
+    require('./comprobantes') (router);
+    app.use('/api/comprobantes', router);
 }

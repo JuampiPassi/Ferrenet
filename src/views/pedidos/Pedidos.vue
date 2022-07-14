@@ -25,6 +25,7 @@
             class="mt-5"
             x-large
             style="color:white"
+            @click="clicAsignarBox"
             v-if="verAsignarBox"
         >Asignar Box</v-btn>
     </v-container>
@@ -41,6 +42,9 @@ export default {
     methods:{
         clicConsolidados(){
             this.$router.push({name: 'Consolidados'});
+        },
+        clicAsignarBox(){
+            this.$router.push({name: 'AsignarBox'});
         },
     },
     computed:{
