@@ -25,7 +25,7 @@
             <v-divider class="orange mt-5 mb-5" dark></v-divider>
             <div class="text-center">
                <!-- <v-btn outlined small color="orange" @click="verifok=true">Habilitar</v-btn>-->
-                <v-btn outlined small color="orange" class="ml-3" @click="verifok=true">Pasar</v-btn>
+                <v-btn outlined small color="orange" class="ml-3" :disabled="articulos[0].orden_str!='Z'" @click="verifok=true">Pasar</v-btn>
                 <v-btn outlined small color="orange" class="ml-3" :disabled="!verifok" @click="aceptar()">Aceptar</v-btn>
                 <v-btn @click="verbarcode=true" icon color="orange" class="ml-3"><v-icon style="font-size:28px">mdi-barcode-scan</v-icon></v-btn>
             </div>
@@ -39,6 +39,14 @@
                             </td>
                         </tr>
                         <tr>
+                            <td>Empaque</td>
+                            <td>{{articulos[0].empaque}}</td>
+                        </tr>
+                        <tr>
+                            <td>Total pedido</td>
+                            <td>{{articulos[0].empaque*this.cantidad}}</td>
+                        </tr>
+                        <tr>
                             <td>Stock</td>
                             <td>{{articulos[0].stock}}</td>
                         </tr>
@@ -46,7 +54,7 @@
                             <td style="font-weight: bold; color: red;">Stock Ingreso</td>
                             <td style="font-weight: bold; color: red;">{{stockingreso}}</td>
                         </tr>
-                        <tr>
+                        <!--<tr>
                             <td>Ubicación</td>
                             <template v-if="articulos[0].orden_str!='Z'">
                                 <td>{{articulos[0].orden_str}}</td>
@@ -54,11 +62,7 @@
                             <template v-else>
                                 <td>{{articulos[0].cod_art}}</td>
                             </template>
-                        </tr>
-                        <tr>
-                            <td>Empaque</td>
-                            <td>{{articulos[0].empaque}}</td>
-                        </tr>
+                        </tr>-->
                         <tr>
                             <td>Fec ctrl: <b>{{this.articulos[0].fec_ctrol}}</b></td>
                             <td>Fec ingr: <b>{{articulos[0].fec_ult_ingr}}</b></td>
