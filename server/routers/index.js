@@ -29,4 +29,8 @@ module.exports = (app) => {
 
     require('./comprobantes') (router);
     app.use('/api/comprobantes', router);
+
+    require('./box') (router);
+    app.use('/api/box', router);
+
 }

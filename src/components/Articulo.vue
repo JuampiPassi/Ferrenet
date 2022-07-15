@@ -36,7 +36,7 @@
                         <tr>
                             <td><p class="mb-0" style="font-size:20px; font-weight: bold;">Cantidad</p></td>
                             <td>
-                                <v-text-field autofocus dense flat color="orange" style="font-size:20px; font-weight: bold; width:30%; height: inherit;" type="number" v-model="nuevacant" :placeholder="cantidad" :readonly="!verifok"/>
+                                <v-text-field dense flat color="orange" style="font-size:20px; font-weight: bold; width:30%; height: inherit;" type="number" v-model="nuevacant" :placeholder="cantidad" :readonly="!verifok"/>
                             </td>
                         </tr>
                         <tr>
@@ -162,12 +162,10 @@ export default {
               
                 if(this.empaque!=0){
                     let ajuste=(this.nuevacant*this.empaque)-this.stock;
-                    //this.$emit('aceptar',ajuste)
-                    console.log(ajuste)
+                    this.$emit('aceptar',ajuste)
                 }else{
                     let ajuste=this.nuevacant-this.stock;
-                   // this.$emit('aceptar',ajuste)
-                   console.log(ajuste)
+                   this.$emit('aceptar',ajuste)
                 }  
             }
         }

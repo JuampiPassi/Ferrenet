@@ -123,6 +123,9 @@ export default{
     },
     async getRemito(cprdet_id){
         return (await axios.get(`./api/comprobantes/remito/${cprdet_id}`)).data
+    },
+    async getBox(id){
+        return (await axios.get(`./api/box/buscar/${id}`)).data
     }
 
 }
