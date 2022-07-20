@@ -25,7 +25,7 @@
             </v-row>
             <v-divider class="orange mt-5 mb-5" dark></v-divider>
             <div class="text-center">
-                <v-btn outlined small color="orange" @click="verifok=true">Habilitar</v-btn>
+                <v-btn outlined small color="orange" @click="habilitar">Habilitar</v-btn>
                 <v-btn outlined small color="orange" class="ml-3" @click="pasar()">Pasar</v-btn>
                 <v-btn outlined small color="orange" class="ml-3" :disabled="!verifok" @click="aceptar()">Aceptar</v-btn>
                 <v-btn  @click="verbarcode=true" icon color="orange" class="ml-3"><v-icon style="font-size:28px">mdi-barcode-scan</v-icon></v-btn>
@@ -36,7 +36,7 @@
                         <tr>
                             <td><p class="mb-0" style="font-size:20px; font-weight: bold;">Cantidad</p></td>
                             <td>
-                                <v-text-field dense flat color="orange" style="font-size:20px; font-weight: bold; width:30%; height: inherit;" type="number" v-model="nuevacant" :placeholder="cantidad" :readonly="!verifok"/>
+                                <v-text-field ref="cantidad" dense flat color="orange" style="font-size:20px; font-weight: bold; width:30%; height: inherit;" type="number" v-model="nuevacant" :placeholder="cantidad.toString()" :readonly="!verifok"/>
                             </td>
                         </tr>
                         <tr>
@@ -149,6 +149,10 @@ export default {
         },
         pasar(){
             this.$emit('pasar')
+        },
+        habilitar(){
+            this.verifok=true
+            this.$refs.cantidad.focus()
         },
         aceptar(){
             if(sessionStorage.getItem("CprId")==undefined||sessionStorage.getItem("CprId")==''){

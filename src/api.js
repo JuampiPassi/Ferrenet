@@ -126,6 +126,15 @@ export default{
     },
     async getBox(id){
         return (await axios.get(`./api/box/buscar/${id}`)).data
+    },
+    async deleteBoxRemito(info){
+        return (await axios.delete(`./api/box/remitos`,{data: info})).data
+    },
+    async postBoxRemito(remitos){
+        return (await axios.post(`./api/box/remitos`,{remitos:remitos})).data
+    },
+    async putAsignarBox(datos){
+        return (await axios.put(`./api/box/asignar`,datos)).data
     }
 
 }

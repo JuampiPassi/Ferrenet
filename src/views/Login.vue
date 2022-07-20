@@ -26,9 +26,11 @@
                                 <v-text-field
                                 :loading='loading'
                                 prepend-icon="person"
+                                :append-icon="verContraseña ? 'mdi-eye' : 'mdi-eye-off'"
+                                @click:append="verContraseña = !verContraseña"
+                                :type="verContraseña ? 'text' : 'password'"
                                 v-model="usuario"
                                 label="Contraseña"
-                                type="password"
                                 outlined
                                 color="#ef6b01"
                                 @keyup.enter="login"
@@ -63,7 +65,8 @@ export default {
             usuario: '',
             mensaje:'',
             tipo:'success',
-            alert:false
+            alert:false,
+            verContraseña:false
             
         }
     },

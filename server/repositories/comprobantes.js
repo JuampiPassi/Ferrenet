@@ -7,7 +7,7 @@ const axios = require('axios')
 const getRemito = async (cprdet_id) => {
     try {
     
-        let consulta = `select c.rz,c.nro,c.nro_cpr from cpr c, cprdet cp where cp.cpr_id=c.cpr_id AND cp.cprdet_id=${cprdet_id}`;
+        let consulta = `select c.rz,c.nro,c.nro_cpr,c.cpr_id from cpr c, cprdet cp where cp.cpr_id=c.cpr_id AND cp.cprdet_id=${cprdet_id}`;
         let resp = await firebirdMetodos.getConsultaPaljet(consulta);
         return resp;
     } catch (error) {
