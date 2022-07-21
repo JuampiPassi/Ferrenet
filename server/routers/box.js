@@ -47,7 +47,7 @@ module.exports = function (router) {
 		let box_id=req.body.box_id
 		let cod_cli=req.body.cliente
 		let fecha=req.body.fecha
-		let consulta = `UPDATE ven_box set account_id_c='${cod_cli}', account_id1_c='${cod_cli}', preparado='${fecha}' WHERE id=${box_id}`
+		let consulta = `UPDATE ven_box set account_id_c='${cod_cli}', account_id1_c='${cod_cli}', preparado='${fecha}' WHERE id='${box_id}'`
 		conexion.query(consulta,(error,results)=>{
 			if(error){
 				throw(error)

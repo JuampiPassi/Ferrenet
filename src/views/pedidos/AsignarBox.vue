@@ -77,6 +77,7 @@ export default {
             filas:[],
             codigoBox:'',
             boxAsignado:'',
+            boxAsignadoId:'',
             verbarcode:false,
             bulto:'',
             verbarcodeBultos:false,
@@ -140,6 +141,7 @@ export default {
                 let bulto = code.substring(pos+1)
                 try {
                     let result = await ApiServer.getRemito(cprdet_id)
+                    console.log(result)
                     this.cargandoBulto=false
                     if(result.length>0){
                         if(this.boxAsignado!=null && result[0].RZ!=this.boxAsignado){
@@ -166,10 +168,12 @@ export default {
                                 cprdet_id:cprdet_id,
                                 bulto:bulto,
                                 cliente: result[0].RZ,
+                                cod_cli: result[0].COD_CLI,
                                 remito: result[0].NRO+"-"+result[0].NRO_CPR,
                                 cpr_id: result[0].CPR_ID,
                                 nro:result[0].NRO,
-                                nro_cpr:result[0].NRO_CPR
+                                nro_cpr:result[0].NRO_CPR,
+
                             }
                             this.filas.push(datos)
                         }
@@ -215,10 +219,12 @@ export default {
             datos = datos.slice(0,-1)
 
             try {
-                //let resp1 = await ApiServer.putAsignarBox({box_id:this.codigoBox,cliente:})
-                //let resp = await ApiServer.deleteBoxRemito({datos:datos})
-                //let resp = await ApiServer.postBoxRemito(datos2)
-                console.log(resp)
+                let resp1 = await ApiServer.putAsignarBox({box_id:this.codigoBox,cliente:this.filas[0].cod_cli,fecha:moment().format('YYYY-MM-DD hh:mm:ss')})
+                let resp2 = await ApiServer.deleteBoxRemito({datos:datos})
+                let resp3 = await ApiServer.postBoxRemito(datos2)
+                console.log(resp1)
+                console.log(resp2)
+                console.log(resp3)
                 this.cargando=false
                 this.filas=[], this.codigoBox='', this.boxAsignado=''
                 this.alertGuardado=true

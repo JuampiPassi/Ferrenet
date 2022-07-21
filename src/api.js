@@ -135,6 +135,9 @@ export default{
     },
     async putAsignarBox(datos){
         return (await axios.put(`./api/box/asignar`,datos)).data
+    },
+    async getCliente(cod_cli){
+        return (await axios.get(`./api/clientes/buscar/${cod_cli}`)).data
     }
 
 }
